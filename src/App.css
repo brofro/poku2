@@ -1,38 +1,120 @@
+/* src/App.css */
 .App {
   text-align: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.battlefield {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
+  margin-top: 20px;
+}
+
+.player-area {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.player-two {
+  align-items: flex-end;
+}
+
+.player-one {
+  align-items: flex-start;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 150px;
+  height: 200px;
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.card-image-container {
+  height: 120px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  overflow: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+.card-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.card-name {
+  font-weight: bold;
+  font-size: 1em;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.card-stat {
+  display: flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.player-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 70vh;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.player-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-weight: bold;
+  color: #333;
+}
+
+.player-two-label {
+  align-self: flex-start;
+}
+
+.player-one-label {
+  align-self: flex-end;
 }
