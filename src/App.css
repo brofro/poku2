@@ -2,8 +2,22 @@
 .App {
   text-align: center;
   padding: 20px;
-  max-width: 800px;
+  max-width: 1200px;
+  /* Increased max-width to accommodate the new layout */
   margin: 0 auto;
+}
+
+.game-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.battlefield-container {
+  flex-grow: 1;
+  margin: 0 20px;
+  /* Add margin to separate from buttons and log */
 }
 
 .battlefield {
@@ -11,7 +25,6 @@
   flex-direction: column;
   justify-content: space-between;
   height: 70vh;
-  margin-top: 20px;
 }
 
 .player-area {
@@ -21,11 +34,13 @@
 }
 
 .player-two {
-  align-items: flex-end;
+  align-items: flex-start;
+  /* Changed from flex-end to flex-start */
 }
 
 .player-one {
-  align-items: flex-start;
+  align-items: flex-end;
+  /* Changed from flex-start to flex-end */
 }
 
 .card {
@@ -92,37 +107,27 @@
   margin-right: 5px;
 }
 
-.player-labels {
+.control-buttons {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 70vh;
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  gap: 10px;
+  width: 200px;
+  /* Set a fixed width for the buttons */
 }
 
-.player-label {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  font-weight: bold;
-  color: #333;
+.control-buttons button {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
-.player-two-label {
-  align-self: flex-start;
-}
-
-.player-one-label {
-  align-self: flex-end;
-}
-
-.game-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+.control-buttons button:hover {
+  background-color: #45a049;
 }
 
 .game-log {
@@ -132,7 +137,6 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  margin-left: 20px;
 }
 
 .log-entries {
@@ -144,6 +148,11 @@
   padding: 5px;
   background-color: #f0f0f0;
   border-radius: 3px;
+}
+
+.current-log {
+  background-color: #ffffcc;
+  font-weight: bold;
 }
 
 .log-id {

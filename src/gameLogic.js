@@ -58,6 +58,7 @@ function createLogEntry(action, data) {
 function initializeCard(cardData) {
     return {
         ...cardData,
+        id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp
     };
@@ -178,16 +179,12 @@ function findCardPosition(playerCards, targetCard) {
 function getBoardState(gameState) {
     return {
         [PLAYER_ONE]: gameState[PLAYER_ONE].map(card => ({
-            name: card.name,
+            ...card,
             position: findCardPosition(gameState[PLAYER_ONE], card),
-            hp: card.currentHp,
-            state: card.state
         })),
         [PLAYER_TWO]: gameState[PLAYER_TWO].map(card => ({
-            name: card.name,
+            ...card,
             position: findCardPosition(gameState[PLAYER_TWO], card),
-            hp: card.currentHp,
-            state: card.state
         })),
         currentPlayer: gameState.currentPlayer,
         round: gameState.round
@@ -326,6 +323,22 @@ function performRound(gameState) {
     };
 }
 
+function getGameStateAtLogIndex(gameLog, index) {
+    if (index < 0) {
+        // Return initial state
+        return gameLog[0].board_state;
+    }
+
+    for (let i = index; i >= 0; i--) {
+        if (gameLog[i].board_state) {
+            return gameLog[i].board_state;
+        }
+    }
+
+    // If no board state found, return the initial state
+    return gameLog[0].board_state;
+}
+
 
 
 /**
@@ -359,5 +372,6 @@ export {
     performTurn,
     performRound,
     runGameLoop,
-    isGameOver
+    isGameOver,
+    getGameStateAtLogIndex
 };

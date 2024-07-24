@@ -1,38 +1,35 @@
 import { PLAYER_ONE, PLAYER_TWO } from '../constants.js';
+
+export const getImageUrl = (pokemonNumber) => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png`;
+
 export const CARD_DEFINITIONS = {
-    CYNDAQUIL: {
-        id: 'CYNDAQUIL',
+    155: {
+        id: 155,
         name: "Cyndaquil",
-        img: "https://veekun.com/dex/media/pokemon/dream-world/155.svg",
         atk: 2,
         hp: 2,
     },
-    TOTODILE: {
-        id: 'TOTODILE',
+    158: {
+        id: 158,
         name: "Totodile",
-        img: "https://veekun.com/dex/media/pokemon/dream-world/158.svg",
         atk: 3,
         hp: 3,
     },
-    SNORLAX: {
-        id: 'SNORLAX',
+    143: {
+        id: 143,
         name: "Snorlax",
-        img: "https://veekun.com/dex/media/pokemon/dream-world/143.svg",
         atk: 1,
         hp: 5,
     },
-    CHIKORITA: {
-        id: 'CHIKORITA',
+    152: {
+        id: 152,
         name: "Chikorita",
-        img: "https://veekun.com/dex/media/pokemon/dream-world/152.svg",
         atk: 1,
         hp: 1,
     },
 };
 
-
-
 export const initialCardData = {
-    [PLAYER_ONE]: [CARD_DEFINITIONS.CYNDAQUIL, CARD_DEFINITIONS.TOTODILE],
-    [PLAYER_TWO]: [CARD_DEFINITIONS.SNORLAX, CARD_DEFINITIONS.CHIKORITA],
+    [PLAYER_ONE]: [CARD_DEFINITIONS[155], CARD_DEFINITIONS[158]],
+    [PLAYER_TWO]: [CARD_DEFINITIONS[143], CARD_DEFINITIONS[152]],
 };

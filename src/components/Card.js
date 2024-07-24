@@ -1,15 +1,21 @@
-// src/components/Card.js
 import React from 'react';
 import { ATK_ICON, HP_ICON } from '../constants';
+import { getImageUrl } from '../data/cardData'
+import './Card.css';
 
-const Card = ({ name, img, atk, hp }) => {
+const Card = ({ id, name, img, atk, hp, currentHp, state }) => {
+    const cardClasses = ['card'];
+    if (state === 'FATIGUED') cardClasses.push('fatigued');
+    if (state === 'FAINTED') cardClasses.push('fainted');
+
+
     return (
-        <div className="card">
+        <div className={cardClasses.join(' ')}>
             <div className="card-image-container">
-                <img src={img} alt={name} className="card-image" />
+                <img src={getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
             </div>
             <div className="card-info">
-                <div className="card-name">{name}</div>
+                <div className="card-name">{name} #{id}</div>
                 <div className="card-stats">
                     <div className="card-stat">
                         <img src={ATK_ICON} alt="Attack" className="stat-icon" />
@@ -17,7 +23,7 @@ const Card = ({ name, img, atk, hp }) => {
                     </div>
                     <div className="card-stat">
                         <img src={HP_ICON} alt="Health" className="stat-icon" />
-                        <span>{hp}</span>
+                        <span>{currentHp}/{hp}</span>
                     </div>
                 </div>
             </div>

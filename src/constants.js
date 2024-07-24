@@ -21,3 +21,5 @@ export const ACTION_TYPES = {
     GAME_START: 'GAME_START',
     GAME_END: 'GAME_END'
 };
+
+export const PLAY_SPEED = 1000;
