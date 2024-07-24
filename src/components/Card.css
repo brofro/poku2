@@ -81,3 +81,41 @@
     transform: rotate(90deg);
     opacity: 0.6;
 }
+
+/* Define the glowing red animation */
+@keyframes glowingRed {
+    0% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #ff0000;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #ff0000;
+    }
+}
+
+/* Apply the glowing animation to cards with the 'attacking' class */
+.card.attacking {
+    animation: glowingRed 1s infinite;
+}
+
+@keyframes glowingBlue {
+    0% {
+        box-shadow: 0 0 5px #0000ff;
+    }
+
+    50% {
+        box-shadow: 0 0 20px #0000ff;
+    }
+
+    100% {
+        box-shadow: 0 0 5px #0000ff;
+    }
+}
+
+.card.counter-attacking {
+    animation: glowingBlue 1s infinite;
+}

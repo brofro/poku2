@@ -37,10 +37,15 @@ const useGameState = () => {
     // Function to play the next action in the log
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
-            setCurrentLogIndex(prevIndex => prevIndex + 1);
-            setGameState(getGameStateAtLogIndex(gameLog, currentLogIndex + 1));
+            const nextIndex = currentLogIndex + 1;
+            setCurrentLogIndex(nextIndex);
+            setGameState(getGameStateAtLogIndex(gameLog, nextIndex));
+
+            // Set the current action
+            setCurrentAction(gameLog[nextIndex]);
         } else {
             setIsPlaying(false);
+            setCurrentAction(null);  // Clear the action at the end of the game
         }
     };
 

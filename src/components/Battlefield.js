@@ -4,35 +4,63 @@ import { useGame } from '../contexts/GameContext';
 import { PLAYER_ONE, PLAYER_TWO } from '../constants';
 
 const BattleField = () => {
-    // Get the current game state from our GameContext
-    const { gameState } = useGame();
+    // Get the current game state and action from our game context
+    const { gameState, currentAction } = useGame();
 
-    // If the game state hasn't been initialized yet, don't render anything
+    // If the game state hasn't been initialized, don't render anything
     if (!gameState) return null;
+
+    // Helper function to determine if a specific card is currently attacking
+    const isCardAttacking = (player, index) => {
+        // Check if there's a current action and it's an attack
+        return currentAction &&
+            currentAction.action === 'ATTACK' &&
+            // Check if the card position matches the source of the attack
+            currentAction.action_details.sourceCardPosition === index &&
+            // Check if the player matches the source of the attack
+            player === currentAction.action_details.actingPlayer
+    };
+
+    // Helper function to determine if a specific card is currently counter-attacking
+    const isCardCounterAttacking = (player, index) => {
+        // Check if there's a current action and it's a counter-attack
+        return currentAction &&
+            currentAction.action === 'COUNTER_ATTACK' &&
+            // Check if the card position matches the source of the counter-attack
+            currentAction.action_details.sourceCardPosition === index &&
+            // Check if the player matches the source of the counter-attack
+            player === currentAction.action_details.actingPlayer;
+    };
+
+
 
     return (
         <div className="battlefield">
             {/* Player Two's area (typically displayed at the top) */}
             <div className="player-area player-two">
-                {/* Map through Player Two's cards and render each one */}
                 {gameState[PLAYER_TWO].map((card, index) => (
                     <Card
-                        key={`p2-${card.id}`} // Unique key for React list rendering
-                        {...card} // Spread all card properties
-                        player={PLAYER_TWO} // Specify this is a Player Two card
-                        index={index} // Pass the index of the card in the player's hand
+                        key={`p2-${card.id}`}
+                        {...card}
+                        player={PLAYER_TWO}
+                        index={index}
+                        // Pass down whether this specific card is attacking
+                        isAttacking={isCardAttacking(PLAYER_TWO, index)}
+                        isCounterAttacking={isCardCounterAttacking(PLAYER_TWO, index)}
                     />
                 ))}
             </div>
             {/* Player One's area (typically displayed at the bottom) */}
             <div className="player-area player-one">
-                {/* Map through Player One's cards and render each one */}
                 {gameState[PLAYER_ONE].map((card, index) => (
                     <Card
-                        key={`p1-${card.id}`} // Unique key for React list rendering
-                        {...card} // Spread all card properties
-                        player={PLAYER_ONE} // Specify this is a Player One card
-                        index={index} // Pass the index of the card in the player's hand
+                        key={`p1-${card.id}`}
+                        {...card}
+                        player={PLAYER_ONE}
+                        index={index}
+                        // Pass down whether this specific card is attacking
+                        isAttacking={isCardAttacking(PLAYER_ONE, index)}
+                        isCounterAttacking={isCardCounterAttacking(PLAYER_ONE, index)}
                     />
                 ))}
             </div>

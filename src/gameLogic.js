@@ -21,6 +21,7 @@ function createLogEntry(action, data) {
             return {
                 ...baseEntry,
                 action_details: {
+                    actingPlayer: data.actingPlayer,
                     sourceCardPosition: data.sourceCardPosition,
                     sourceCardName: data.sourceCardName,
                     attackValue: data.attackValue,
@@ -238,6 +239,7 @@ function performTurn(gameState) {
     const logEntries = [
         createLogEntry(ACTION_TYPES.ATTACK, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
+            actingPlayer: gameState.currentPlayer,
             sourceCardPosition: attackerPosition,
             sourceCardName: attacker.name,
             attackValue: attacker.atk,
@@ -246,6 +248,7 @@ function performTurn(gameState) {
         }),
         createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
+            actingPlayer: opposingPlayer,
             sourceCardPosition: defenderPosition,
             sourceCardName: defender.name,
             attackValue: defender.atk,

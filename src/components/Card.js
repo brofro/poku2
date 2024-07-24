@@ -3,13 +3,16 @@ import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
 
-const Card = ({ id, name, atk, hp, currentHp, state, player, index }) => {
+const Card = ({ id, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
     // Add appropriate classes based on the card's state
     if (state === 'FATIGUED') cardClasses.push('fatigued');
     if (state === 'FAINTED') cardClasses.push('fainted');
+    // Add 'attacking' class if the card is currently attacking
+    if (isAttacking) cardClasses.push('attacking');
+    if (isCounterAttacking) cardClasses.push('counter-attacking');
 
     return (
         <div className={cardClasses.join(' ')}>
