@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/poku2/static/css/main.0cf7f924.css",
+    "main.js": "/poku2/static/js/main.b743f432.js",
+    "static/js/453.c634b553.chunk.js": "/poku2/static/js/453.c634b553.chunk.js",
+    "index.html": "/poku2/index.html",
+    "main.0cf7f924.css.map": "/poku2/static/css/main.0cf7f924.css.map",
+    "main.b743f432.js.map": "/poku2/static/js/main.b743f432.js.map",
+    "453.c634b553.chunk.js.map": "/poku2/static/js/453.c634b553.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0cf7f924.css",
+    "static/js/main.b743f432.js"
+  ]
+}
