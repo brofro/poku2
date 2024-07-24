@@ -20,11 +20,44 @@ let actionId = 0;
  * @returns {Object} A log entry object
  */
 function createLogEntry(action, data) {
-    return {
+    const baseEntry = {
         id: actionId++,
         action,
-        ...data
+        log: data.log
     };
+
+    switch (action) {
+        case 'ATTACK':
+        case 'COUNTER_ATTACK':
+            return {
+                ...baseEntry,
+                action_details: {
+                    sourceCardPosition: data.sourceCardPosition,
+                    sourceCardName: data.sourceCardName,
+                    attackValue: data.attackValue,
+                    targetCardPosition: data.targetCardPosition,
+                    targetCardName: data.targetCardName
+                }
+            };
+        case 'FAINTED':
+            return {
+                ...baseEntry,
+                action_details: {
+                    faintedCardPos: data.faintedCardPos,
+                    faintedCardName: data.faintedCardName
+                }
+            };
+        case 'HP_UPDATE':
+        case 'ROUND_END':
+        case 'GAME_END':
+        case 'GAME_START':
+            return {
+                ...baseEntry,
+                board_state: data.boardState
+            };
+        default:
+            return baseEntry;
+    }
 }
 
 
@@ -149,6 +182,30 @@ function findCardPosition(playerCards, targetCard) {
 }
 
 /**
+ * Gets the current board state
+ * @param {Object} gameState - The current game state
+ * @returns {Object} The current board state
+ */
+function getBoardState(gameState) {
+    return {
+        [PLAYER_ONE]: gameState[PLAYER_ONE].map(card => ({
+            name: card.name,
+            position: findCardPosition(gameState[PLAYER_ONE], card),
+            hp: card.currentHp,
+            state: card.state
+        })),
+        [PLAYER_TWO]: gameState[PLAYER_TWO].map(card => ({
+            name: card.name,
+            position: findCardPosition(gameState[PLAYER_TWO], card),
+            hp: card.currentHp,
+            state: card.state
+        })),
+        currentPlayer: gameState.currentPlayer,
+        round: gameState.round
+    };
+}
+
+/**
  * Performs a single turn in the game
  * @param {Object} gameState - The current game state
  * @returns {Object} The updated game state after the turn and the log entries
@@ -194,25 +251,40 @@ function performTurn(gameState) {
 
     const logEntries = [
         createLogEntry("ATTACK", {
-            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`
+            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
+            sourceCardPosition: attackerPosition,
+            sourceCardName: attacker.name,
+            attackValue: attacker.atk,
+            targetCardPosition: defenderPosition,
+            targetCardName: defender.name
         }),
         createLogEntry("COUNTER_ATTACK", {
-            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_CATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`
+            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
+            sourceCardPosition: defenderPosition,
+            sourceCardName: defender.name,
+            attackValue: defender.atk,
+            targetCardPosition: attackerPosition,
+            targetCardName: attacker.name
         }),
         createLogEntry("HP_UPDATE", {
-            log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp}_${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`
+            log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
+            boardState: getBoardState(updatedGameState)
         })
     ];
 
     if (updatedAttacker.currentHp <= 0) {
         logEntries.push(createLogEntry("FAINTED", {
-            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`
+            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`,
+            faintedCardPos: attackerPosition,
+            faintedCardName: attacker.name
         }));
     }
 
     if (updatedDefender.currentHp <= 0) {
         logEntries.push(createLogEntry("FAINTED", {
-            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`
+            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`,
+            faintedCardPos: defenderPosition,
+            faintedCardName: defender.name
         }));
     }
 
@@ -250,7 +322,10 @@ function performRound(gameState) {
     updatedGameState[PLAYER_ONE] = resetFatigue(updatedGameState[PLAYER_ONE]);
     updatedGameState[PLAYER_TWO] = resetFatigue(updatedGameState[PLAYER_TWO]);
 
-    logEntries.push(createLogEntry("ROUND_END", { log: `ROUND_${updatedGameState.round}_END` }));
+    logEntries.push(createLogEntry("ROUND_END", {
+        log: `ROUND_${updatedGameState.round}_END`,
+        boardState: getBoardState(updatedGameState)
+    }));
 
     return {
         gameState: {
@@ -262,6 +337,8 @@ function performRound(gameState) {
     };
 }
 
+
+
 /**
  * Runs the main game loop
  * @param {Object} initialCardData - The initial card data for both players
@@ -269,7 +346,10 @@ function performRound(gameState) {
  */
 function runGameLoop(initialCardData) {
     let gameState = initializeGameState(initialCardData);
-    const gameLog = [createLogEntry("GAME_START", { initialState: gameState })];
+    const gameLog = [createLogEntry("GAME_START", {
+        log: "GAME_START",
+        boardState: getBoardState(gameState)
+    })];
 
     while (!isGameOver(gameState)) {
         const { gameState: newState, logEntries } = performRound(gameState);
@@ -277,7 +357,10 @@ function runGameLoop(initialCardData) {
         gameLog.push(...logEntries);
     }
 
-    gameLog.push(createLogEntry("GAME_END", { finalState: gameState }));
+    gameLog.push(createLogEntry("GAME_END", {
+        log: "GAME_END",
+        boardState: getBoardState(gameState)
+    }));
 
     return { finalState: gameState, gameLog };
 }
