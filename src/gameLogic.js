@@ -1,15 +1,4 @@
-// src/gameLogic.js
-
-// Card states
-const CARD_STATE = {
-    ACTIVE: 'ACTIVE',
-    FATIGUED: 'FATIGUED',
-    FAINTED: 'FAINTED'
-};
-
-// Player identifiers
-const PLAYER_ONE = 'P1';
-const PLAYER_TWO = 'P2';
+import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants';
 
 let actionId = 0;
 
@@ -27,8 +16,8 @@ function createLogEntry(action, data) {
     };
 
     switch (action) {
-        case 'ATTACK':
-        case 'COUNTER_ATTACK':
+        case ACTION_TYPES.ATTACK:
+        case ACTION_TYPES.COUNTER_ATTACK:
             return {
                 ...baseEntry,
                 action_details: {
@@ -39,7 +28,7 @@ function createLogEntry(action, data) {
                     targetCardName: data.targetCardName
                 }
             };
-        case 'FAINTED':
+        case ACTION_TYPES.FAINTED:
             return {
                 ...baseEntry,
                 action_details: {
@@ -47,10 +36,10 @@ function createLogEntry(action, data) {
                     faintedCardName: data.faintedCardName
                 }
             };
-        case 'HP_UPDATE':
-        case 'ROUND_END':
-        case 'GAME_END':
-        case 'GAME_START':
+        case ACTION_TYPES.HP_UPDATE:
+        case ACTION_TYPES.ROUND_END:
+        case ACTION_TYPES.GAME_END:
+        case ACTION_TYPES.GAME_START:
             return {
                 ...baseEntry,
                 board_state: data.boardState
@@ -225,7 +214,7 @@ function performTurn(gameState) {
                 ...gameState,
                 currentPlayer: opposingPlayer
             },
-            logEntries: [createLogEntry("TURN_SKIPPED", { log: `${gameState.currentPlayer}_TURN_SKIPPED` })]
+            logEntries: [createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })]
         };
     }
 
@@ -250,7 +239,7 @@ function performTurn(gameState) {
     };
 
     const logEntries = [
-        createLogEntry("ATTACK", {
+        createLogEntry(ACTION_TYPES.ATTACK, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
             sourceCardPosition: attackerPosition,
             sourceCardName: attacker.name,
@@ -258,7 +247,7 @@ function performTurn(gameState) {
             targetCardPosition: defenderPosition,
             targetCardName: defender.name
         }),
-        createLogEntry("COUNTER_ATTACK", {
+        createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
             sourceCardPosition: defenderPosition,
             sourceCardName: defender.name,
@@ -266,14 +255,14 @@ function performTurn(gameState) {
             targetCardPosition: attackerPosition,
             targetCardName: attacker.name
         }),
-        createLogEntry("HP_UPDATE", {
+        createLogEntry(ACTION_TYPES.HP_UPDATE, {
             log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
             boardState: getBoardState(updatedGameState)
         })
     ];
 
     if (updatedAttacker.currentHp <= 0) {
-        logEntries.push(createLogEntry("FAINTED", {
+        logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`,
             faintedCardPos: attackerPosition,
             faintedCardName: attacker.name
@@ -281,7 +270,7 @@ function performTurn(gameState) {
     }
 
     if (updatedDefender.currentHp <= 0) {
-        logEntries.push(createLogEntry("FAINTED", {
+        logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`,
             faintedCardPos: defenderPosition,
             faintedCardName: defender.name
@@ -322,7 +311,7 @@ function performRound(gameState) {
     updatedGameState[PLAYER_ONE] = resetFatigue(updatedGameState[PLAYER_ONE]);
     updatedGameState[PLAYER_TWO] = resetFatigue(updatedGameState[PLAYER_TWO]);
 
-    logEntries.push(createLogEntry("ROUND_END", {
+    logEntries.push(createLogEntry(ACTION_TYPES.ROUND_END, {
         log: `ROUND_${updatedGameState.round}_END`,
         boardState: getBoardState(updatedGameState)
     }));
@@ -346,8 +335,8 @@ function performRound(gameState) {
  */
 function runGameLoop(initialCardData) {
     let gameState = initializeGameState(initialCardData);
-    const gameLog = [createLogEntry("GAME_START", {
-        log: "GAME_START",
+    const gameLog = [createLogEntry(ACTION_TYPES.GAME_START, {
+        log: ACTION_TYPES.GAME_START,
         boardState: getBoardState(gameState)
     })];
 
@@ -357,8 +346,8 @@ function runGameLoop(initialCardData) {
         gameLog.push(...logEntries);
     }
 
-    gameLog.push(createLogEntry("GAME_END", {
-        log: "GAME_END",
+    gameLog.push(createLogEntry(ACTION_TYPES.GAME_END, {
+        log: ACTION_TYPES.GAME_END,
         boardState: getBoardState(gameState)
     }));
 
@@ -366,9 +355,6 @@ function runGameLoop(initialCardData) {
 }
 
 export {
-    CARD_STATE,
-    PLAYER_ONE,
-    PLAYER_TWO,
     initializeGameState,
     performTurn,
     performRound,

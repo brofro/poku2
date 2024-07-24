@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import BattleField from './components/Battlefield.js';
 import GameLog from './components/GameLog';
-import { initialCardData, PLAYER_ONE, PLAYER_TWO } from './data/cardData';
+import { initialCardData } from './data/cardData';
+import { PLAYER_ONE, PLAYER_TWO } from './constants.js'
 import { runGameLoop } from './gameLogic';
 import './App.css';
 

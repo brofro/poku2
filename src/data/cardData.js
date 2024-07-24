@@ -1,4 +1,4 @@
-// src/data/cardData.js
+import { PLAYER_ONE, PLAYER_TWO } from '../constants.js';
 export const CARD_DEFINITIONS = {
     CYNDAQUIL: {
         id: 'CYNDAQUIL',
@@ -30,8 +30,7 @@ export const CARD_DEFINITIONS = {
     },
 };
 
-export const PLAYER_ONE = 'P1';
-export const PLAYER_TWO = 'P2';
+
 
 export const initialCardData = {
     [PLAYER_ONE]: [CARD_DEFINITIONS.CYNDAQUIL, CARD_DEFINITIONS.TOTODILE],
