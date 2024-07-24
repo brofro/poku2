@@ -1,99 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import BattleField from './components/Battlefield.js';
+import React from 'react';
+import BattleField from './components/Battlefield';
 import GameLog from './components/GameLog';
 import ControlButtons from './components/ControlButtons';
-import { initialCardData } from './data/cardData';
-import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from './constants.js'
-import { runGameLoop, getGameStateAtLogIndex } from './gameLogic';
+import { GameProvider } from './contexts/GameContext';
 import './App.css';
 
 function App() {
-  const [gameState, setGameState] = useState(null);
-  const [gameLog, setGameLog] = useState([]);
-  const [currentLogIndex, setCurrentLogIndex] = useState(-1);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentAction, setCurrentAction] = useState(null);
-
-  useEffect(() => {
-    const { finalState, gameLog } = runGameLoop(initialCardData);
-    setGameState(getGameStateAtLogIndex(gameLog, -1));
-    setGameLog(gameLog);
-  }, []);
-
-  useEffect(() => {
-    if (currentLogIndex >= 0 && currentLogIndex < gameLog.length) {
-      const action = gameLog[currentLogIndex];
-      console.log('Current action:', action); // Debug log
-      if (action.action === 'ATTACK' || action.action === 'COUNTER_ATTACK') {
-        setCurrentAction({
-          type: action.action,
-          playerIndex: action.action_details.sourceCardPosition < 2 ? 0 : 1,
-          cardId: action.action_details.sourceCardPosition % 2
-        });
-      } else {
-        setCurrentAction(null);
-      }
-    } else {
-      setCurrentAction(null);
-    }
-  }, [currentLogIndex, gameLog]);
-
-  useEffect(() => {
-    let timeoutId;
-    if (isPlaying && currentLogIndex < gameLog.length - 1) {
-      timeoutId = setTimeout(() => {
-        handlePlayNext();
-      }, PLAY_SPEED);
-    } else if (currentLogIndex >= gameLog.length - 1) {
-      setIsPlaying(false);
-    }
-    return () => clearTimeout(timeoutId);
-  }, [isPlaying, currentLogIndex, gameLog.length]);
-
-  const handlePlayNext = () => {
-    if (currentLogIndex < gameLog.length - 1) {
-      setCurrentLogIndex(prevIndex => prevIndex + 1);
-      setGameState(getGameStateAtLogIndex(gameLog, currentLogIndex + 1));
-    } else {
-      setIsPlaying(false);
-    }
-  };
-
-  const handlePlayPause = () => {
-    if (!isPlaying) {
-      setCurrentLogIndex(-1);
-      setGameState(getGameStateAtLogIndex(gameLog, -1));
-    }
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleRestart = () => {
-    setCurrentLogIndex(-1);
-    setGameState(getGameStateAtLogIndex(gameLog, -1));
-    setIsPlaying(false);
-  };
-
   return (
-    <div className="App">
-      <div className="game-container">
-        <ControlButtons
-          onPlayNext={handlePlayNext}
-          onPlayPause={handlePlayPause}
-          onRestart={handleRestart}
-          isPlaying={isPlaying}
-        />
-        <div className="battlefield-container">
-          {gameState && (
-            <BattleField
-              player1Cards={gameState[PLAYER_ONE]}
-              player2Cards={gameState[PLAYER_TWO]}
-              currentAction={currentAction}
-            />
-          )}
+    // Wrap the entire app with the GameProvider to make game state available everywhere
+    <GameProvider>
+      <div className="App">
+        <div className="game-container">
+          {/* Control buttons for game flow */}
+          <ControlButtons />
+          <div className="battlefield-container">
+            {/* The main game board */}
+            <BattleField />
+          </div>
+          {/* Log of game actions */}
+          <GameLog />
         </div>
-        <GameLog log={gameLog} currentLogIndex={currentLogIndex} />
       </div>
-    </div>
+    </GameProvider>
   );
 }
 

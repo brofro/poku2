@@ -1,13 +1,20 @@
 import React from 'react';
+import { useGame } from '../contexts/GameContext';
 
-const ControlButtons = ({ onPlayNext, onPlayPause, onRestart, isPlaying }) => {
+const ControlButtons = () => {
+    // Get the necessary functions and state from our game context
+    const { handlePlayNext, handlePlayPause, handleRestart, isPlaying } = useGame();
+
     return (
         <div className="control-buttons">
-            <button onClick={onPlayNext}>Play Next Log Only</button>
-            <button onClick={onPlayPause}>
+            {/* Button to play the next action */}
+            <button onClick={handlePlayNext}>Play Next Log Only</button>
+            {/* Button to start/pause continuous play */}
+            <button onClick={handlePlayPause}>
                 {isPlaying ? 'Pause' : 'Continuously Play'}
             </button>
-            <button onClick={onRestart}>Restart</button>
+            {/* Button to restart the game */}
+            <button onClick={handleRestart}>Restart</button>
         </div>
     );
 };
