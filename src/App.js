@@ -3,7 +3,7 @@ import BattleField from './components/Battlefield.js';
 import GameLog from './components/GameLog';
 import ControlButtons from './components/ControlButtons';
 import { initialCardData } from './data/cardData';
-import { PLAYER_ONE, PLAYER_TWO } from './constants.js'
+import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from './constants.js'
 import { runGameLoop, getGameStateAtLogIndex } from './gameLogic';
 import './App.css';
 
@@ -38,16 +38,32 @@ function App() {
     }
   }, [currentLogIndex, gameLog]);
 
+  useEffect(() => {
+    let timeoutId;
+    if (isPlaying && currentLogIndex < gameLog.length - 1) {
+      timeoutId = setTimeout(() => {
+        handlePlayNext();
+      }, PLAY_SPEED);
+    } else if (currentLogIndex >= gameLog.length - 1) {
+      setIsPlaying(false);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isPlaying, currentLogIndex, gameLog.length]);
+
   const handlePlayNext = () => {
     if (currentLogIndex < gameLog.length - 1) {
       setCurrentLogIndex(prevIndex => prevIndex + 1);
       setGameState(getGameStateAtLogIndex(gameLog, currentLogIndex + 1));
+    } else {
+      setIsPlaying(false);
     }
   };
 
-
-
   const handlePlayPause = () => {
+    if (!isPlaying) {
+      setCurrentLogIndex(-1);
+      setGameState(getGameStateAtLogIndex(gameLog, -1));
+    }
     setIsPlaying(!isPlaying);
   };
 
