@@ -5,9 +5,10 @@ import { PLAYER_ONE, PLAYER_TWO } from '../constants';
 
 const BattleField = () => {
     // Get the current game state and action from our game context
-    const { gameState, currentAction } = useGame();
+    const { gameState, currentAction, isLogGenerated } = useGame();
 
     // If the game state hasn't been initialized, don't render anything
+    if (!isLogGenerated) return null;
     if (!gameState) return null;
 
     // Helper function to determine if a specific card is currently attacking

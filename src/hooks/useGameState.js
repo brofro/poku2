@@ -10,13 +10,14 @@ const useGameState = () => {
     const [currentLogIndex, setCurrentLogIndex] = useState(-1);  // Index of current action in the log
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
+    const [isLogGenerated, setIsLogGenerated] = useState(false);
 
-    // Initialize the game when the component mounts
-    useEffect(() => {
+    const handleGenerateLog = () => {
         const { finalState, gameLog } = runGameLoop(initialCardData);
-        setGameState(getGameStateAtLogIndex(gameLog, -1));  // Set initial game state
-        setGameLog(gameLog);  // Set the full game log
-    }, []);
+        setGameState(getGameStateAtLogIndex(gameLog, -1));
+        setGameLog(gameLog);
+        setIsLogGenerated(true);
+    };
 
     // Handle auto-play functionality
     useEffect(() => {
@@ -72,7 +73,9 @@ const useGameState = () => {
         gameLog,
         currentLogIndex,
         isPlaying,
+        isLogGenerated,
         currentAction,
+        handleGenerateLog,
         handlePlayNext,
         handlePlayPause,
         handleRestart,

@@ -143,6 +143,16 @@ function areAllCardsInState(playerCards, state) {
 }
 
 /**
+ * Checks if any cards of a player are in a specific state
+ * @param {Array} playerCards - The player's cards
+ * @param {string} state - The state to check for
+ * @returns {boolean} True if any cards are in the specified state, false otherwise
+ */
+function areAnyCardsInState(playerCards, state) {
+    return playerCards.some(card => card.state === state);
+}
+
+/**
  * Resets the fatigue of all non-fainted cards
  * @param {Array} playerCards - The player's cards
  * @returns {Array} The updated player cards with fatigue reset
@@ -198,45 +208,54 @@ function getBoardState(gameState) {
  * @returns {Object} The updated game state after the turn and the log entries
  */
 function performTurn(gameState) {
+    // Get the current player's cards and determine the opposing player
     const currentPlayerCards = gameState[gameState.currentPlayer];
     const opposingPlayer = getOpposingPlayer(gameState.currentPlayer);
     const opposingPlayerCards = gameState[opposingPlayer];
 
+    // Find the first active card for the current player and the first non-fainted card for the opponent
     const attacker = findLeftmostActiveCard(currentPlayerCards);
     const defender = findLeftmostNonFaintedCard(opposingPlayerCards);
 
+    // If either player has no valid cards, skip the turn
     if (!attacker || !defender) {
-        // If no valid attacker or defender, switch turns
         return {
             gameState: {
                 ...gameState,
-                currentPlayer: opposingPlayer
+                currentPlayer: opposingPlayer // Switch to the other player
             },
             logEntries: [createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })]
         };
     }
 
+    // Perform the attack and get the updated attacker and defender cards
     const { updatedAttacker, updatedDefender } = performAttack(attacker, defender);
 
+    // Find the positions of the attacker and defender in their respective card lists
     const attackerPosition = findCardPosition(currentPlayerCards, attacker);
     const defenderPosition = findCardPosition(opposingPlayerCards, defender);
 
+    // Update the current player's card list with the new attacker state
     const updatedCurrentPlayerCards = currentPlayerCards.map(card =>
         card.id === updatedAttacker.id ? updatedAttacker : card
     );
 
+    // Update the opposing player's card list with the new defender state
     const updatedOpposingPlayerCards = opposingPlayerCards.map(card =>
         card.id === updatedDefender.id ? updatedDefender : card
     );
 
+    // Create the updated game state
     const updatedGameState = {
         ...gameState,
         [gameState.currentPlayer]: updatedCurrentPlayerCards,
         [opposingPlayer]: updatedOpposingPlayerCards,
-        currentPlayer: opposingPlayer
+        currentPlayer: opposingPlayer // Switch to the other player for the next turn
     };
 
+    // Initialize the log entries array with the attack, counter-attack, and HP update
     const logEntries = [
+        // Log the attack
         createLogEntry(ACTION_TYPES.ATTACK, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
             actingPlayer: gameState.currentPlayer,
@@ -246,6 +265,7 @@ function performTurn(gameState) {
             targetCardPosition: defenderPosition,
             targetCardName: defender.name
         }),
+        // Log the counter-attack
         createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
             actingPlayer: opposingPlayer,
@@ -255,12 +275,14 @@ function performTurn(gameState) {
             targetCardPosition: attackerPosition,
             targetCardName: attacker.name
         }),
+        // Log the HP update for both cards
         createLogEntry(ACTION_TYPES.HP_UPDATE, {
             log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
             boardState: getBoardState(updatedGameState)
         })
     ];
 
+    // Check if the attacker fainted and log it if so
     if (updatedAttacker.currentHp <= 0) {
         logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`,
@@ -269,6 +291,7 @@ function performTurn(gameState) {
         }));
     }
 
+    // Check if the defender fainted and log it if so
     if (updatedDefender.currentHp <= 0) {
         logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`,
@@ -277,6 +300,7 @@ function performTurn(gameState) {
         }));
     }
 
+    // Return the updated game state and log entries
     return { gameState: updatedGameState, logEntries };
 }
 
@@ -299,8 +323,8 @@ function performRound(gameState) {
     let updatedGameState = { ...gameState };
     const logEntries = [];
 
-    while (!areAllCardsInState(updatedGameState[PLAYER_ONE], CARD_STATE.FATIGUED) &&
-        !areAllCardsInState(updatedGameState[PLAYER_TWO], CARD_STATE.FATIGUED) &&
+    while ((areAnyCardsInState(updatedGameState[PLAYER_ONE], CARD_STATE.ACTIVE) ||
+        areAnyCardsInState(updatedGameState[PLAYER_TWO], CARD_STATE.ACTIVE)) &&
         !isGameOver(updatedGameState)) {
         const { gameState: newState, logEntries: turnLogEntries } = performTurn(updatedGameState);
         updatedGameState = newState;

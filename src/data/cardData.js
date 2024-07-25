@@ -25,7 +25,7 @@ export const CARD_DEFINITIONS = {
         id: 152,
         name: "Chikorita",
         atk: 1,
-        hp: 1,
+        hp: 4,
     },
 };
 

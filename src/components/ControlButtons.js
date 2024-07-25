@@ -3,8 +3,8 @@ import { useGame } from '../contexts/GameContext';
 
 const ControlButtons = () => {
     // Get the necessary functions and state from our game context
-    const { handlePlayNext, handlePlayPause, handleRestart, isPlaying } = useGame();
-
+    const { handlePlayNext, handlePlayPause, handleRestart, isPlaying, isLogGenerated } = useGame();
+    if (!isLogGenerated) return null;
     return (
         <div className="control-buttons">
             {/* Button to play the next action */}

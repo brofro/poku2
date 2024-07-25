@@ -3,7 +3,9 @@ import { useGame } from '../contexts/GameContext';
 
 const GameLog = () => {
     // Get the game log and current log index from our game context
-    const { gameLog, currentLogIndex } = useGame();
+    const { gameLog, currentLogIndex, isLogGenerated } = useGame();
+
+    if (!isLogGenerated) return null;
 
     return (
         <div className="game-log">
