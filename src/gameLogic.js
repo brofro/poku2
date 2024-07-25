@@ -283,10 +283,10 @@ function performTurn(gameState) {
     const attackerPosition = findCardPosition(currentPlayerCards, attacker);
     const defenderPosition = findCardPosition(opposingPlayerCards, defender);
 
-    // Perform the attack and get the updated attacker and defender cards
-    //const { updatedAttacker, updatedDefender } = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition);
+    // Perform the attack/catk and get the updated attacker and defender cards
     let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition, ACTION_TYPES.ATTACK);
-    let updatedAttacker = performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
+    //Skip counter attack on quick attack
+    let updatedAttacker = attacker.quickattack ? attacker : performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
 
 
 

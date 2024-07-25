@@ -2,15 +2,15 @@ import React from 'react';
 import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
+import quickattackicon from './quick-attack-icon.png'
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, quickattack }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
     // Add appropriate classes based on the card's state
     if (state === 'FATIGUED') cardClasses.push('fatigued');
     if (state === 'FAINTED') cardClasses.push('fainted');
-    // Add 'attacking' class if the card is currently attacking
     if (isAttacking) cardClasses.push('attacking');
     if (isCounterAttacking) cardClasses.push('counter-attacking');
     if (divineShield) cardClasses.push('divine-shield');
@@ -20,6 +20,7 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
+                {quickattack && <img src={quickattackicon} alt="Quick Attack" className="quick-attack-icon" />}
             </div>
             {/* Card information */}
             <div className="card-info">
