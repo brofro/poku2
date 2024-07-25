@@ -1,12 +1,13 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants.js';
 
 let actionId = 0;
+let gameLog = [];
 
 /**
- * Creates a log entry
+ * Creates a log entry and adds it to the global gameLog
  * @param {string} action - The action that occurred
  * @param {Object} data - Additional data about the action
- * @returns {Object} A log entry object
+ * @returns {Object} The created log entry
  */
 function createLogEntry(action, data) {
     const baseEntry = {
@@ -15,10 +16,12 @@ function createLogEntry(action, data) {
         log: data.log
     };
 
+    let logEntry;
+
     switch (action) {
         case ACTION_TYPES.ATTACK:
         case ACTION_TYPES.COUNTER_ATTACK:
-            return {
+            logEntry = {
                 ...baseEntry,
                 action_details: {
                     actingPlayer: data.actingPlayer,
@@ -29,25 +32,31 @@ function createLogEntry(action, data) {
                     targetCardName: data.targetCardName
                 }
             };
+            break;
         case ACTION_TYPES.FAINTED:
-            return {
+            logEntry = {
                 ...baseEntry,
                 action_details: {
                     faintedCardPos: data.faintedCardPos,
                     faintedCardName: data.faintedCardName
                 }
             };
+            break;
         case ACTION_TYPES.HP_UPDATE:
         case ACTION_TYPES.ROUND_END:
         case ACTION_TYPES.GAME_END:
         case ACTION_TYPES.GAME_START:
-            return {
+            logEntry = {
                 ...baseEntry,
                 board_state: data.boardState
             };
+            break;
         default:
-            return baseEntry;
+            logEntry = baseEntry;
     }
+
+    gameLog.push(logEntry);
+    return logEntry;
 }
 
 
@@ -252,56 +261,48 @@ function performTurn(gameState) {
         [opposingPlayer]: updatedOpposingPlayerCards,
         currentPlayer: opposingPlayer // Switch to the other player for the next turn
     };
+    createLogEntry(ACTION_TYPES.ATTACK, {
+        log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
+        actingPlayer: gameState.currentPlayer,
+        sourceCardPosition: attackerPosition,
+        sourceCardName: attacker.name,
+        attackValue: attacker.atk,
+        targetCardPosition: defenderPosition,
+        targetCardName: defender.name
+    });
 
-    // Initialize the log entries array with the attack, counter-attack, and HP update
-    const logEntries = [
-        // Log the attack
-        createLogEntry(ACTION_TYPES.ATTACK, {
-            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
-            actingPlayer: gameState.currentPlayer,
-            sourceCardPosition: attackerPosition,
-            sourceCardName: attacker.name,
-            attackValue: attacker.atk,
-            targetCardPosition: defenderPosition,
-            targetCardName: defender.name
-        }),
-        // Log the counter-attack
-        createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
-            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
-            actingPlayer: opposingPlayer,
-            sourceCardPosition: defenderPosition,
-            sourceCardName: defender.name,
-            attackValue: defender.atk,
-            targetCardPosition: attackerPosition,
-            targetCardName: attacker.name
-        }),
-        // Log the HP update for both cards
-        createLogEntry(ACTION_TYPES.HP_UPDATE, {
-            log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
-            boardState: getBoardState(updatedGameState)
-        })
-    ];
+    createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
+        log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
+        actingPlayer: opposingPlayer,
+        sourceCardPosition: defenderPosition,
+        sourceCardName: defender.name,
+        attackValue: defender.atk,
+        targetCardPosition: attackerPosition,
+        targetCardName: attacker.name
+    });
 
-    // Check if the attacker fainted and log it if so
+    createLogEntry(ACTION_TYPES.HP_UPDATE, {
+        log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
+        boardState: getBoardState(updatedGameState)
+    });
+
     if (updatedAttacker.currentHp <= 0) {
-        logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
+        createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`,
             faintedCardPos: attackerPosition,
             faintedCardName: attacker.name
-        }));
+        });
     }
 
-    // Check if the defender fainted and log it if so
     if (updatedDefender.currentHp <= 0) {
-        logEntries.push(createLogEntry(ACTION_TYPES.FAINTED, {
+        createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`,
             faintedCardPos: defenderPosition,
             faintedCardName: defender.name
-        }));
+        });
     }
 
-    // Return the updated game state and log entries
-    return { gameState: updatedGameState, logEntries };
+    return { gameState: updatedGameState };
 }
 
 /**
@@ -321,32 +322,28 @@ function isGameOver(gameState) {
  */
 function performRound(gameState) {
     let updatedGameState = { ...gameState };
-    const logEntries = [];
 
     while ((areAnyCardsInState(updatedGameState[PLAYER_ONE], CARD_STATE.ACTIVE) ||
         areAnyCardsInState(updatedGameState[PLAYER_TWO], CARD_STATE.ACTIVE)) &&
         !isGameOver(updatedGameState)) {
-        const { gameState: newState, logEntries: turnLogEntries } = performTurn(updatedGameState);
+        const { gameState: newState } = performTurn(updatedGameState);
         updatedGameState = newState;
-        logEntries.push(...turnLogEntries);
     }
 
-    // Reset fatigue for both players
     updatedGameState[PLAYER_ONE] = resetFatigue(updatedGameState[PLAYER_ONE]);
     updatedGameState[PLAYER_TWO] = resetFatigue(updatedGameState[PLAYER_TWO]);
 
-    logEntries.push(createLogEntry(ACTION_TYPES.ROUND_END, {
+    createLogEntry(ACTION_TYPES.ROUND_END, {
         log: `ROUND_${updatedGameState.round}_END`,
         boardState: getBoardState(updatedGameState)
-    }));
+    });
 
     return {
         gameState: {
             ...updatedGameState,
             round: updatedGameState.round + 1,
-            currentPlayer: PLAYER_ONE // Reset to player one for the next round
-        },
-        logEntries
+            currentPlayer: PLAYER_ONE
+        }
     };
 }
 
@@ -374,22 +371,24 @@ function getGameStateAtLogIndex(gameLog, index) {
  * @returns {Object} The final game state and the complete game log
  */
 function runGameLoop(initialCardData) {
+    gameLog = []; // Reset the game log
+    actionId = 0; // Reset the action ID counter
     let gameState = initializeGameState(initialCardData);
-    const gameLog = [createLogEntry(ACTION_TYPES.GAME_START, {
+
+    createLogEntry(ACTION_TYPES.GAME_START, {
         log: ACTION_TYPES.GAME_START,
         boardState: getBoardState(gameState)
-    })];
+    });
 
     while (!isGameOver(gameState)) {
-        const { gameState: newState, logEntries } = performRound(gameState);
+        const { gameState: newState } = performRound(gameState);
         gameState = newState;
-        gameLog.push(...logEntries);
     }
 
-    gameLog.push(createLogEntry(ACTION_TYPES.GAME_END, {
+    createLogEntry(ACTION_TYPES.GAME_END, {
         log: ACTION_TYPES.GAME_END,
         boardState: getBoardState(gameState)
-    }));
+    });
 
     return { finalState: gameState, gameLog };
 }
