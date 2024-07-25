@@ -42,6 +42,15 @@ function createLogEntry(action, data) {
                 }
             };
             break;
+        case ACTION_TYPES.DEATHRATTLE:
+            logEntry = {
+                ...baseEntry,
+                board_state: data.boardState,
+                action_details: {
+                    triggeredCard: data.sourceCardName
+                }
+            }
+            break;
         case ACTION_TYPES.HP_UPDATE:
         case ACTION_TYPES.ROUND_END:
         case ACTION_TYPES.GAME_END:
@@ -115,6 +124,19 @@ function findLeftmostNonFaintedCard(playerCards) {
     return playerCards.find(card => card.state !== CARD_STATE.FAINTED) || null;
 }
 
+function handleFainted(card) {
+    if (card.currentHp <= 0) {
+        card.state = CARD_STATE.FAINTED;
+
+        if (card.deathrattle && !card.triggeredDeathrattle) {
+            console.log(card.name)
+
+            card = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true }
+        }
+    }
+    return card;
+}
+
 /**
  * Performs an attack between two cards
  * @param {Object} attackerCard - The attacking card
@@ -122,21 +144,19 @@ function findLeftmostNonFaintedCard(playerCards) {
  * @returns {Object} The updated attacker and defender cards
  */
 function performAttack(attackerCard, defenderCard) {
-    const updatedAttacker = { ...attackerCard };
-    const updatedDefender = { ...defenderCard };
+    let updatedAttacker = { ...attackerCard };
+    let updatedDefender = { ...defenderCard };
 
     updatedDefender.currentHp = Math.max(0, defenderCard.currentHp - attackerCard.atk);
     updatedAttacker.currentHp = Math.max(0, attackerCard.currentHp - defenderCard.atk);
 
-    if (updatedDefender.currentHp === 0) {
-        updatedDefender.state = CARD_STATE.FAINTED;
-    }
+    console.log(attackerCard.name, defenderCard.name)
 
-    if (updatedAttacker.currentHp === 0) {
-        updatedAttacker.state = CARD_STATE.FAINTED;
-    } else {
-        updatedAttacker.state = CARD_STATE.FATIGUED;
-    }
+    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker) }
+    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender) }
+
+    updatedAttacker.state = updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED;
+
 
     return { updatedAttacker, updatedDefender };
 }
@@ -285,6 +305,22 @@ function performTurn(gameState) {
         log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
         boardState: getBoardState(updatedGameState)
     });
+
+    if (updatedAttacker.triggeredDeathrattle) {
+        createLogEntry(ACTION_TYPES.DEATHRATTLE, {
+            log: `${updatedAttacker.name} triggered deathrattle`,
+            sourceCardName: updatedAttacker.name,
+            boardState: getBoardState(updatedGameState)
+        })
+    }
+
+    if (updatedDefender.triggeredDeathrattle) {
+        createLogEntry(ACTION_TYPES.DEATHRATTLE, {
+            log: `${updatedDefender.name} triggered deathrattle`,
+            sourceCardName: updatedDefender.name,
+            boardState: getBoardState(updatedGameState)
+        })
+    }
 
     if (updatedAttacker.currentHp <= 0) {
         createLogEntry(ACTION_TYPES.FAINTED, {

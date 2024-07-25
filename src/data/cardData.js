@@ -20,6 +20,16 @@ export const CARD_DEFINITIONS = {
         name: "Snorlax",
         atk: 1,
         hp: 5,
+        deathrattle() {
+            return {
+                id: 143,
+                name: "Munchlax",
+                atk: 1,
+                hp: 1,
+                currentHp: 1,
+                img: getImageUrl(446)
+            }
+        }
     },
     152: {
         id: 152,

@@ -3,7 +3,7 @@ import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
 
-const Card = ({ id, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
@@ -18,7 +18,7 @@ const Card = ({ id, name, atk, hp, currentHp, state, player, index, isAttacking,
         <div className={cardClasses.join(' ')}>
             {/* Card image */}
             <div className="card-image-container">
-                <img src={getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
+                <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
             </div>
             {/* Card information */}
             <div className="card-info">
