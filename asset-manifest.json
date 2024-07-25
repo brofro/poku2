@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/poku2/static/css/main.0262e68e.css",
-    "main.js": "/poku2/static/js/main.8b534ea1.js",
+    "main.css": "/poku2/static/css/main.d471f6dd.css",
+    "main.js": "/poku2/static/js/main.34fb1ccb.js",
     "static/js/453.c634b553.chunk.js": "/poku2/static/js/453.c634b553.chunk.js",
+    "static/media/quick-attack-icon.png": "/poku2/static/media/quick-attack-icon.78ed0f78e3d60f0c6ee0.png",
     "index.html": "/poku2/index.html",
-    "main.0262e68e.css.map": "/poku2/static/css/main.0262e68e.css.map",
-    "main.8b534ea1.js.map": "/poku2/static/js/main.8b534ea1.js.map",
+    "main.d471f6dd.css.map": "/poku2/static/css/main.d471f6dd.css.map",
+    "main.34fb1ccb.js.map": "/poku2/static/js/main.34fb1ccb.js.map",
     "453.c634b553.chunk.js.map": "/poku2/static/js/453.c634b553.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0262e68e.css",
-    "static/js/main.8b534ea1.js"
+    "static/css/main.d471f6dd.css",
+    "static/js/main.34fb1ccb.js"
   ]
 }
