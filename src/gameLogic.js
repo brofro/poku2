@@ -1,4 +1,4 @@
-import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants';
+import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants.js';
 
 let actionId = 0;
 
