@@ -8,6 +8,7 @@ export const CARD_DEFINITIONS = {
         name: "Cyndaquil",
         atk: 2,
         hp: 2,
+        divineShield: true
     },
     158: {
         id: 158,

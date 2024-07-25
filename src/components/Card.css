@@ -119,3 +119,55 @@
 .card.counter-attacking {
     animation: glowingBlue 1s infinite;
 }
+
+/* Replace the previous .card.divine-shield::before rule with this */
+.card.divine-shield {
+    box-shadow: 0 0 10px 3px rgba(255, 255, 0, 0.7);
+}
+
+/* Adjust the existing animations to include the divine shield glow */
+@keyframes glowingRed {
+    0% {
+        box-shadow: 0 0 5px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+
+    50% {
+        box-shadow: 0 0 20px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 5px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+}
+
+@keyframes glowingBlue {
+    0% {
+        box-shadow: 0 0 5px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+
+    50% {
+        box-shadow: 0 0 20px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 5px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+    }
+}
+
+/* Update the existing .card.attacking and .card.counter-attacking rules */
+.card.attacking {
+    animation: glowingRed 1s infinite;
+}
+
+.card.counter-attacking {
+    animation: glowingBlue 1s infinite;
+}
+
+/* Add new rules for combinations of divine shield with attacking/counter-attacking */
+.card.divine-shield.attacking {
+    animation: glowingRed 1s infinite;
+}
+
+.card.divine-shield.counter-attacking {
+    animation: glowingBlue 1s infinite;
+}

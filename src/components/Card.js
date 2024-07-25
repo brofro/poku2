@@ -3,7 +3,7 @@ import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
@@ -13,6 +13,7 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
     // Add 'attacking' class if the card is currently attacking
     if (isAttacking) cardClasses.push('attacking');
     if (isCounterAttacking) cardClasses.push('counter-attacking');
+    if (divineShield) cardClasses.push('divine-shield');
 
     return (
         <div className={cardClasses.join(' ')}>

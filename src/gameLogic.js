@@ -149,7 +149,12 @@ function handleFainted(card, player, position) {
 
 function performAttack(attackerCard, defenderCard, attackerPlayer, attackerPosition, defenderPosition, type) {
     let updatedDefender = { ...defenderCard };
-    updatedDefender.currentHp = Math.max(0, defenderCard.currentHp - attackerCard.atk);
+    if (defenderCard.divineShield) {
+        updatedDefender.divineShield = false
+    }
+    else {
+        updatedDefender.currentHp = Math.max(0, defenderCard.currentHp - attackerCard.atk);
+    }
     createLogEntry(type, {
         log: `${attackerPlayer}_${attackerPosition}(${abbreviateName(attackerCard.name)})_ATK ${attackerCard.atk}_${defenderPosition}(${abbreviateName(defenderCard.name)})`,
         actingPlayer: attackerPlayer,
