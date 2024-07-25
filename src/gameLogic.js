@@ -45,7 +45,6 @@ function createLogEntry(action, data) {
         case ACTION_TYPES.DEATHRATTLE:
             logEntry = {
                 ...baseEntry,
-                board_state: data.boardState,
                 action_details: {
                     triggeredCard: data.sourceCardName
                 }
@@ -124,41 +123,44 @@ function findLeftmostNonFaintedCard(playerCards) {
     return playerCards.find(card => card.state !== CARD_STATE.FAINTED) || null;
 }
 
-function handleFainted(card) {
+function handleFainted(card, player, position) {
     if (card.currentHp <= 0) {
         card.state = CARD_STATE.FAINTED;
 
-        if (card.deathrattle && !card.triggeredDeathrattle) {
-            console.log(card.name)
+        // Create FAINTED log entry
+        createLogEntry(ACTION_TYPES.FAINTED, {
+            log: `${player}_${position}(${abbreviateName(card.name)})_FAINTED`,
+            faintedCardPos: position,
+            faintedCardName: card.name,
+        });
 
-            card = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true }
+        if (card.deathrattle && !card.triggeredDeathrattle) {
+            card = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true };
+
+            // Create DEATHRATTLE log entry
+            createLogEntry(ACTION_TYPES.DEATHRATTLE, {
+                log: `${card.name} triggered deathrattle`,
+                sourceCardName: card.name,
+            });
         }
     }
     return card;
 }
 
-/**
- * Performs an attack between two cards
- * @param {Object} attackerCard - The attacking card
- * @param {Object} defenderCard - The defending card
- * @returns {Object} The updated attacker and defender cards
- */
-function performAttack(attackerCard, defenderCard) {
-    let updatedAttacker = { ...attackerCard };
+function performAttack(attackerCard, defenderCard, attackerPlayer, attackerPosition, defenderPosition, type) {
     let updatedDefender = { ...defenderCard };
-
     updatedDefender.currentHp = Math.max(0, defenderCard.currentHp - attackerCard.atk);
-    updatedAttacker.currentHp = Math.max(0, attackerCard.currentHp - defenderCard.atk);
+    createLogEntry(type, {
+        log: `${attackerPlayer}_${attackerPosition}(${abbreviateName(attackerCard.name)})_ATK ${attackerCard.atk}_${defenderPosition}(${abbreviateName(defenderCard.name)})`,
+        actingPlayer: attackerPlayer,
+        sourceCardPosition: attackerPosition,
+        sourceCardName: attackerCard.name,
+        attackValue: attackerCard.atk,
+        targetCardPosition: defenderPosition,
+        targetCardName: defenderCard.name
+    });
 
-    console.log(attackerCard.name, defenderCard.name)
-
-    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker) }
-    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender) }
-
-    updatedAttacker.state = updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED;
-
-
-    return { updatedAttacker, updatedDefender };
+    return updatedDefender
 }
 
 /**
@@ -231,6 +233,22 @@ function getBoardState(gameState) {
     };
 }
 
+function updatePlayerCards(updatedCard, playerCards) {
+    const updatedCards = playerCards.map(card =>
+        card.id === updatedCard.id ? updatedCard : card
+    )
+
+    return updatedCards
+}
+
+function getUpdateGameState(currentGameState, updatedCurrentPlayerCards, updatedOpposingPlayerCards) {
+    return {
+        ...currentGameState,
+        [currentGameState.currentPlayer]: updatedCurrentPlayerCards,
+        [getOpposingPlayer(currentGameState.currentPlayer)]: updatedOpposingPlayerCards,
+    }
+}
+
 /**
  * Performs a single turn in the game
  * @param {Object} gameState - The current game state
@@ -256,89 +274,31 @@ function performTurn(gameState) {
             logEntries: [createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })]
         };
     }
-
-    // Perform the attack and get the updated attacker and defender cards
-    const { updatedAttacker, updatedDefender } = performAttack(attacker, defender);
-
     // Find the positions of the attacker and defender in their respective card lists
     const attackerPosition = findCardPosition(currentPlayerCards, attacker);
     const defenderPosition = findCardPosition(opposingPlayerCards, defender);
 
-    // Update the current player's card list with the new attacker state
-    const updatedCurrentPlayerCards = currentPlayerCards.map(card =>
-        card.id === updatedAttacker.id ? updatedAttacker : card
-    );
+    // Perform the attack and get the updated attacker and defender cards
+    //const { updatedAttacker, updatedDefender } = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition);
+    let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition, ACTION_TYPES.ATTACK);
+    let updatedAttacker = performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
 
-    // Update the opposing player's card list with the new defender state
-    const updatedOpposingPlayerCards = opposingPlayerCards.map(card =>
-        card.id === updatedDefender.id ? updatedDefender : card
-    );
 
-    // Create the updated game state
-    const updatedGameState = {
-        ...gameState,
-        [gameState.currentPlayer]: updatedCurrentPlayerCards,
-        [opposingPlayer]: updatedOpposingPlayerCards,
-        currentPlayer: opposingPlayer // Switch to the other player for the next turn
-    };
-    createLogEntry(ACTION_TYPES.ATTACK, {
-        log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defenderPosition}(${abbreviateName(defender.name)})`,
-        actingPlayer: gameState.currentPlayer,
-        sourceCardPosition: attackerPosition,
-        sourceCardName: attacker.name,
-        attackValue: attacker.atk,
-        targetCardPosition: defenderPosition,
-        targetCardName: defender.name
-    });
 
-    createLogEntry(ACTION_TYPES.COUNTER_ATTACK, {
-        log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_ATK ${defender.atk}_${attackerPosition}(${abbreviateName(attacker.name)})`,
-        actingPlayer: opposingPlayer,
-        sourceCardPosition: defenderPosition,
-        sourceCardName: defender.name,
-        attackValue: defender.atk,
-        targetCardPosition: attackerPosition,
-        targetCardName: attacker.name
-    });
+    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker, gameState.currentPlayer, attackerPosition) }
+    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender, opposingPlayer, defenderPosition) }
 
+    let updatedCurrentPlayerCards = updatePlayerCards({ ...updatedAttacker, state: updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED }, currentPlayerCards)
+    let updatedOpposingPlayerCards = updatePlayerCards(updatedDefender, opposingPlayerCards)
+    let updatedGameState = getUpdateGameState(gameState, updatedCurrentPlayerCards, updatedOpposingPlayerCards)
+
+    // Create the updated game state and update HP
     createLogEntry(ACTION_TYPES.HP_UPDATE, {
         log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
         boardState: getBoardState(updatedGameState)
     });
 
-    if (updatedAttacker.triggeredDeathrattle) {
-        createLogEntry(ACTION_TYPES.DEATHRATTLE, {
-            log: `${updatedAttacker.name} triggered deathrattle`,
-            sourceCardName: updatedAttacker.name,
-            boardState: getBoardState(updatedGameState)
-        })
-    }
-
-    if (updatedDefender.triggeredDeathrattle) {
-        createLogEntry(ACTION_TYPES.DEATHRATTLE, {
-            log: `${updatedDefender.name} triggered deathrattle`,
-            sourceCardName: updatedDefender.name,
-            boardState: getBoardState(updatedGameState)
-        })
-    }
-
-    if (updatedAttacker.currentHp <= 0) {
-        createLogEntry(ACTION_TYPES.FAINTED, {
-            log: `${gameState.currentPlayer}_${attackerPosition}(${abbreviateName(attacker.name)})_FAINTED`,
-            faintedCardPos: attackerPosition,
-            faintedCardName: attacker.name
-        });
-    }
-
-    if (updatedDefender.currentHp <= 0) {
-        createLogEntry(ACTION_TYPES.FAINTED, {
-            log: `${opposingPlayer}_${defenderPosition}(${abbreviateName(defender.name)})_FAINTED`,
-            faintedCardPos: defenderPosition,
-            faintedCardName: defender.name
-        });
-    }
-
-    return { gameState: updatedGameState };
+    return { gameState: { ...updatedGameState, currentPlayer: opposingPlayer } };
 }
 
 /**
