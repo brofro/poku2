@@ -2,9 +2,9 @@ import React from 'react';
 import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
-import quickattackicon from './quick-attack-icon.png'
+import rangedicon from './ranged.svg'
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, quickattack }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, ranged }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
@@ -20,7 +20,7 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
-                {quickattack && <img src={quickattackicon} alt="Quick Attack" className="quick-attack-icon" />}
+                {ranged && <img src={rangedicon} alt="Ranged" className="ranged-icon" />}
             </div>
             {/* Card information */}
             <div className="card-info">

@@ -37,7 +37,7 @@ export const CARD_DEFINITIONS = {
         name: "Chikorita",
         atk: 1,
         hp: 4,
-        quickattack: true
+        ranged: true
     },
 };
 

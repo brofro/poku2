@@ -11,6 +11,19 @@
     padding: 8px;
     box-sizing: border-box;
     transition: all 0.3s ease;
+    position: relative
+}
+
+.card.divine-shield::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 3px solid yellow;
+    border-radius: 10px;
+    pointer-events: none;
 }
 
 /* Card image container styles */
@@ -120,35 +133,31 @@
     animation: glowingBlue 1s infinite;
 }
 
-.card.divine-shield {
-    box-shadow: 0 0 10px 3px rgba(255, 255, 0, 0.7);
-}
-
 @keyframes glowingRed {
     0% {
-        box-shadow: 0 0 5px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 5px #ff0000;
     }
 
     50% {
-        box-shadow: 0 0 20px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 20px #ff0000;
     }
 
     100% {
-        box-shadow: 0 0 5px #ff0000, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 5px #ff0000;
     }
 }
 
 @keyframes glowingBlue {
     0% {
-        box-shadow: 0 0 5px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 5px #0000ff;
     }
 
     50% {
-        box-shadow: 0 0 20px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 20px #0000ff;
     }
 
     100% {
-        box-shadow: 0 0 5px #0000ff, 0 0 10px 3px rgba(255, 255, 0, 0.7);
+        box-shadow: 0 0 5px #0000ff;
     }
 }
 
@@ -160,19 +169,11 @@
     animation: glowingBlue 1s infinite;
 }
 
-.card.divine-shield.attacking {
-    animation: glowingRed 1s infinite;
-}
-
-.card.divine-shield.counter-attacking {
-    animation: glowingBlue 1s infinite;
-}
-
 .card-image-container {
     position: relative;
 }
 
-.quick-attack-icon {
+.ranged-icon {
     position: absolute;
     top: 5px;
     right: 5px;

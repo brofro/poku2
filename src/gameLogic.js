@@ -285,8 +285,8 @@ function performTurn(gameState) {
 
     // Perform the attack/catk and get the updated attacker and defender cards
     let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition, ACTION_TYPES.ATTACK);
-    //Skip counter attack on quick attack
-    let updatedAttacker = attacker.quickattack ? attacker : performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
+    //Skip counter attack on ranged
+    let updatedAttacker = attacker.ranged ? attacker : performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
 
 
 
