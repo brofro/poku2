@@ -1,16 +1,18 @@
 {
   "files": {
-    "main.css": "/poku2/static/css/main.d471f6dd.css",
-    "main.js": "/poku2/static/js/main.34fb1ccb.js",
+    "main.css": "/poku2/static/css/main.cf4243e9.css",
+    "main.js": "/poku2/static/js/main.a48027b7.js",
     "static/js/453.c634b553.chunk.js": "/poku2/static/js/453.c634b553.chunk.js",
-    "static/media/quick-attack-icon.png": "/poku2/static/media/quick-attack-icon.78ed0f78e3d60f0c6ee0.png",
+    "static/media/divineshield.svg": "/poku2/static/media/divineshield.a024bae862fc1a08427e87bf6670051f.svg",
+    "static/media/deathrattle.svg": "/poku2/static/media/deathrattle.ccee72e8af57dc7562e9703d4370aace.svg",
     "index.html": "/poku2/index.html",
-    "main.d471f6dd.css.map": "/poku2/static/css/main.d471f6dd.css.map",
-    "main.34fb1ccb.js.map": "/poku2/static/js/main.34fb1ccb.js.map",
+    "static/media/ranged.svg": "/poku2/static/media/ranged.c54039696c671dc9e507d67e94a4e2bb.svg",
+    "main.cf4243e9.css.map": "/poku2/static/css/main.cf4243e9.css.map",
+    "main.a48027b7.js.map": "/poku2/static/js/main.a48027b7.js.map",
     "453.c634b553.chunk.js.map": "/poku2/static/js/453.c634b553.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d471f6dd.css",
-    "static/js/main.34fb1ccb.js"
+    "static/css/main.cf4243e9.css",
+    "static/js/main.a48027b7.js"
   ]
 }
