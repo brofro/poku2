@@ -69,6 +69,13 @@ const useGameState = () => {
         setIsPlaying(false);
     };
 
+    const setGameStateFromLog = (index) => {
+        setCurrentLogIndex(index);
+        setGameState(getGameStateAtLogIndex(gameLog, index));
+        setIsPlaying(false);
+        setCurrentAction(gameLog[index]);
+    };
+
     // Return all necessary state and functions
     return {
         gameState,
@@ -81,6 +88,7 @@ const useGameState = () => {
         handlePlayNext,
         handlePlayPause,
         handleRestart,
+        setGameStateFromLog
     };
 };
 

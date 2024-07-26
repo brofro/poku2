@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../contexts/GameContext';
+import LogEntry from './LogEntry';
 
 const GameLog = () => {
     // Get the game log and current log index from our game context
@@ -12,13 +13,12 @@ const GameLog = () => {
             <h2>Game Log</h2>
             <div className="log-entries">
                 {gameLog.map((entry, index) => (
-                    <div
+                    <LogEntry
                         key={entry.id}
-                        // Highlight the current log entry
-                        className={`log-entry ${index === currentLogIndex ? 'current-log' : ''}`}
-                    >
-                        <span className="log-id">{entry.id}:</span> {entry.log || entry.action}
-                    </div>
+                        entry={entry}
+                        index={index}
+                        currentIndex={currentLogIndex}
+                    />
                 ))}
             </div>
         </div>

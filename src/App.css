@@ -143,23 +143,6 @@
   font-size: 0.9em;
 }
 
-.log-entry {
-  margin-bottom: 5px;
-  padding: 5px;
-  background-color: #f0f0f0;
-  border-radius: 3px;
-}
-
-.current-log {
-  background-color: #ffffcc;
-  font-weight: bold;
-}
-
-.log-id {
-  font-weight: bold;
-  margin-right: 5px;
-}
-
 .generate-log-button {
   padding: 10px;
   font-size: 14px;
