@@ -74,13 +74,14 @@ function createLogEntry(action, data) {
  * @param {Object} cardData - The original card data
  * @returns {Object} A new card object with added game state properties
  */
-function initializeCard(cardData, bagData = {}) {
+function initializeCard(cardData, bagData = {}, index) {
     return {
         ...cardData,
         ...bagData,
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
-        currentHp: cardData.hp
+        currentHp: cardData.hp,
+        position: index
     };
 }
 
@@ -92,9 +93,9 @@ function initializeCard(cardData, bagData = {}) {
 function initializeGameState(initialCardData) {
     return {
         [PLAYER_ONE]: initialCardData[PLAYER_ONE].map((card, index) =>
-            initializeCard(card, initialBagData[PLAYER_ONE][index])),
+            initializeCard(card, initialBagData[PLAYER_ONE][index], index)),
         [PLAYER_TWO]: initialCardData[PLAYER_TWO].map((card, index) =>
-            initializeCard(card, initialBagData[PLAYER_TWO][index])),
+            initializeCard(card, initialBagData[PLAYER_TWO][index], index)),
         currentPlayer: PLAYER_ONE,
         round: 1
     };
@@ -213,16 +214,6 @@ function abbreviateName(name) {
 }
 
 /**
- * Finds the position of a card in the player's hand
- * @param {Array} playerCards - The player's cards
- * @param {Object} targetCard - The card to find
- * @returns {number} The position of the card (1-based index)
- */
-function findCardPosition(playerCards, targetCard) {
-    return playerCards.findIndex(card => card.id === targetCard.id);
-}
-
-/**
  * Gets the current board state
  * @param {Object} gameState - The current game state
  * @returns {Object} The current board state
@@ -231,11 +222,9 @@ function getBoardState(gameState) {
     return {
         [PLAYER_ONE]: gameState[PLAYER_ONE].map(card => ({
             ...card,
-            position: findCardPosition(gameState[PLAYER_ONE], card),
         })),
         [PLAYER_TWO]: gameState[PLAYER_TWO].map(card => ({
             ...card,
-            position: findCardPosition(gameState[PLAYER_TWO], card),
         })),
         currentPlayer: gameState.currentPlayer,
         round: gameState.round
@@ -283,19 +272,16 @@ function performTurn(gameState) {
             logEntries: [createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })]
         };
     }
-    // Find the positions of the attacker and defender in their respective card lists
-    const attackerPosition = findCardPosition(currentPlayerCards, attacker);
-    const defenderPosition = findCardPosition(opposingPlayerCards, defender);
 
     // Perform the attack/catk and get the updated attacker and defender cards
-    let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attackerPosition, defenderPosition, ACTION_TYPES.ATTACK);
+    let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attacker.position, defender.position, ACTION_TYPES.ATTACK);
     //Skip counter attack on ranged
-    let updatedAttacker = attacker.ranged ? attacker : performAttack(defender, attacker, opposingPlayer, defenderPosition, attackerPosition, ACTION_TYPES.COUNTER_ATTACK)
+    let updatedAttacker = attacker.ranged ? attacker : performAttack(defender, attacker, opposingPlayer, defender.position, attacker.position, ACTION_TYPES.COUNTER_ATTACK)
 
 
 
-    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker, gameState.currentPlayer, attackerPosition) }
-    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender, opposingPlayer, defenderPosition) }
+    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker, gameState.currentPlayer, attacker.position) }
+    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender, opposingPlayer, defender.position) }
 
     let updatedCurrentPlayerCards = updatePlayerCards({ ...updatedAttacker, state: updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED }, currentPlayerCards)
     let updatedOpposingPlayerCards = updatePlayerCards(updatedDefender, opposingPlayerCards)
@@ -303,7 +289,7 @@ function performTurn(gameState) {
 
     // Create the updated game state and update HP
     createLogEntry(ACTION_TYPES.HP_UPDATE, {
-        log: `${attackerPosition}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defenderPosition}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
+        log: `${attacker.position}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defender.position}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
         boardState: getBoardState(updatedGameState)
     });
 
