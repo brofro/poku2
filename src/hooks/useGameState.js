@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
-import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from '../constants';
+import { PLAY_SPEED } from '../constants';
 import { runGameLoop, getGameStateAtLogIndex } from '../gameLogic';
 
 const useGameState = () => {
@@ -13,10 +13,25 @@ const useGameState = () => {
     const [isLogGenerated, setIsLogGenerated] = useState(false);
 
     const handleGenerateLog = () => {
-        const { finalState, gameLog } = runGameLoop(initialCardData);
+        const { gameLog } = runGameLoop(initialCardData);
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setGameLog(gameLog);
         setIsLogGenerated(true);
+    };
+
+    // Function to play the next action in the log
+    const handlePlayNext = () => {
+        if (currentLogIndex < gameLog.length - 1) {
+            const nextIndex = currentLogIndex + 1;
+            setCurrentLogIndex(nextIndex);
+            setGameState(getGameStateAtLogIndex(gameLog, nextIndex));
+
+            // Set the current action
+            setCurrentAction(gameLog[nextIndex]);
+        } else {
+            setIsPlaying(false);
+            setCurrentAction(null);  // Clear the action at the end of the game
+        }
     };
 
     // Handle auto-play functionality
@@ -35,20 +50,7 @@ const useGameState = () => {
         return () => clearTimeout(timeoutId);
     }, [isPlaying, currentLogIndex, gameLog.length]);
 
-    // Function to play the next action in the log
-    const handlePlayNext = () => {
-        if (currentLogIndex < gameLog.length - 1) {
-            const nextIndex = currentLogIndex + 1;
-            setCurrentLogIndex(nextIndex);
-            setGameState(getGameStateAtLogIndex(gameLog, nextIndex));
 
-            // Set the current action
-            setCurrentAction(gameLog[nextIndex]);
-        } else {
-            setIsPlaying(false);
-            setCurrentAction(null);  // Clear the action at the end of the game
-        }
-    };
 
     // Function to start or pause auto-play
     const handlePlayPause = () => {

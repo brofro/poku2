@@ -3,6 +3,7 @@ import { initialBagData } from './data/effectsData.js';
 
 let actionId = 0;
 let gameLog = [];
+let gameState = {};
 
 /**
  * Creates a log entry and adds it to the global gameLog
@@ -14,7 +15,8 @@ function createLogEntry(action, data) {
     const baseEntry = {
         id: actionId++,
         action,
-        log: data.log
+        log: data.log,
+        board_state: { ...gameState }
     };
 
     let logEntry;
@@ -57,7 +59,6 @@ function createLogEntry(action, data) {
         case ACTION_TYPES.GAME_START:
             logEntry = {
                 ...baseEntry,
-                board_state: data.boardState
             };
             break;
         default:
@@ -213,23 +214,7 @@ function abbreviateName(name) {
     return name.substring(0, 3).toUpperCase();
 }
 
-/**
- * Gets the current board state
- * @param {Object} gameState - The current game state
- * @returns {Object} The current board state
- */
-function getBoardState(gameState) {
-    return {
-        [PLAYER_ONE]: gameState[PLAYER_ONE].map(card => ({
-            ...card,
-        })),
-        [PLAYER_TWO]: gameState[PLAYER_TWO].map(card => ({
-            ...card,
-        })),
-        currentPlayer: gameState.currentPlayer,
-        round: gameState.round
-    };
-}
+
 
 function updatePlayerCards(updatedCard, playerCards) {
     const updatedCards = playerCards.map(card =>
@@ -239,20 +224,13 @@ function updatePlayerCards(updatedCard, playerCards) {
     return updatedCards
 }
 
-function getUpdateGameState(currentGameState, updatedCurrentPlayerCards, updatedOpposingPlayerCards) {
-    return {
-        ...currentGameState,
-        [currentGameState.currentPlayer]: updatedCurrentPlayerCards,
-        [getOpposingPlayer(currentGameState.currentPlayer)]: updatedOpposingPlayerCards,
-    }
-}
 
 /**
  * Performs a single turn in the game
  * @param {Object} gameState - The current game state
  * @returns {Object} The updated game state after the turn and the log entries
  */
-function performTurn(gameState) {
+function performTurn() {
     // Get the current player's cards and determine the opposing player
     const currentPlayerCards = gameState[gameState.currentPlayer];
     const opposingPlayer = getOpposingPlayer(gameState.currentPlayer);
@@ -264,13 +242,9 @@ function performTurn(gameState) {
 
     // If either player has no valid cards, skip the turn
     if (!attacker || !defender) {
-        return {
-            gameState: {
-                ...gameState,
-                currentPlayer: opposingPlayer // Switch to the other player
-            },
-            logEntries: [createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })]
-        };
+        gameState.currentPlayer = opposingPlayer
+        createLogEntry(ACTION_TYPES.TURN_SKIPPED, { log: `${gameState.currentPlayer}_${ACTION_TYPES.TURN_SKIPPED}` })
+        return
     }
 
     // Perform the attack/catk and get the updated attacker and defender cards
@@ -283,25 +257,22 @@ function performTurn(gameState) {
     updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker, gameState.currentPlayer, attacker.position) }
     updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender, opposingPlayer, defender.position) }
 
-    let updatedCurrentPlayerCards = updatePlayerCards({ ...updatedAttacker, state: updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED }, currentPlayerCards)
-    let updatedOpposingPlayerCards = updatePlayerCards(updatedDefender, opposingPlayerCards)
-    let updatedGameState = getUpdateGameState(gameState, updatedCurrentPlayerCards, updatedOpposingPlayerCards)
+    gameState[gameState.currentPlayer] = updatePlayerCards({ ...updatedAttacker, state: updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED }, currentPlayerCards)
+    gameState[opposingPlayer] = updatePlayerCards(updatedDefender, opposingPlayerCards)
 
     // Create the updated game state and update HP
     createLogEntry(ACTION_TYPES.HP_UPDATE, {
         log: `${attacker.position}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defender.position}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
-        boardState: getBoardState(updatedGameState)
     });
 
-    return { gameState: { ...updatedGameState, currentPlayer: opposingPlayer } };
+    gameState.currentPlayer = opposingPlayer
 }
 
 /**
  * Checks if the game has ended
- * @param {Object} gameState - The current game state
  * @returns {boolean} True if the game has ended, false otherwise
  */
-function isGameOver(gameState) {
+function isGameOver() {
     return areAllCardsInState(gameState[PLAYER_ONE], CARD_STATE.FAINTED) ||
         areAllCardsInState(gameState[PLAYER_TWO], CARD_STATE.FAINTED);
 }
@@ -311,31 +282,28 @@ function isGameOver(gameState) {
  * @param {Object} gameState - The current game state
  * @returns {Object} The updated game state after the round and the log entries
  */
-function performRound(gameState) {
-    let updatedGameState = { ...gameState };
+function performRound() {
 
-    while ((areAnyCardsInState(updatedGameState[PLAYER_ONE], CARD_STATE.ACTIVE) ||
-        areAnyCardsInState(updatedGameState[PLAYER_TWO], CARD_STATE.ACTIVE)) &&
-        !isGameOver(updatedGameState)) {
-        const { gameState: newState } = performTurn(updatedGameState);
-        updatedGameState = newState;
+    //The turn will continue as long as there are active cards and not game over
+    while ((
+        areAnyCardsInState(gameState[PLAYER_ONE], CARD_STATE.ACTIVE) ||
+        areAnyCardsInState(gameState[PLAYER_TWO], CARD_STATE.ACTIVE)) &&
+        !isGameOver()) {
+
+        performTurn();
     }
 
-    updatedGameState[PLAYER_ONE] = resetFatigue(updatedGameState[PLAYER_ONE]);
-    updatedGameState[PLAYER_TWO] = resetFatigue(updatedGameState[PLAYER_TWO]);
+    //Round end fatigue reset
+    gameState[PLAYER_ONE] = resetFatigue(gameState[PLAYER_ONE]);
+    gameState[PLAYER_TWO] = resetFatigue(gameState[PLAYER_TWO]);
 
     createLogEntry(ACTION_TYPES.ROUND_END, {
-        log: `ROUND_${updatedGameState.round}_END`,
-        boardState: getBoardState(updatedGameState)
+        log: `ROUND_${gameState.round}_END`,
     });
 
-    return {
-        gameState: {
-            ...updatedGameState,
-            round: updatedGameState.round + 1,
-            currentPlayer: PLAYER_ONE
-        }
-    };
+    gameState.round += 1
+    //Refactor when starting player is randomized
+    gameState.currentPlayer = PLAYER_ONE
 }
 
 function getGameStateAtLogIndex(gameLog, index) {
@@ -364,21 +332,18 @@ function getGameStateAtLogIndex(gameLog, index) {
 function runGameLoop(initialCardData) {
     gameLog = []; // Reset the game log
     actionId = 0; // Reset the action ID counter
-    let gameState = initializeGameState(initialCardData);
+    gameState = initializeGameState(initialCardData);
 
     createLogEntry(ACTION_TYPES.GAME_START, {
         log: ACTION_TYPES.GAME_START,
-        boardState: getBoardState(gameState)
     });
 
-    while (!isGameOver(gameState)) {
-        const { gameState: newState } = performRound(gameState);
-        gameState = newState;
+    while (!isGameOver()) {
+        performRound();
     }
 
     createLogEntry(ACTION_TYPES.GAME_END, {
         log: ACTION_TYPES.GAME_END,
-        boardState: getBoardState(gameState)
     });
 
     return { finalState: gameState, gameLog };
