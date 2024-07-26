@@ -30,7 +30,8 @@ export const CARD_DEFINITIONS = {
                 currentHp: 1,
                 img: getImageUrl(446)
             }
-        }
+        },
+        deathrattleText: "Summon a 1/1 Munchlax"
     },
     152: {
         id: 152,

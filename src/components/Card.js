@@ -3,8 +3,10 @@ import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
 import rangedicon from './ranged.svg'
+import deathrattleicon from './deathrattle.svg';
+import divineshieldicon from './divineshield.svg';
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, ranged }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, ranged, deathrattleText }) => {
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
 
@@ -20,7 +22,9 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
-                {ranged && <img src={rangedicon} alt="Ranged" className="ranged-icon" />}
+                {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" />}
+                {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" />}
+                {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" />}
             </div>
             {/* Card information */}
             <div className="card-info">
