@@ -22,9 +22,11 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
-                {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" />}
-                {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" />}
-                {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" />}
+                <div className='card-icons'>
+                    {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" />}
+                    {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" />}
+                    {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" />}
+                </div>
             </div>
             {/* Card information */}
             <div className="card-info">

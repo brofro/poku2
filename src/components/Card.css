@@ -171,6 +171,20 @@
 
 .card-image-container {
     position: relative;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.card-icons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 4px;
+    /* Space between icons */
 }
 
 .card-icon {
