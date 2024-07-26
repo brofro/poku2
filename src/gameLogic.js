@@ -16,7 +16,8 @@ function createLogEntry(action, data) {
         id: actionId++,
         action,
         log: data.log,
-        board_state: { ...gameState }
+        //Deep copy game state
+        board_state: JSON.parse(JSON.stringify(gameState))
     };
 
     let logEntry;
@@ -131,9 +132,7 @@ function findLeftmostNonFaintedCard(playerCards) {
 
 function handleFainted(card, player, position) {
     if (card.currentHp <= 0) {
-        card.state = CARD_STATE.FAINTED;
-
-        // Create FAINTED log entry
+        gameState[player][position].state = CARD_STATE.FAINTED
         createLogEntry(ACTION_TYPES.FAINTED, {
             log: `${player}_${position}(${abbreviateName(card.name)})_FAINTED`,
             faintedCardPos: position,
@@ -141,37 +140,39 @@ function handleFainted(card, player, position) {
         });
 
         if (card.deathrattle && !card.triggeredDeathrattle) {
-            card = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true };
-
-            // Create DEATHRATTLE log entry
+            gameState[player][position] = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true }
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
                 sourceCardName: card.name,
             });
         }
     }
-    return card;
 }
 
-function performAttack(attackerCard, defenderCard, attackerPlayer, attackerPosition, defenderPosition, type) {
-    let updatedDefender = { ...defenderCard };
-    if (defenderCard.divineShield) {
-        updatedDefender.divineShield = false
+
+
+//performAttack editing gameState directly
+function performAttack(attacker, defender, attackingPlayer, defendingPlayer, type) {
+    //attacker and defender are copies and not the actual cards, actual cards are in gameState
+    let atkValue = 0
+    if (defender.divineShield) {
+        gameState[defendingPlayer][defender.position].divineShield = false
     }
     else {
-        updatedDefender.currentHp = Math.max(0, defenderCard.currentHp - attackerCard.atk);
+        atkValue = attacker.atk
+        gameState[defendingPlayer][defender.position].currentHp = Math.max(0, defender.currentHp - attacker.atk)
     }
     createLogEntry(type, {
-        log: `${attackerPlayer}_${attackerPosition}(${abbreviateName(attackerCard.name)})_ATK ${attackerCard.atk}_${defenderPosition}(${abbreviateName(defenderCard.name)})`,
-        actingPlayer: attackerPlayer,
-        sourceCardPosition: attackerPosition,
-        sourceCardName: attackerCard.name,
-        attackValue: attackerCard.atk,
-        targetCardPosition: defenderPosition,
-        targetCardName: defenderCard.name
+        log: `${attackingPlayer}_${attacker.position}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defender.position}(${abbreviateName(defender.name)})`,
+        actingPlayer: attackingPlayer,
+        sourceCardPosition: attacker.position,
+        sourceCardName: attacker.name,
+        attackValue: atkValue,
+        targetCardPosition: defender.position,
+        targetCardName: defender.name
     });
 
-    return updatedDefender
+    if (type === ACTION_TYPES.ATTACK) { gameState[attackingPlayer][attacker.position].state = CARD_STATE.FATIGUED }
 }
 
 /**
@@ -214,17 +215,6 @@ function abbreviateName(name) {
     return name.substring(0, 3).toUpperCase();
 }
 
-
-
-function updatePlayerCards(updatedCard, playerCards) {
-    const updatedCards = playerCards.map(card =>
-        card.id === updatedCard.id ? updatedCard : card
-    )
-
-    return updatedCards
-}
-
-
 /**
  * Performs a single turn in the game
  * @param {Object} gameState - The current game state
@@ -247,23 +237,14 @@ function performTurn() {
         return
     }
 
-    // Perform the attack/catk and get the updated attacker and defender cards
-    let updatedDefender = performAttack(attacker, defender, gameState.currentPlayer, attacker.position, defender.position, ACTION_TYPES.ATTACK);
-    //Skip counter attack on ranged
-    let updatedAttacker = attacker.ranged ? attacker : performAttack(defender, attacker, opposingPlayer, defender.position, attacker.position, ACTION_TYPES.COUNTER_ATTACK)
-
-
-
-    updatedAttacker = { ...updatedAttacker, ...handleFainted(updatedAttacker, gameState.currentPlayer, attacker.position) }
-    updatedDefender = { ...updatedDefender, ...handleFainted(updatedDefender, opposingPlayer, defender.position) }
-
-    gameState[gameState.currentPlayer] = updatePlayerCards({ ...updatedAttacker, state: updatedAttacker.state === CARD_STATE.FAINTED ? CARD_STATE.FAINTED : CARD_STATE.FATIGUED }, currentPlayerCards)
-    gameState[opposingPlayer] = updatePlayerCards(updatedDefender, opposingPlayerCards)
-
-    // Create the updated game state and update HP
-    createLogEntry(ACTION_TYPES.HP_UPDATE, {
-        log: `${attacker.position}(${abbreviateName(attacker.name)})_HP ${updatedAttacker.currentHp} ${defender.position}(${abbreviateName(defender.name)})_HP ${updatedDefender.currentHp}`,
-    });
+    //Attack
+    performAttack(attacker, defender, gameState.currentPlayer, opposingPlayer, ACTION_TYPES.ATTACK)
+    //Counter Attack
+    if (!attacker.ranged) { performAttack(defender, attacker, opposingPlayer, gameState.currentPlayer, ACTION_TYPES.COUNTER_ATTACK) }
+    //Faint Attacker
+    handleFainted(attacker, gameState.currentPlayer, attacker.position)
+    //Faint Defender
+    handleFainted(defender, opposingPlayer, defender.position)
 
     gameState.currentPlayer = opposingPlayer
 }
