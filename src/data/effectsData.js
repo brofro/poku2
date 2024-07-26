@@ -10,13 +10,15 @@ export const EFFECTS = {
     2: {
         deathrattle() {
             return {
+                id: 446,
                 name: "Munchlax",
                 atk: 1,
                 hp: 1,
                 currentHp: 1,
-                img: getImageUrl(446)
+                img: getImageUrl(446),
             }
         },
+        //deathrattle text is also the indicator for the icon
         deathrattleText: "Summon a 1/1 Munchlax"
     }
 }

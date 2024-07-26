@@ -141,6 +141,7 @@ function handleFainted(card, player, position) {
 
         if (card.deathrattle && !card.triggeredDeathrattle) {
             gameState[player][position] = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true }
+            delete gameState[player][position].deathrattleText
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
                 sourceCardName: card.name,
