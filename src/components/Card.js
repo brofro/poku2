@@ -1,5 +1,5 @@
 import { useEffect, useRef, React } from 'react';
-import { ATK_ICON, HP_ICON, getImageUrl } from '../constants';
+import { ATK_ICON, HP_ICON, getImageUrl } from '../data/constants';
 import './Card.css';
 import rangedicon from './ranged.svg'
 import deathrattleicon from './deathrattle.svg';

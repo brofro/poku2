@@ -1,10 +1,10 @@
 import React from 'react';
-import BattleField from './components/Battlefield';
-import GameLog from './components/GameLog';
-import ControlButtons from './components/ControlButtons';
-import GenerateLogButton from './components/GenerateLogButton';
-import { GameProvider } from './contexts/GameContext';
 import './App.css';
+import BattleField from '../components/Battlefield';
+import ControlButtons from '../components/ControlButtons';
+import GameLog from '../components/GameLog';
+import GenerateLogButton from '../components/GenerateLogButton';
+import { GameProvider } from '../contexts/GameContext';
 
 function App() {
   return (

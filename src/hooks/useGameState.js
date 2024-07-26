@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
-import { PLAY_SPEED } from '../constants';
-import { runGameLoop, getGameStateAtLogIndex } from '../gameLogic';
+import { PLAY_SPEED } from '../data/constants';
+import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
 
 const useGameState = () => {
     // State variables to manage the game

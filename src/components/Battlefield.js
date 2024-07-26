@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 import { useGame } from '../contexts/GameContext';
-import { PLAYER_ONE, PLAYER_TWO } from '../constants';
+import { PLAYER_ONE, PLAYER_TWO } from '../data/constants';
 
 const BattleField = () => {
     // Get the current game state and action from our game context

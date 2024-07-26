@@ -1,4 +1,4 @@
-import { PLAYER_ONE, PLAYER_TWO } from '../constants.js';
+import { PLAYER_ONE, PLAYER_TWO } from './constants.js';
 
 
 export const CARD_DEFINITIONS = {

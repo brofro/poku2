@@ -1,5 +1,5 @@
-import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants.js';
-import { initialBagData } from './data/effectsData.js';
+import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from '../data/constants.js';
+import { initialBagData } from '../data/effectsData.js';
 
 let actionId = 0;
 let gameLog = [];

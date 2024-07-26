@@ -1,4 +1,4 @@
-import { PLAYER_ONE, PLAYER_TWO, getImageUrl } from "../constants"
+import { PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
 
 export const EFFECTS = {
     0: {
