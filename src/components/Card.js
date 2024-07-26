@@ -1,5 +1,4 @@
 import React from 'react';
-import { Tooltip } from 'react-tooltip';
 import { ATK_ICON, HP_ICON } from '../constants';
 import { getImageUrl } from '../data/cardData';
 import './Card.css';
@@ -24,9 +23,9 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
                 <div className='card-icons'>
-                    {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" data-tooltip-id='icon-tooltip' data-tooltip-content="Ranged: This card does not take counter-attack damage" />}
-                    {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" data-tooltip-id='icon-tooltip' data-tooltip-content={`Deathrattle: ${deathrattleText}`} />}
-                    {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" data-tooltip-id='icon-tooltip' data-tooltip-content="Divine Shield: This card negates the first instance of damage" />}
+                    {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" />}
+                    {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" />}
+                    {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" />}
                 </div>
             </div>
             {/* Card information */}
@@ -47,7 +46,6 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
                     </div>
                 </div>
             </div>
-            <Tooltip id="icon-tooltip" />
         </div>
     );
 };
