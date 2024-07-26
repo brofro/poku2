@@ -1,4 +1,6 @@
 // src/constants.js
+export const getImageUrl = (pokemonNumber) => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png`;
+
 export const ATK_ICON = "https://i.imgur.com/X4Fo2c5.png";
 export const HP_ICON = "https://i.imgur.com/MP4IoUo.png";
 
@@ -23,4 +25,4 @@ export const ACTION_TYPES = {
     GAME_END: 'GAME_END'
 };
 
-export const PLAY_SPEED = 1000;
+export const PLAY_SPEED = 500;

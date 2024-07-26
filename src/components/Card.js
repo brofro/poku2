@@ -1,6 +1,5 @@
 import React from 'react';
-import { ATK_ICON, HP_ICON } from '../constants';
-import { getImageUrl } from '../data/cardData';
+import { ATK_ICON, HP_ICON, getImageUrl } from '../constants';
 import './Card.css';
 import rangedicon from './ranged.svg'
 import deathrattleicon from './deathrattle.svg';

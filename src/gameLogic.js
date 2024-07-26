@@ -1,4 +1,5 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from './constants.js';
+import { initialBagData } from './data/effectsData.js';
 
 let actionId = 0;
 let gameLog = [];
@@ -73,9 +74,10 @@ function createLogEntry(action, data) {
  * @param {Object} cardData - The original card data
  * @returns {Object} A new card object with added game state properties
  */
-function initializeCard(cardData) {
+function initializeCard(cardData, bagData = {}) {
     return {
         ...cardData,
+        ...bagData,
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp
@@ -89,8 +91,10 @@ function initializeCard(cardData) {
  */
 function initializeGameState(initialCardData) {
     return {
-        [PLAYER_ONE]: initialCardData[PLAYER_ONE].map(initializeCard),
-        [PLAYER_TWO]: initialCardData[PLAYER_TWO].map(initializeCard),
+        [PLAYER_ONE]: initialCardData[PLAYER_ONE].map((card, index) =>
+            initializeCard(card, initialBagData[PLAYER_ONE][index])),
+        [PLAYER_TWO]: initialCardData[PLAYER_TWO].map((card, index) =>
+            initializeCard(card, initialBagData[PLAYER_TWO][index])),
         currentPlayer: PLAYER_ONE,
         round: 1
     };
