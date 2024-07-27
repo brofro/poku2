@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/poku2/static/css/main.5a23de74.css",
-    "main.js": "/poku2/static/js/main.564f4960.js",
+    "main.js": "/poku2/static/js/main.e9163d97.js",
     "static/js/453.c634b553.chunk.js": "/poku2/static/js/453.c634b553.chunk.js",
     "static/media/divineshield.svg": "/poku2/static/media/divineshield.a024bae862fc1a08427e87bf6670051f.svg",
     "static/media/deathrattle.svg": "/poku2/static/media/deathrattle.ccee72e8af57dc7562e9703d4370aace.svg",
     "index.html": "/poku2/index.html",
     "static/media/ranged.svg": "/poku2/static/media/ranged.c54039696c671dc9e507d67e94a4e2bb.svg",
     "main.5a23de74.css.map": "/poku2/static/css/main.5a23de74.css.map",
-    "main.564f4960.js.map": "/poku2/static/js/main.564f4960.js.map",
+    "main.e9163d97.js.map": "/poku2/static/js/main.e9163d97.js.map",
     "453.c634b553.chunk.js.map": "/poku2/static/js/453.c634b553.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5a23de74.css",
-    "static/js/main.564f4960.js"
+    "static/js/main.e9163d97.js"
   ]
 }
