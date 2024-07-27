@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { isMobile } from 'react-device-detect';
 
 //the item type, using the same type for everything means all dragBoxes can go into all dropBoxes
 const ANY_ITEM = "ANY_ITEM";
@@ -43,7 +45,7 @@ export const SHAPES = {
 export function DragdropWrapper({ className, children }) {
     return (
         <div className={className}>
-            <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
+            <DndProvider backend={isMobile ? TouchBackend : HTML5Backend} options={{ enableMouseEvents: true }}>
                 {children}
             </DndProvider>
         </div>

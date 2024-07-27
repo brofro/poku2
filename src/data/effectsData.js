@@ -3,6 +3,7 @@ import rangedicon from "../components/ranged.svg"
 import divineShieldIcon from "../components/divineshield.svg"
 import deathrattleIcon from "../components/deathrattle.svg"
 
+let bagId = 0
 
 export const EFFECTS = {
     [KEY_EFFECTS.RANGED]: {
@@ -51,7 +52,9 @@ function deepCopy(obj, hash = new WeakMap()) {
 function selectEffects(keys) {
     return keys.reduce((selectedEffects, key) => {
         if (key in EFFECTS) {
-            selectedEffects[key] = deepCopy(EFFECTS[key]);
+
+            selectedEffects[bagId] = { id: bagId, [key]: deepCopy(EFFECTS[key]) }
+            bagId++
         }
         return selectedEffects;
     }, {});
@@ -61,3 +64,5 @@ export const initialBagData = {
     [PLAYER_ONE]: [selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED]), selectEffects([])],
     [PLAYER_TWO]: [selectEffects([`${KEY_EFFECTS.DEATHRATTLE}0`]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }
+
+export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED])

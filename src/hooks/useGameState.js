@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
-import { initialBagData } from '../data/effectsData';
+import { initialBagData, initialShopData } from '../data/effectsData';
 import { PLAYER_ONE, PLAY_SPEED } from '../data/constants';
 import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
 
@@ -16,6 +16,7 @@ const useGameState = () => {
     // states for roster and bag
     const [roster, setRoster] = useState(initialCardData[PLAYER_ONE]);
     const [bag, setBag] = useState(initialBagData[PLAYER_ONE]);
+    const [shop, setShop] = useState(initialShopData)
 
     const handleGenerateLog = () => {
         const { gameLog } = runGameLoop(initialCardData);
@@ -91,6 +92,7 @@ const useGameState = () => {
         currentAction,
         roster,
         bag,
+        shop,
         handleGenerateLog,
         handlePlayNext,
         handlePlayPause,

@@ -3,6 +3,8 @@ import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css"
 import Card from './components/Card';
+import { useGame } from './contexts/GameContext';
+import ItemEffect from './components/ItemEffect';
 
 export const test_shop_items = {
     id1: { id: "id1", name: "divine shield" },
@@ -24,7 +26,12 @@ export function ItemShop(props) {
     };
 
     const ItemCard = ({ obj, ...props }) => {
-        return <pre>{JSON.stringify(obj, null, 2)}</pre>;
+        return <img src={obj.icon} />;
+    };
+
+    const flattenObject = ({ id, ...rest }) => {
+        const [name, value] = Object.entries(rest)[0];
+        return { name, ...value };
     };
 
     const ItemDrag = ({ obj, itemType, bagId, ...props }) => {
@@ -37,9 +44,12 @@ export function ItemShop(props) {
             boxSizing: "border-box",
             borderWidth: "4px"
         };
+
+        const flat = flattenObject(obj)
+
         return (
             <DragBox {...p} {...props}>
-                <ItemCard obj={obj} {...props} />
+                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} isShopItem={true} />
             </DragBox>
         );
     };

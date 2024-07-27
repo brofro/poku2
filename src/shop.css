@@ -70,11 +70,8 @@
 }
 
 .shop-item-card {
-    box-sizing: border-box;
-    border: 1px solid;
     margin: 2px;
     padding: 2px;
     white-space: pre-wrap;
     font-size: 8px;
-    background-color: white;
 }

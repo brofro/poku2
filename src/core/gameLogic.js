@@ -79,7 +79,8 @@ function createLogEntry(action, data) {
 function initializeCard(cardData, bagData = {}, index) {
     return {
         ...cardData,
-        effects: bagData,
+        //Get array of inner objects (ie effects) from bag of effects, and copy spread into a new object
+        effects: Object.assign({}, ...Object.values(bagData)),
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,
