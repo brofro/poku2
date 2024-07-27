@@ -1,76 +1,80 @@
-/* Remove body styles */
-
 .shop-container {
     border: 1px solid;
-    height: 95vh;
     display: flex;
-
-    /* css vars */
-    --box-size: 7px;
-    --bag-box-size: 20px;
-    --text-size: 10px;
-    --family: verdana;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: verdana;
+    font-size: 10px;
 }
 
-.shop-guide {
-    flex: 1;
-    visibility: collapse;
-}
-
-.shop-guide li {
-    margin: 5%;
+.shop-roster {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
 }
 
 .shop-main {
-    flex: 5;
     display: flex;
     flex-direction: column;
+    height: 400px;
+    /* Reduced height */
 }
 
-.shop-items {
-    border: 1px solid;
-    margin: 0.5%;
-    padding: 0.5%;
-    flex: 1;
+.shop-bag-container {
     display: flex;
+    justify-content: space-around;
+    flex: 2;
 }
 
 .shop-bag {
     border: 1px solid;
-    margin: 0.5%;
-    padding: 0.5%;
+    background-color: #e6f2ff;
+    /* Light blue for bags */
     flex: 1;
+    margin: 0 5px;
+    padding: 5px;
     display: flex;
+    flex-direction: column;
 }
 
 .shop-storage {
     border: 1px solid;
-    margin: 0.5%;
-    padding: 0.5%;
+    background-color: #fff2e6;
+    /* Light orange for storage */
     flex: 1;
+    margin: 5px;
+    padding: 5px;
     display: flex;
     flex-wrap: wrap;
 }
 
-.shop-battle-button {
-    margin: 2%;
+.shop-items {
+    border: 1px solid;
+    background-color: #e6ffe6;
+    /* Light green for shop */
+    flex: 1;
+    margin: 5px;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .shop-bag-box {
-    border: inherit;
-    margin: inherit;
+    border: 1px dashed #999;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 50px;
 }
 
 .shop-item-card {
     box-sizing: border-box;
     border: 1px solid;
-    margin: 0.5%;
-    padding: 0.5%;
+    margin: 2px;
+    padding: 2px;
     white-space: pre-wrap;
-    font-size: var(--text-size);
-    font-family: var(--family);
+    font-size: 8px;
+    background-color: white;
 }

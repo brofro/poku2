@@ -9,7 +9,7 @@ import Roster from '../components/Roster';
 import { ItemShop, test_shop_items } from '../shop';
 
 function AppContent() {
-  const { isLogGenerated } = useGame()
+  const { isLogGenerated, roster } = useGame()
 
   return <div className="App">
     <div className="game-container">
@@ -22,8 +22,7 @@ function AppContent() {
           <BattleField />
         ) : (
           <>
-            <Roster />
-            <ItemShop shopItems={test_shop_items} bagData={{ b1: {}, b2: {}, b3: {} }} />
+            <ItemShop shopItems={test_shop_items} bagData={{ b1: {}, b2: {} }} roster={roster} />
           </>
         )}
       </div>

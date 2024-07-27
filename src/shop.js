@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css"
-
-const numShopItems = 3;
-const numBags = 3;
+import Card from './components/Card';
 
 export const test_shop_items = {
     id1: { id: "id1", name: "divine shield" },
@@ -17,6 +15,7 @@ export function ItemShop(props) {
     const [shop, setShop] = useState(props.shopItems);
     const [storage, setStorage] = useState({});
     const [bags, setBags] = useState(props.bagData);
+    const [roster, setRoster] = useState(props.roster);
 
     const remove = (id, obj) => {
         const copy = { ...obj };
@@ -87,18 +86,24 @@ export function ItemShop(props) {
 
     return (
         <div className="shop-container">
-            <div className="shop-guide">
-                <ol>
-                    <li>you have x monies</li>
-                    <li>dragndrop from shop into storage</li>
-                    <li>dragndrop storage into bag</li>
-                </ol>
-            </div>
             <DragdropWrapper className="shop-main">
-                <div className="shop-bag">
-                    bag
-                    {Object.keys(bags).map((bagId) => (
-                        <BagDrop bagId={bagId} className="shop-bag-box" key={bagId} />
+                <div className="shop-bag-container">
+                    {Object.keys(bags).map((bagId, index) => (
+                        <div key={bagId} className="shop-bag">
+                            <div className="shop-roster">
+                                {roster[index] && (
+                                    <Card
+                                        {...roster[index]}
+                                    />
+                                )}
+                            </div>
+                            <BagDrop bagId={bagId} className="shop-bag-box">
+                                {bagId}
+                                {Object.values(bags[bagId]).map((obj, idx) => (
+                                    <ItemDrag itemType="bag" bagId={bagId} obj={obj} key={idx} />
+                                ))}
+                            </BagDrop>
+                        </div>
                     ))}
                 </div>
                 <StorageDrop className="shop-storage">
@@ -107,7 +112,6 @@ export function ItemShop(props) {
                         <ItemDrag itemType="storage" obj={obj} key={index} />
                     ))}
                 </StorageDrop>
-
                 <div className="shop-items">
                     shop
                     {Object.values(shop).map((obj, index) => (
