@@ -6,6 +6,7 @@ import GameLog from '../components/GameLog';
 import GenerateLogButton from '../components/GenerateLogButton';
 import { GameProvider, useGame } from '../contexts/GameContext';
 import Roster from '../components/Roster';
+import { ItemShop, test_shop_items } from '../shop';
 
 function AppContent() {
   const { isLogGenerated } = useGame()
@@ -22,6 +23,7 @@ function AppContent() {
         ) : (
           <>
             <Roster />
+            <ItemShop shopItems={test_shop_items} bagData={{ b1: {}, b2: {}, b3: {} }} />
           </>
         )}
       </div>

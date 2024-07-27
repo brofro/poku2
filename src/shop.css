@@ -1,0 +1,76 @@
+/* Remove body styles */
+
+.shop-container {
+    border: 1px solid;
+    height: 95vh;
+    display: flex;
+
+    /* css vars */
+    --box-size: 7px;
+    --bag-box-size: 20px;
+    --text-size: 10px;
+    --family: verdana;
+}
+
+.shop-guide {
+    flex: 1;
+    visibility: collapse;
+}
+
+.shop-guide li {
+    margin: 5%;
+}
+
+.shop-main {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.shop-items {
+    border: 1px solid;
+    margin: 0.5%;
+    padding: 0.5%;
+    flex: 1;
+    display: flex;
+}
+
+.shop-bag {
+    border: 1px solid;
+    margin: 0.5%;
+    padding: 0.5%;
+    flex: 1;
+    display: flex;
+}
+
+.shop-storage {
+    border: 1px solid;
+    margin: 0.5%;
+    padding: 0.5%;
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shop-battle-button {
+    margin: 2%;
+}
+
+.shop-bag-box {
+    border: inherit;
+    margin: inherit;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shop-item-card {
+    box-sizing: border-box;
+    border: 1px solid;
+    margin: 0.5%;
+    padding: 0.5%;
+    white-space: pre-wrap;
+    font-size: var(--text-size);
+    font-family: var(--family);
+}
