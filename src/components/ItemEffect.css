@@ -1,0 +1,5 @@
+.item-effect-icon {
+    width: 16px;
+    height: 16px;
+    filter: drop-shadow(0px 0px 2px rgb(254, 145, 4));
+}

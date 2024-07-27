@@ -1,11 +1,9 @@
 import { useEffect, useRef, React } from 'react';
 import { ATK_ICON, HP_ICON, getImageUrl } from '../data/constants';
 import './Card.css';
-import rangedicon from './ranged.svg'
-import deathrattleicon from './deathrattle.svg';
-import divineshieldicon from './divineshield.svg';
+import ItemEffect from './ItemEffect';
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttacking, isCounterAttacking, divineShield, ranged, deathrattleText }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, isCounterAttacking }) => {
     const healthRef = useRef(null);
 
     useEffect(() => {
@@ -25,18 +23,24 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, player, index, isAttac
     if (state === 'FAINTED') cardClasses.push('fainted');
     if (isAttacking) cardClasses.push('attacking');
     if (isCounterAttacking) cardClasses.push('counter-attacking');
-    if (divineShield) cardClasses.push('divine-shield');
+    //if (divineShield) cardClasses.push('divine-shield');
 
     return (
         <div className={cardClasses.join(' ')}>
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
-                <div className='card-icons'>
-                    {ranged && <img src={rangedicon} alt="Ranged" className="card-icon" />}
-                    {deathrattleText && <img src={deathrattleicon} alt="Deathrattle" className="card-icon" />}
-                    {divineShield && <img src={divineshieldicon} alt="Divine Shield" className="card-icon" />}
-                </div>
+                {effects && <div className='card-icons'>
+                    {Object.entries(effects).map(([effectName, effectData]) =>
+                        effectData.active && (
+                            <ItemEffect
+                                key={effectName}
+                                icon={effectData.icon}
+                                alt={effectName}
+                            />
+                        )
+                    )}
+                </div>}
             </div>
             {/* Card information */}
             <div className="card-info">

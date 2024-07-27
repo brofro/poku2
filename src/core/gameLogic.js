@@ -1,4 +1,4 @@
-import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES } from '../data/constants.js';
+import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
 import { initialBagData } from '../data/effectsData.js';
 
 let actionId = 0;
@@ -79,11 +79,12 @@ function createLogEntry(action, data) {
 function initializeCard(cardData, bagData = {}, index) {
     return {
         ...cardData,
-        ...bagData,
+        effects: bagData,
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,
-        position: index
+        position: index,
+        triggeredDeathrattle: false
     };
 }
 
@@ -138,9 +139,9 @@ function handleFainted(card, player, position) {
             faintedCardPos: position,
             faintedCardName: card.name,
         });
-
-        if (card.deathrattle && !card.triggeredDeathrattle) {
-            gameState[player][position] = { ...card, ...card.deathrattle(), state: CARD_STATE.FATIGUED, triggeredDeathrattle: true }
+        const deathrattleKeys = Object.keys(card.effects).filter(str => { return str.includes('deathrattle') })
+        if (deathrattleKeys.length > 0 && !card.triggeredDeathrattle) {
+            gameState[player][position] = { ...card, ...card.effects[`${deathrattleKeys[0]}`].deathrattle(), triggeredDeathrattle: true }
             delete gameState[player][position].deathrattleText
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
@@ -156,8 +157,8 @@ function handleFainted(card, player, position) {
 function performAttack(attacker, defender, attackingPlayer, defendingPlayer, type) {
     //attacker and defender are copies and not the actual cards, actual cards are in gameState
     let atkValue = 0
-    if (defender.divineShield) {
-        gameState[defendingPlayer][defender.position].divineShield = false
+    if (defender.effects.hasOwnProperty(KEY_EFFECTS.DIVINE_SHIELD) && defender.effects.divineShield.active) {
+        gameState[defendingPlayer][defender.position].effects.divineShield.active = false
     }
     else {
         atkValue = attacker.atk
@@ -241,7 +242,9 @@ function performTurn() {
     //Attack
     performAttack(attacker, defender, gameState.currentPlayer, opposingPlayer, ACTION_TYPES.ATTACK)
     //Counter Attack
-    if (!attacker.ranged) { performAttack(defender, attacker, opposingPlayer, gameState.currentPlayer, ACTION_TYPES.COUNTER_ATTACK) }
+    if (!attacker.effects.hasOwnProperty(KEY_EFFECTS.RANGED) || (attacker.effects.hasOwnProperty(KEY_EFFECTS.RANGED) && !attacker.effects.ranged.active)) {
+        performAttack(defender, attacker, opposingPlayer, gameState.currentPlayer, ACTION_TYPES.COUNTER_ATTACK)
+    }
     //Faint Attacker
     handleFainted(attacker, gameState.currentPlayer, attacker.position)
     //Faint Defender

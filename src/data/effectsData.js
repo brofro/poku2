@@ -1,13 +1,20 @@
-import { PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
+import { CARD_STATE, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
+import rangedicon from "../components/ranged.svg"
+import divineShieldIcon from "../components/divineshield.svg"
+import deathrattleIcon from "../components/deathrattle.svg"
+
 
 export const EFFECTS = {
-    0: {
-        ranged: true
+    [KEY_EFFECTS.RANGED]: {
+        icon: rangedicon,
+        active: true
     },
-    1: {
-        divineShield: true
+    [KEY_EFFECTS.DIVINE_SHIELD]: {
+        icon: divineShieldIcon,
+        active: true
     },
-    2: {
+    [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
+        icon: deathrattleIcon,
         deathrattle() {
             return {
                 id: 446,
@@ -16,6 +23,7 @@ export const EFFECTS = {
                 hp: 1,
                 currentHp: 1,
                 img: getImageUrl(446),
+                state: CARD_STATE.FATIGUED
             }
         },
         //deathrattle text is also the indicator for the icon
@@ -23,7 +31,31 @@ export const EFFECTS = {
     }
 }
 
+function deepCopy(obj, hash = new WeakMap()) {
+    if (obj === null || typeof obj !== 'object') return obj;
+    if (hash.has(obj)) return hash.get(obj);
+
+    let copy = Array.isArray(obj) ? [] : {};
+    hash.set(obj, copy);
+
+    Object.keys(obj).forEach(key => {
+        copy[key] = deepCopy(obj[key], hash);
+    });
+
+    return copy;
+}
+
+
+function selectEffects(keys) {
+    return keys.reduce((selectedEffects, key) => {
+        if (key in EFFECTS) {
+            selectedEffects[key] = deepCopy(EFFECTS[key]);
+        }
+        return selectedEffects;
+    }, {});
+}
+
 export const initialBagData = {
-    [PLAYER_ONE]: [EFFECTS[1], {}],
-    [PLAYER_TWO]: [EFFECTS[2], { ...EFFECTS[0], ...EFFECTS[1] }]
+    [PLAYER_ONE]: [selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED]), selectEffects([])],
+    [PLAYER_TWO]: [selectEffects([`${KEY_EFFECTS.DEATHRATTLE}0`]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }

@@ -25,4 +25,10 @@ export const ACTION_TYPES = {
     GAME_END: 'GAME_END'
 };
 
+export const KEY_EFFECTS = {
+    RANGED: 'ranged',
+    DIVINE_SHIELD: 'divineShield',
+    DEATHRATTLE: 'deathrattle'
+}
+
 export const PLAY_SPEED = 500;
