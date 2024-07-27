@@ -83,8 +83,7 @@ function initializeCard(cardData, bagData = {}, index) {
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,
-        position: index,
-        triggeredDeathrattle: false
+        position: index
     };
 }
 
@@ -141,7 +140,10 @@ function handleFainted(card, player, position) {
         });
         const deathrattleKeys = Object.keys(card.effects).filter(str => { return str.includes('deathrattle') })
         if (deathrattleKeys.length > 0 && !card.triggeredDeathrattle) {
-            gameState[player][position] = { ...card, ...card.effects[`${deathrattleKeys[0]}`].deathrattle(), triggeredDeathrattle: true }
+            //only act on the first deathrattle for now, handle multi deathrattle later
+            const deathrattleEffect = { ...card.effects[`${deathrattleKeys[0]}`] }
+            if (!deathrattleEffect.active) { return }
+            gameState[player][position] = { position: card.position, ...deathrattleEffect.deathrattle() }
             delete gameState[player][position].deathrattleText
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
