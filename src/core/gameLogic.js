@@ -1,5 +1,5 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
-import { initialBagData } from '../data/effectsData.js';
+import { initialBagData, deepCopy } from '../data/effectsData.js';
 
 let actionId = 0;
 let gameLog = [];
@@ -80,7 +80,7 @@ function initializeCard(cardData, bagData = {}, index) {
     return {
         ...cardData,
         //Get array of inner objects (ie effects) from bag of effects, and copy spread into a new object
-        effects: Object.assign({}, ...Object.values(bagData)),
+        effects: Object.assign({}, ...Object.values(deepCopy(bagData))),
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,
@@ -93,10 +93,10 @@ function initializeCard(cardData, bagData = {}, index) {
  * @param {Object} initialCardData - The initial card data for both players
  * @returns {Object} The initial game state
  */
-function initializeGameState(initialCardData) {
+function initializeGameState(initialCardData, bags) {
     return {
         [PLAYER_ONE]: initialCardData[PLAYER_ONE].map((card, index) =>
-            initializeCard(card, initialBagData[PLAYER_ONE][index], index)),
+            initializeCard(card, bags[index], index)),
         [PLAYER_TWO]: initialCardData[PLAYER_TWO].map((card, index) =>
             initializeCard(card, initialBagData[PLAYER_TWO][index], index)),
         currentPlayer: PLAYER_ONE,
@@ -317,10 +317,10 @@ function getGameStateAtLogIndex(gameLog, index) {
  * @param {Object} initialCardData - The initial card data for both players
  * @returns {Object} The final game state and the complete game log
  */
-function runGameLoop(initialCardData) {
+function runGameLoop(initialCardData, bag) {
     gameLog = []; // Reset the game log
     actionId = 0; // Reset the action ID counter
-    gameState = initializeGameState(initialCardData);
+    gameState = initializeGameState(initialCardData, bag);
 
     createLogEntry(ACTION_TYPES.GAME_START, {
         log: ACTION_TYPES.GAME_START,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css"
@@ -6,18 +6,9 @@ import Card from './Card';
 import { useGame } from '../contexts/GameContext';
 import ItemEffect from './ItemEffect';
 
-export const test_shop_items = {
-    id1: { id: "id1", name: "divine shield" },
-    id2: { id: "id2", name: "onDeath1/1" },
-    id3: { id: "id3", name: "support: +2atk" },
-    id4: { id: "id4", name: "ranged" }
-};
+export function ItemShop() {
+    const { roster, shop, setShop, bags, setBags, storage, setStorage } = useGame();
 
-export function ItemShop(props) {
-    const [shop, setShop] = useState(props.shopItems);
-    const [storage, setStorage] = useState({});
-    const [bags, setBags] = useState(props.bagData);
-    const [roster, setRoster] = useState(props.roster);
 
     const remove = (id, obj) => {
         const copy = { ...obj };

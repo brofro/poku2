@@ -1,16 +1,28 @@
 import React from 'react';
 import { useGame } from '../contexts/GameContext';
+import { ACTION_TYPES } from '../data/constants';
 
 const GenerateLogButton = () => {
-    const { handleGenerateLog, isLogGenerated } = useGame();
+    const { handleGenerateLog, isLogGenerated, currentAction, resetGameState } = useGame();
+
+    const handleButtonClick = () => {
+        if (isLogGenerated) {
+            resetGameState()
+        } else {
+            handleGenerateLog();
+        }
+    };
+
+    const buttonText = isLogGenerated ? 'Reset Game' : 'Generate Battle Log';
+    const isDisabled = isLogGenerated && currentAction?.action !== ACTION_TYPES.GAME_END;
 
     return (
         <button
-            onClick={handleGenerateLog}
-            disabled={isLogGenerated}
+            onClick={handleButtonClick}
+            disabled={isDisabled}
             className="generate-log-button"
         >
-            Generate Battle Log
+            {buttonText}
         </button>
     );
 };

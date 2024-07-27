@@ -34,7 +34,7 @@ export const EFFECTS = {
     }
 }
 
-function deepCopy(obj, hash = new WeakMap()) {
+export function deepCopy(obj, hash = new WeakMap()) {
     if (obj === null || typeof obj !== 'object') return obj;
     if (hash.has(obj)) return hash.get(obj);
 

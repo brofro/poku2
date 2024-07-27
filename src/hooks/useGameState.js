@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
-import { initialBagData, initialShopData } from '../data/effectsData';
+import { initialShopData } from '../data/effectsData';
 import { PLAYER_ONE, PLAY_SPEED } from '../data/constants';
 import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
 
@@ -15,15 +15,26 @@ const useGameState = () => {
 
     // states for roster and bag
     const [roster, setRoster] = useState(initialCardData[PLAYER_ONE]);
-    const [bag, setBag] = useState(initialBagData[PLAYER_ONE]);
+    const [bags, setBags] = useState(Object.fromEntries(Array.from({ length: roster.length }, (_, i) => [i, {}])));
     const [shop, setShop] = useState(initialShopData)
+    const [storage, setStorage] = useState({})
 
     const handleGenerateLog = () => {
-        const { gameLog } = runGameLoop(initialCardData);
+        const { gameLog } = runGameLoop(initialCardData, bags);
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setGameLog(gameLog);
         setIsLogGenerated(true);
     };
+
+    const resetGameState = () => {
+        setGameLog([])
+        setIsLogGenerated(false)
+        setCurrentAction(null)
+        setCurrentLogIndex(-1)
+    }
+
+    //updates bag at index
+    const updateBag = (index, effects) => setBags(prev => ({ ...prev, [index]: Object.fromEntries(effects.map((effect, i) => [i, effect])) }));
 
     // Function to play the next action in the log
     const handlePlayNext = () => {
@@ -91,13 +102,15 @@ const useGameState = () => {
         isLogGenerated,
         currentAction,
         roster,
-        bag,
+        bags,
         shop,
+        storage,
         handleGenerateLog,
         handlePlayNext,
         handlePlayPause,
         handleRestart,
-        setGameStateFromLog
+        setGameStateFromLog,
+        resetGameState
     };
 };
 
