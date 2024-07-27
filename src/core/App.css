@@ -163,3 +163,35 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+
+.player-area {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.roster,
+.bag {
+  margin-bottom: 20px;
+}
+
+.roster h2,
+.bag h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.bag-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bag-item {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}

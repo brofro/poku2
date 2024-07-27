@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
-import { PLAY_SPEED } from '../data/constants';
+import { initialBagData } from '../data/effectsData';
+import { PLAYER_ONE, PLAY_SPEED } from '../data/constants';
 import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
 
 const useGameState = () => {
@@ -11,6 +12,10 @@ const useGameState = () => {
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
+
+    // states for roster and bag
+    const [roster, setRoster] = useState(initialCardData[PLAYER_ONE]);
+    const [bag, setBag] = useState(initialBagData[PLAYER_ONE]);
 
     const handleGenerateLog = () => {
         const { gameLog } = runGameLoop(initialCardData);
@@ -84,6 +89,8 @@ const useGameState = () => {
         isPlaying,
         isLogGenerated,
         currentAction,
+        roster,
+        bag,
         handleGenerateLog,
         handlePlayNext,
         handlePlayPause,
