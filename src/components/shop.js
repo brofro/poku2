@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css"
-import Card from './components/Card';
-import { useGame } from './contexts/GameContext';
-import ItemEffect from './components/ItemEffect';
+import Card from './Card';
+import { useGame } from '../contexts/GameContext';
+import ItemEffect from './ItemEffect';
 
 export const test_shop_items = {
     id1: { id: "id1", name: "divine shield" },

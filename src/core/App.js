@@ -5,7 +5,7 @@ import ControlButtons from '../components/ControlButtons';
 import GameLog from '../components/GameLog';
 import GenerateLogButton from '../components/GenerateLogButton';
 import { GameProvider, useGame } from '../contexts/GameContext';
-import { ItemShop, test_shop_items } from '../shop';
+import { ItemShop } from '../components/shop';
 
 function AppContent() {
   const { isLogGenerated, roster, shop } = useGame()
