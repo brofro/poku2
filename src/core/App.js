@@ -5,7 +5,6 @@ import ControlButtons from '../components/ControlButtons';
 import GameLog from '../components/GameLog';
 import GenerateLogButton from '../components/GenerateLogButton';
 import { GameProvider, useGame } from '../contexts/GameContext';
-import Roster from '../components/Roster';
 import { ItemShop, test_shop_items } from '../shop';
 
 function AppContent() {

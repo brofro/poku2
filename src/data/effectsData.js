@@ -15,6 +15,7 @@ export const EFFECTS = {
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
         icon: deathrattleIcon,
+        active: true,
         deathrattle() {
             return {
                 id: 446,
@@ -23,7 +24,8 @@ export const EFFECTS = {
                 hp: 1,
                 currentHp: 1,
                 img: getImageUrl(446),
-                state: CARD_STATE.FATIGUED
+                state: CARD_STATE.FATIGUED,
+                effects: {}
             }
         },
         //deathrattle text is also the indicator for the icon
