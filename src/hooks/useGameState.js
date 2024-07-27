@@ -110,7 +110,10 @@ const useGameState = () => {
         handlePlayPause,
         handleRestart,
         setGameStateFromLog,
-        resetGameState
+        resetGameState,
+        setShop,
+        setStorage,
+        setBags
     };
 };
 
