@@ -6,7 +6,6 @@ import GameLog from '../components/GameLog';
 import GenerateLogButton from '../components/GenerateLogButton';
 import { GameProvider, useGame } from '../contexts/GameContext';
 import Roster from '../components/Roster';
-import Bag from '../components/Bag';
 
 function AppContent() {
   const { isLogGenerated } = useGame()
@@ -23,7 +22,6 @@ function AppContent() {
         ) : (
           <>
             <Roster />
-            <Bag />
           </>
         )}
       </div>
