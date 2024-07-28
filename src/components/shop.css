@@ -36,6 +36,7 @@
     padding: 5px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .shop-storage {
@@ -61,12 +62,13 @@
 }
 
 .shop-bag-box {
+    width: 100%;
     border: 1px dashed #999;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 50px;
+    min-height: 100px;
 }
 
 .shop-item-card {
@@ -74,4 +76,69 @@
     padding: 2px;
     white-space: pre-wrap;
     font-size: 8px;
+}
+
+.shop-card-drag {
+    cursor: move;
+    transition: all 0.3s ease;
+    margin: 5px;
+    width: 120px;
+    height: 160px;
+}
+
+.shop-card-drag:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.shop-bench {
+    border: 2px dashed #007bff;
+    background-color: #f0f8ff;
+    border-radius: 8px;
+    min-height: 180px;
+    padding: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.shop-bench::before {
+    content: 'Bench';
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.empty-roster-slot {
+    width: 120px;
+    height: 160px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .shop-bag-container {
+        flex-direction: column;
+    }
+
+    .shop-bag {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .shop-bench {
+        width: 100%;
+    }
 }

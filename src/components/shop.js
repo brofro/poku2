@@ -7,7 +7,7 @@ import { useGame } from '../contexts/GameContext';
 import ItemEffect from './ItemEffect';
 
 export function ItemShop() {
-    const { roster, shop, setShop, bags, setBags, storage, setStorage } = useGame();
+    const { roster, setRoster, bench, setBench, shop, setShop, bags, setBags, storage, setStorage } = useGame();
 
 
     const remove = (id, obj) => {
@@ -85,19 +85,114 @@ export function ItemShop() {
         );
     };
 
+    //Card DND
+    const RosterDrop = ({ rosterCard, setRosterCard, removeBenchCard, index, ...props }) => {
+        const p = {};
+        p.className = "shop-roster";
+        p.itemType = "card";
+        p._canDrop = (item) => item.itemType === "card" && item.from === "bench";
+        p._afterDrop = ({ data, from }) => {
+            if (from === "bench") {
+                setRosterCard(index, data);
+                removeBenchCard(data.id);
+            }
+        };
+        p.canDropStyle = { backgroundColor: COLORS.green };
+        p.isOverStyle = { opacity: "50%" };
+
+        return (
+            <DropBox {...p} {...props}>
+                {rosterCard ? (
+                    <CardDrag card={rosterCard} from="roster" index={index} />
+                ) : (
+                    <div className="empty-roster-slot">Drag a card here</div>
+                )}
+            </DropBox>
+        );
+    };
+
+    const BenchDrop = ({ bench, setBench, removeRosterCard, ...props }) => {
+        const p = {};
+        p.className = "shop-bench";
+        p.itemType = "card";
+        p._canDrop = (item) => item.itemType === "card" && item.from === "roster";
+        p._afterDrop = ({ data, from, index }) => {
+            if (from === "roster") {
+                setBench(prev => [...prev, data]);
+                removeRosterCard(index);
+            }
+        };
+        p.canDropStyle = { backgroundColor: COLORS.green };
+        p.isOverStyle = { opacity: "50%" };
+
+        return (
+            <DropBox {...p} {...props}>
+                {bench.map((card, index) => (
+                    <CardDrag key={card.id} card={card} index={index} from="bench" />
+                ))}
+            </DropBox>
+        );
+    };
+
+
+    const CardDrag = ({ card, from, index, ...props }) => {
+        const p = {};
+        p.className = "shop-card-drag";
+        p.itemType = "card";
+        p.dragData = { data: card, itemType: "card", from, index };
+        p._canDrag = () => true;
+        p.isDraggingStyle = {
+            opacity: 0.5,
+            boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+        };
+
+        return (
+            <DragBox {...p} {...props}>
+                <Card {...card} />
+            </DragBox>
+        );
+    };
+
+
+    const removeBenchCard = (cardId) => {
+        setBench(prev => prev.filter(card => card.id !== cardId));
+    };
+
+    const setRosterCard = (index, card) => {
+        setRoster(prev => {
+            const newRoster = [...prev];
+            newRoster[index] = card;
+            return newRoster;
+        });
+    };
+
+    const removeRosterCard = (index) => {
+        setRoster(prev => {
+            const newRoster = [...prev];
+            newRoster[index] = null;
+            return newRoster;
+        });
+    };
+
     return (
         <div className="shop-container">
             <DragdropWrapper className="shop-main">
                 <div className="shop-bag-container">
                     {Object.keys(bags).map((bagId, index) => (
                         <div key={bagId} className="shop-bag">
-                            <div className="shop-roster">
+                            {/* <div className="shop-roster">
                                 {roster[index] && (
                                     <Card
                                         {...roster[index]}
                                     />
                                 )}
-                            </div>
+                            </div> */}
+                            <RosterDrop
+                                rosterCard={roster[index]}
+                                setRosterCard={setRosterCard}
+                                removeBenchCard={removeBenchCard}
+                                index={index}
+                            />
                             <BagDrop bagId={bagId} className="shop-bag-box">
                                 {bagId}
                                 {Object.values(bags[bagId]).map((obj, idx) => (
@@ -119,6 +214,11 @@ export function ItemShop() {
                         <ItemDrag itemType="shop" obj={obj} key={index} />
                     ))}
                 </div>
+                <BenchDrop
+                    bench={bench}
+                    setBench={setBench}
+                    removeRosterCard={removeRosterCard}
+                />
             </DragdropWrapper>
         </div>
     );

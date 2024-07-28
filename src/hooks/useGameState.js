@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { initialCardData } from '../data/cardData';
 import { initialShopData } from '../data/effectsData';
-import { PLAYER_ONE, PLAY_SPEED } from '../data/constants';
+import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from '../data/constants';
 import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
 
 const useGameState = () => {
@@ -15,12 +15,13 @@ const useGameState = () => {
 
     // states for roster and bag
     const [roster, setRoster] = useState(initialCardData[PLAYER_ONE]);
+    const [bench, setBench] = useState([])
     const [bags, setBags] = useState(Object.fromEntries(Array.from({ length: roster.length }, (_, i) => [i, {}])));
     const [shop, setShop] = useState(initialShopData)
     const [storage, setStorage] = useState({})
 
     const handleGenerateLog = () => {
-        const { gameLog } = runGameLoop(initialCardData, bags);
+        const { gameLog } = runGameLoop({ [PLAYER_ONE]: roster, [PLAYER_TWO]: initialCardData[PLAYER_TWO] }, bags);
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setGameLog(gameLog);
         setIsLogGenerated(true);
@@ -102,6 +103,7 @@ const useGameState = () => {
         isLogGenerated,
         currentAction,
         roster,
+        bench,
         bags,
         shop,
         storage,
@@ -113,7 +115,9 @@ const useGameState = () => {
         resetGameState,
         setShop,
         setStorage,
-        setBags
+        setBags,
+        setRoster,
+        setBench
     };
 };
 
