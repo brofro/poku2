@@ -1,5 +1,5 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
-import { initialBagData, deepCopy } from '../data/effectsData.js';
+import { initialBagData, deepCopy, selectEffects } from '../data/effectsData.js';
 
 let actionId = 0;
 let gameLog = [];
@@ -77,10 +77,12 @@ function createLogEntry(action, data) {
  * @returns {Object} A new card object with added game state properties
  */
 function initializeCard(cardData, bagData = {}, index) {
+    const abilities = Object.assign({}, ...Object.values(deepCopy(selectEffects(cardData.abilities))))
+    const bagEffects = Object.assign({}, ...Object.values(deepCopy(bagData)))
     return {
         ...cardData,
         //Get array of inner objects (ie effects) from bag of effects, and copy spread into a new object
-        effects: Object.assign({}, ...Object.values(deepCopy(bagData))),
+        effects: { ...abilities, ...bagEffects },
         id: cardData.id,
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,

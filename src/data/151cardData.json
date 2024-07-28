@@ -998,7 +998,10 @@
         "hp": 23,
         "atk": 6,
         "spd": 2,
-        "name": "snorlax"
+        "name": "snorlax",
+        "abilities": [
+            "deathrattle0"
+        ]
     },
     "144": {
         "id": 144,

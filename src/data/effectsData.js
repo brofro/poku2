@@ -49,7 +49,7 @@ export function deepCopy(obj, hash = new WeakMap()) {
 }
 
 
-function selectEffects(keys) {
+export function selectEffects(keys = []) {
     return keys.reduce((selectedEffects, key) => {
         if (key in EFFECTS) {
 
@@ -62,7 +62,7 @@ function selectEffects(keys) {
 
 export const initialBagData = {
     [PLAYER_ONE]: [selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED]), selectEffects([])],
-    [PLAYER_TWO]: [selectEffects([`${KEY_EFFECTS.DEATHRATTLE}0`]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
+    [PLAYER_TWO]: [selectEffects([]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }
 
 export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED])
