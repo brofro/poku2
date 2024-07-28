@@ -3,7 +3,7 @@ import { ATK_ICON, HP_ICON, getImageUrl } from '../data/constants';
 import './Card.css';
 import ItemEffect from './ItemEffect';
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, isCounterAttacking }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, isCounterAttacking, isShopCard }) => {
     const healthRef = useRef(null);
 
     useEffect(() => {
@@ -17,6 +17,8 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
 
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
+
+    if (isShopCard) cardClasses.push('shop-card')
 
     // Add appropriate classes based on the card's state
     if (state === 'FATIGUED') cardClasses.push('fatigued');

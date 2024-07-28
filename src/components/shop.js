@@ -148,7 +148,7 @@ export function ItemShop() {
 
         return (
             <DragBox {...p} {...props}>
-                <Card {...card} />
+                <Card {...card} isShopCard={true} />
             </DragBox>
         );
     };

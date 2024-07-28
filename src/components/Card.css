@@ -193,3 +193,7 @@
 .card-stat.health.changed {
     box-shadow: 0 0 15px #ff8c00, 0 0 25px #ff8c00;
 }
+
+.card.shop-card {
+    height: 120px;
+}

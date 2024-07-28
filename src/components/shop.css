@@ -11,7 +11,7 @@
 .shop-roster {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 10px;
+    margin-right: 20px;
 }
 
 .shop-main {
@@ -32,11 +32,12 @@
     background-color: #e6f2ff;
     /* Light blue for bags */
     flex: 1;
-    margin: 0 5px;
+    margin-bottom: 20px;
     padding: 5px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .shop-storage {
@@ -83,7 +84,7 @@
     transition: all 0.3s ease;
     margin: 5px;
     width: 120px;
-    height: 160px;
+    height: 120px;
 }
 
 .shop-card-drag:hover {
@@ -116,7 +117,7 @@
 
 .empty-roster-slot {
     width: 120px;
-    height: 160px;
+    height: 120px;
     border: 2px dashed #ccc;
     border-radius: 8px;
     display: flex;
@@ -128,17 +129,18 @@
     padding: 10px;
 }
 
+/* Responsive design for smaller screens */
 @media (max-width: 768px) {
-    .shop-bag-container {
+    .shop-bag {
         flex-direction: column;
     }
 
-    .shop-bag {
-        width: 100%;
+    .shop-roster {
+        margin-right: 0;
         margin-bottom: 20px;
     }
 
-    .shop-bench {
+    .shop-bag-box {
         width: 100%;
     }
 }
