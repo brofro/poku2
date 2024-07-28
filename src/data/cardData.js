@@ -1,34 +1,9 @@
 import { PLAYER_ONE, PLAYER_TWO } from './constants.js';
+import cardData151 from './151cardData.json'
 
-
-export const CARD_DEFINITIONS = {
-    155: {
-        id: 155,
-        name: "Cyndaquil",
-        atk: 2,
-        hp: 2,
-    },
-    158: {
-        id: 158,
-        name: "Totodile",
-        atk: 3,
-        hp: 3,
-    },
-    143: {
-        id: 143,
-        name: "Snorlax",
-        atk: 1,
-        hp: 5,
-    },
-    152: {
-        id: 152,
-        name: "Chikorita",
-        atk: 1,
-        hp: 4,
-    },
-};
+const CARD_DEFINITIONS = cardData151
 
 export const initialCardData = {
-    [PLAYER_ONE]: [CARD_DEFINITIONS[155], CARD_DEFINITIONS[158]],
-    [PLAYER_TWO]: [CARD_DEFINITIONS[143], CARD_DEFINITIONS[152]],
+    [PLAYER_ONE]: [CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1], CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1]],
+    [PLAYER_TWO]: [CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1], CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1]],
 };

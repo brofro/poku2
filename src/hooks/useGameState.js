@@ -14,8 +14,8 @@ const useGameState = () => {
     const [isLogGenerated, setIsLogGenerated] = useState(false);
 
     // states for roster and bag
-    const [roster, setRoster] = useState(initialCardData[PLAYER_ONE]);
-    const [bench, setBench] = useState([])
+    const [roster, setRoster] = useState([null, null]);
+    const [bench, setBench] = useState(initialCardData[PLAYER_ONE])
     const [bags, setBags] = useState(Object.fromEntries(Array.from({ length: roster.length }, (_, i) => [i, {}])));
     const [shop, setShop] = useState(initialShopData)
     const [storage, setStorage] = useState({})

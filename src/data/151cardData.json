@@ -1,0 +1,1059 @@
+{
+    "1": {
+        "id": 1,
+        "hp": 3,
+        "atk": 4,
+        "spd": 3,
+        "name": "bulbasaur"
+    },
+    "2": {
+        "id": 2,
+        "hp": 4,
+        "atk": 5,
+        "spd": 4,
+        "name": "ivysaur"
+    },
+    "3": {
+        "id": 3,
+        "hp": 6,
+        "atk": 6,
+        "spd": 5,
+        "name": "venusaur"
+    },
+    "4": {
+        "id": 4,
+        "hp": 2,
+        "atk": 4,
+        "spd": 4,
+        "name": "charmander"
+    },
+    "5": {
+        "id": 5,
+        "hp": 4,
+        "atk": 5,
+        "spd": 5,
+        "name": "charmeleon"
+    },
+    "6": {
+        "id": 6,
+        "hp": 6,
+        "atk": 11,
+        "spd": 6,
+        "name": "charizard"
+    },
+    "7": {
+        "id": 7,
+        "hp": 3,
+        "atk": 3,
+        "spd": 2,
+        "name": "squirtle"
+    },
+    "8": {
+        "id": 8,
+        "hp": 5,
+        "atk": 4,
+        "spd": 3,
+        "name": "wartortle"
+    },
+    "9": {
+        "id": 9,
+        "hp": 11,
+        "atk": 6,
+        "spd": 5,
+        "name": "blastoise"
+    },
+    "10": {
+        "id": 10,
+        "hp": 1,
+        "atk": 1,
+        "spd": 3,
+        "name": "caterpie"
+    },
+    "11": {
+        "id": 11,
+        "hp": 2,
+        "atk": 1,
+        "spd": 2,
+        "name": "metapod"
+    },
+    "12": {
+        "id": 12,
+        "hp": 4,
+        "atk": 5,
+        "spd": 4,
+        "name": "butterfree"
+    },
+    "13": {
+        "id": 13,
+        "hp": 1,
+        "atk": 2,
+        "spd": 3,
+        "name": "weedle"
+    },
+    "14": {
+        "id": 14,
+        "hp": 2,
+        "atk": 1,
+        "spd": 2,
+        "name": "kakuna"
+    },
+    "15": {
+        "id": 15,
+        "hp": 4,
+        "atk": 5,
+        "spd": 5,
+        "name": "beedrill"
+    },
+    "16": {
+        "id": 16,
+        "hp": 2,
+        "atk": 3,
+        "spd": 3,
+        "name": "pidgey"
+    },
+    "17": {
+        "id": 17,
+        "hp": 3,
+        "atk": 4,
+        "spd": 4,
+        "name": "pidgeotto"
+    },
+    "18": {
+        "id": 18,
+        "hp": 5,
+        "atk": 5,
+        "spd": 6,
+        "name": "pidgeot"
+    },
+    "19": {
+        "id": 19,
+        "hp": 1,
+        "atk": 3,
+        "spd": 4,
+        "name": "rattata"
+    },
+    "20": {
+        "id": 20,
+        "hp": 4,
+        "atk": 4,
+        "spd": 6,
+        "name": "raticate"
+    },
+    "21": {
+        "id": 21,
+        "hp": 1,
+        "atk": 3,
+        "spd": 4,
+        "name": "spearow"
+    },
+    "22": {
+        "id": 22,
+        "hp": 4,
+        "atk": 5,
+        "spd": 6,
+        "name": "fearow"
+    },
+    "23": {
+        "id": 23,
+        "hp": 2,
+        "atk": 3,
+        "spd": 3,
+        "name": "ekans"
+    },
+    "24": {
+        "id": 24,
+        "hp": 5,
+        "atk": 6,
+        "spd": 5,
+        "name": "arbok"
+    },
+    "25": {
+        "id": 25,
+        "hp": 2,
+        "atk": 4,
+        "spd": 6,
+        "name": "pikachu"
+    },
+    "26": {
+        "id": 26,
+        "hp": 4,
+        "atk": 6,
+        "spd": 11,
+        "name": "raichu"
+    },
+    "27": {
+        "id": 27,
+        "hp": 3,
+        "atk": 3,
+        "spd": 2,
+        "name": "sandshrew"
+    },
+    "28": {
+        "id": 28,
+        "hp": 6,
+        "atk": 5,
+        "spd": 4,
+        "name": "sandslash"
+    },
+    "29": {
+        "id": 29,
+        "hp": 3,
+        "atk": 3,
+        "spd": 2,
+        "name": "nidoran-f"
+    },
+    "30": {
+        "id": 30,
+        "hp": 4,
+        "atk": 4,
+        "spd": 3,
+        "name": "nidorina"
+    },
+    "31": {
+        "id": 31,
+        "hp": 6,
+        "atk": 6,
+        "spd": 5,
+        "name": "nidoqueen"
+    },
+    "32": {
+        "id": 32,
+        "hp": 2,
+        "atk": 3,
+        "spd": 3,
+        "name": "nidoran-m"
+    },
+    "33": {
+        "id": 33,
+        "hp": 3,
+        "atk": 4,
+        "spd": 4,
+        "name": "nidorino"
+    },
+    "34": {
+        "id": 34,
+        "hp": 5,
+        "atk": 11,
+        "spd": 5,
+        "name": "nidoking"
+    },
+    "35": {
+        "id": 35,
+        "hp": 4,
+        "atk": 4,
+        "spd": 2,
+        "name": "clefairy"
+    },
+    "36": {
+        "id": 36,
+        "hp": 6,
+        "atk": 6,
+        "spd": 4,
+        "name": "clefable"
+    },
+    "37": {
+        "id": 37,
+        "hp": 3,
+        "atk": 3,
+        "spd": 4,
+        "name": "vulpix"
+    },
+    "38": {
+        "id": 38,
+        "hp": 6,
+        "atk": 5,
+        "spd": 6,
+        "name": "ninetales"
+    },
+    "39": {
+        "id": 39,
+        "hp": 3,
+        "atk": 3,
+        "spd": 1,
+        "name": "jigglypuff"
+    },
+    "40": {
+        "id": 40,
+        "hp": 5,
+        "atk": 5,
+        "spd": 3,
+        "name": "wigglytuff"
+    },
+    "41": {
+        "id": 41,
+        "hp": 2,
+        "atk": 2,
+        "spd": 3,
+        "name": "zubat"
+    },
+    "42": {
+        "id": 42,
+        "hp": 5,
+        "atk": 5,
+        "spd": 6,
+        "name": "golbat"
+    },
+    "43": {
+        "id": 43,
+        "hp": 3,
+        "atk": 4,
+        "spd": 2,
+        "name": "oddish"
+    },
+    "44": {
+        "id": 44,
+        "hp": 5,
+        "atk": 5,
+        "spd": 2,
+        "name": "gloom"
+    },
+    "45": {
+        "id": 45,
+        "hp": 6,
+        "atk": 11,
+        "spd": 3,
+        "name": "vileplume"
+    },
+    "46": {
+        "id": 46,
+        "hp": 3,
+        "atk": 4,
+        "spd": 1,
+        "name": "paras"
+    },
+    "47": {
+        "id": 47,
+        "hp": 5,
+        "atk": 5,
+        "spd": 2,
+        "name": "parasect"
+    },
+    "48": {
+        "id": 48,
+        "hp": 3,
+        "atk": 3,
+        "spd": 3,
+        "name": "venonat"
+    },
+    "49": {
+        "id": 49,
+        "hp": 5,
+        "atk": 5,
+        "spd": 6,
+        "name": "venomoth"
+    },
+    "50": {
+        "id": 50,
+        "hp": 1,
+        "atk": 3,
+        "spd": 6,
+        "name": "diglett"
+    },
+    "51": {
+        "id": 51,
+        "hp": 3,
+        "atk": 5,
+        "spd": 16,
+        "name": "dugtrio"
+    },
+    "52": {
+        "id": 52,
+        "hp": 2,
+        "atk": 3,
+        "spd": 6,
+        "name": "meowth"
+    },
+    "53": {
+        "id": 53,
+        "hp": 4,
+        "atk": 5,
+        "spd": 15,
+        "name": "persian"
+    },
+    "54": {
+        "id": 54,
+        "hp": 3,
+        "atk": 4,
+        "spd": 3,
+        "name": "psyduck"
+    },
+    "55": {
+        "id": 55,
+        "hp": 6,
+        "atk": 6,
+        "spd": 5,
+        "name": "golduck"
+    },
+    "56": {
+        "id": 56,
+        "hp": 2,
+        "atk": 4,
+        "spd": 4,
+        "name": "mankey"
+    },
+    "57": {
+        "id": 57,
+        "hp": 4,
+        "atk": 6,
+        "spd": 6,
+        "name": "primeape"
+    },
+    "58": {
+        "id": 58,
+        "hp": 3,
+        "atk": 5,
+        "spd": 4,
+        "name": "growlithe"
+    },
+    "59": {
+        "id": 59,
+        "hp": 6,
+        "atk": 16,
+        "spd": 6,
+        "name": "arcanine"
+    },
+    "60": {
+        "id": 60,
+        "hp": 2,
+        "atk": 3,
+        "spd": 6,
+        "name": "poliwag"
+    },
+    "61": {
+        "id": 61,
+        "hp": 4,
+        "atk": 4,
+        "spd": 6,
+        "name": "poliwhirl"
+    },
+    "62": {
+        "id": 62,
+        "hp": 11,
+        "atk": 6,
+        "spd": 4,
+        "name": "poliwrath"
+    },
+    "63": {
+        "id": 63,
+        "hp": 1,
+        "atk": 4,
+        "spd": 6,
+        "name": "abra"
+    },
+    "64": {
+        "id": 64,
+        "hp": 2,
+        "atk": 5,
+        "spd": 7,
+        "name": "kadabra"
+    },
+    "65": {
+        "id": 65,
+        "hp": 4,
+        "atk": 7,
+        "spd": 16,
+        "name": "alakazam"
+    },
+    "66": {
+        "id": 66,
+        "hp": 3,
+        "atk": 4,
+        "spd": 2,
+        "name": "machop"
+    },
+    "67": {
+        "id": 67,
+        "hp": 5,
+        "atk": 5,
+        "spd": 3,
+        "name": "machoke"
+    },
+    "68": {
+        "id": 68,
+        "hp": 6,
+        "atk": 11,
+        "spd": 3,
+        "name": "machamp"
+    },
+    "69": {
+        "id": 69,
+        "hp": 2,
+        "atk": 5,
+        "spd": 2,
+        "name": "bellsprout"
+    },
+    "70": {
+        "id": 70,
+        "hp": 3,
+        "atk": 6,
+        "spd": 3,
+        "name": "weepinbell"
+    },
+    "71": {
+        "id": 71,
+        "hp": 5,
+        "atk": 16,
+        "spd": 4,
+        "name": "victreebel"
+    },
+    "72": {
+        "id": 72,
+        "hp": 4,
+        "atk": 3,
+        "spd": 4,
+        "name": "tentacool"
+    },
+    "73": {
+        "id": 73,
+        "hp": 6,
+        "atk": 5,
+        "spd": 6,
+        "name": "tentacruel"
+    },
+    "74": {
+        "id": 74,
+        "hp": 3,
+        "atk": 4,
+        "spd": 1,
+        "name": "geodude"
+    },
+    "75": {
+        "id": 75,
+        "hp": 5,
+        "atk": 5,
+        "spd": 2,
+        "name": "graveler"
+    },
+    "76": {
+        "id": 76,
+        "hp": 11,
+        "atk": 6,
+        "spd": 3,
+        "name": "golem"
+    },
+    "77": {
+        "id": 77,
+        "hp": 3,
+        "atk": 5,
+        "spd": 6,
+        "name": "ponyta"
+    },
+    "78": {
+        "id": 78,
+        "hp": 5,
+        "atk": 6,
+        "spd": 7,
+        "name": "rapidash"
+    },
+    "79": {
+        "id": 79,
+        "hp": 4,
+        "atk": 4,
+        "spd": 1,
+        "name": "slowpoke"
+    },
+    "80": {
+        "id": 80,
+        "hp": 11,
+        "atk": 6,
+        "spd": 2,
+        "name": "slowbro"
+    },
+    "81": {
+        "id": 81,
+        "hp": 3,
+        "atk": 4,
+        "spd": 3,
+        "name": "magnemite"
+    },
+    "82": {
+        "id": 82,
+        "hp": 5,
+        "atk": 6,
+        "spd": 4,
+        "name": "magneton"
+    },
+    "83": {
+        "id": 83,
+        "hp": 3,
+        "atk": 5,
+        "spd": 4,
+        "name": "farfetchd"
+    },
+    "84": {
+        "id": 84,
+        "hp": 2,
+        "atk": 4,
+        "spd": 5,
+        "name": "doduo"
+    },
+    "85": {
+        "id": 85,
+        "hp": 4,
+        "atk": 6,
+        "spd": 11,
+        "name": "dodrio"
+    },
+    "86": {
+        "id": 86,
+        "hp": 4,
+        "atk": 3,
+        "spd": 3,
+        "name": "seel"
+    },
+    "87": {
+        "id": 87,
+        "hp": 6,
+        "atk": 5,
+        "spd": 4,
+        "name": "dewgong"
+    },
+    "88": {
+        "id": 88,
+        "hp": 4,
+        "atk": 4,
+        "spd": 1,
+        "name": "grimer"
+    },
+    "89": {
+        "id": 89,
+        "hp": 11,
+        "atk": 6,
+        "spd": 3,
+        "name": "muk"
+    },
+    "90": {
+        "id": 90,
+        "hp": 3,
+        "atk": 4,
+        "spd": 2,
+        "name": "shellder"
+    },
+    "91": {
+        "id": 91,
+        "hp": 11,
+        "atk": 6,
+        "spd": 4,
+        "name": "cloyster"
+    },
+    "92": {
+        "id": 92,
+        "hp": 1,
+        "atk": 5,
+        "spd": 5,
+        "name": "gastly"
+    },
+    "93": {
+        "id": 93,
+        "hp": 3,
+        "atk": 6,
+        "spd": 6,
+        "name": "haunter"
+    },
+    "94": {
+        "id": 94,
+        "hp": 4,
+        "atk": 11,
+        "spd": 11,
+        "name": "gengar"
+    },
+    "95": {
+        "id": 95,
+        "hp": 6,
+        "atk": 2,
+        "spd": 4,
+        "name": "onix"
+    },
+    "96": {
+        "id": 96,
+        "hp": 4,
+        "atk": 3,
+        "spd": 2,
+        "name": "drowzee"
+    },
+    "97": {
+        "id": 97,
+        "hp": 7,
+        "atk": 5,
+        "spd": 4,
+        "name": "hypno"
+    },
+    "98": {
+        "id": 98,
+        "hp": 3,
+        "atk": 4,
+        "spd": 3,
+        "name": "krabby"
+    },
+    "99": {
+        "id": 99,
+        "hp": 5,
+        "atk": 6,
+        "spd": 5,
+        "name": "kingler"
+    },
+    "100": {
+        "id": 100,
+        "hp": 3,
+        "atk": 3,
+        "spd": 6,
+        "name": "voltorb"
+    },
+    "101": {
+        "id": 101,
+        "hp": 5,
+        "atk": 4,
+        "spd": 26,
+        "name": "electrode"
+    },
+    "102": {
+        "id": 102,
+        "hp": 4,
+        "atk": 3,
+        "spd": 2,
+        "name": "exeggcute"
+    },
+    "103": {
+        "id": 103,
+        "hp": 6,
+        "atk": 17,
+        "spd": 3,
+        "name": "exeggutor"
+    },
+    "104": {
+        "id": 104,
+        "hp": 4,
+        "atk": 3,
+        "spd": 2,
+        "name": "cubone"
+    },
+    "105": {
+        "id": 105,
+        "hp": 6,
+        "atk": 4,
+        "spd": 3,
+        "name": "marowak"
+    },
+    "106": {
+        "id": 106,
+        "hp": 5,
+        "atk": 5,
+        "spd": 5,
+        "name": "hitmonlee"
+    },
+    "107": {
+        "id": 107,
+        "hp": 6,
+        "atk": 5,
+        "spd": 5,
+        "name": "hitmonchan"
+    },
+    "108": {
+        "id": 108,
+        "hp": 6,
+        "atk": 4,
+        "spd": 2,
+        "name": "lickitung"
+    },
+    "109": {
+        "id": 109,
+        "hp": 4,
+        "atk": 4,
+        "spd": 2,
+        "name": "koffing"
+    },
+    "110": {
+        "id": 110,
+        "hp": 6,
+        "atk": 6,
+        "spd": 4,
+        "name": "weezing"
+    },
+    "111": {
+        "id": 111,
+        "hp": 5,
+        "atk": 4,
+        "spd": 1,
+        "name": "rhyhorn"
+    },
+    "112": {
+        "id": 112,
+        "hp": 7,
+        "atk": 6,
+        "spd": 2,
+        "name": "rhydon"
+    },
+    "113": {
+        "id": 113,
+        "hp": 26,
+        "atk": 1,
+        "spd": 3,
+        "name": "chansey"
+    },
+    "114": {
+        "id": 114,
+        "hp": 5,
+        "atk": 5,
+        "spd": 4,
+        "name": "tangela"
+    },
+    "115": {
+        "id": 115,
+        "hp": 6,
+        "atk": 5,
+        "spd": 6,
+        "name": "kangaskhan"
+    },
+    "116": {
+        "id": 116,
+        "hp": 2,
+        "atk": 4,
+        "spd": 4,
+        "name": "horsea"
+    },
+    "117": {
+        "id": 117,
+        "hp": 4,
+        "atk": 6,
+        "spd": 5,
+        "name": "seadra"
+    },
+    "118": {
+        "id": 118,
+        "hp": 3,
+        "atk": 3,
+        "spd": 4,
+        "name": "goldeen"
+    },
+    "119": {
+        "id": 119,
+        "hp": 5,
+        "atk": 5,
+        "spd": 4,
+        "name": "seaking"
+    },
+    "120": {
+        "id": 120,
+        "hp": 2,
+        "atk": 4,
+        "spd": 5,
+        "name": "staryu"
+    },
+    "121": {
+        "id": 121,
+        "hp": 5,
+        "atk": 6,
+        "spd": 15,
+        "name": "starmie"
+    },
+    "122": {
+        "id": 122,
+        "hp": 5,
+        "atk": 5,
+        "spd": 6,
+        "name": "mr-mime"
+    },
+    "123": {
+        "id": 123,
+        "hp": 5,
+        "atk": 6,
+        "spd": 7,
+        "name": "scyther"
+    },
+    "124": {
+        "id": 124,
+        "hp": 4,
+        "atk": 6,
+        "spd": 6,
+        "name": "jynx"
+    },
+    "125": {
+        "id": 125,
+        "hp": 5,
+        "atk": 6,
+        "spd": 7,
+        "name": "electabuzz"
+    },
+    "126": {
+        "id": 126,
+        "hp": 5,
+        "atk": 11,
+        "spd": 6,
+        "name": "magmar"
+    },
+    "127": {
+        "id": 127,
+        "hp": 5,
+        "atk": 6,
+        "spd": 5,
+        "name": "pinsir"
+    },
+    "128": {
+        "id": 128,
+        "hp": 6,
+        "atk": 5,
+        "spd": 11,
+        "name": "tauros"
+    },
+    "129": {
+        "id": 129,
+        "hp": 1,
+        "atk": 1,
+        "spd": 5,
+        "name": "magikarp"
+    },
+    "130": {
+        "id": 130,
+        "hp": 11,
+        "atk": 7,
+        "spd": 5,
+        "name": "gyarados"
+    },
+    "131": {
+        "id": 131,
+        "hp": 17,
+        "atk": 6,
+        "spd": 4,
+        "name": "lapras"
+    },
+    "132": {
+        "id": 132,
+        "hp": 3,
+        "atk": 3,
+        "spd": 3,
+        "name": "ditto"
+    },
+    "133": {
+        "id": 133,
+        "hp": 3,
+        "atk": 3,
+        "spd": 3,
+        "name": "eevee"
+    },
+    "134": {
+        "id": 134,
+        "hp": 11,
+        "atk": 6,
+        "spd": 4,
+        "name": "vaporeon"
+    },
+    "135": {
+        "id": 135,
+        "hp": 5,
+        "atk": 6,
+        "spd": 18,
+        "name": "jolteon"
+    },
+    "136": {
+        "id": 136,
+        "hp": 5,
+        "atk": 17,
+        "spd": 4,
+        "name": "flareon"
+    },
+    "137": {
+        "id": 137,
+        "hp": 5,
+        "atk": 5,
+        "spd": 2,
+        "name": "porygon"
+    },
+    "138": {
+        "id": 138,
+        "hp": 4,
+        "atk": 4,
+        "spd": 2,
+        "name": "omanyte"
+    },
+    "139": {
+        "id": 139,
+        "hp": 6,
+        "atk": 6,
+        "spd": 3,
+        "name": "omastar"
+    },
+    "140": {
+        "id": 140,
+        "hp": 3,
+        "atk": 5,
+        "spd": 3,
+        "name": "kabuto"
+    },
+    "141": {
+        "id": 141,
+        "hp": 5,
+        "atk": 6,
+        "spd": 5,
+        "name": "kabutops"
+    },
+    "142": {
+        "id": 142,
+        "hp": 5,
+        "atk": 6,
+        "spd": 18,
+        "name": "aerodactyl"
+    },
+    "143": {
+        "id": 143,
+        "hp": 23,
+        "atk": 6,
+        "spd": 2,
+        "name": "snorlax"
+    },
+    "144": {
+        "id": 144,
+        "hp": 17,
+        "atk": 6,
+        "spd": 5,
+        "name": "articuno"
+    },
+    "145": {
+        "id": 145,
+        "hp": 6,
+        "atk": 16,
+        "spd": 6,
+        "name": "zapdos"
+    },
+    "146": {
+        "id": 146,
+        "hp": 6,
+        "atk": 17,
+        "spd": 6,
+        "name": "moltres"
+    },
+    "147": {
+        "id": 147,
+        "hp": 2,
+        "atk": 4,
+        "spd": 3,
+        "name": "dratini"
+    },
+    "148": {
+        "id": 148,
+        "hp": 4,
+        "atk": 5,
+        "spd": 4,
+        "name": "dragonair"
+    },
+    "149": {
+        "id": 149,
+        "hp": 15,
+        "atk": 22,
+        "spd": 5,
+        "name": "dragonite"
+    },
+    "150": {
+        "id": 150,
+        "hp": 15,
+        "atk": 26,
+        "spd": 18,
+        "name": "mewtwo"
+    },
+    "151": {
+        "id": 151,
+        "hp": 16,
+        "atk": 11,
+        "spd": 6,
+        "name": "mew"
+    }
+}
