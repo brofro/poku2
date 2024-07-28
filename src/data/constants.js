@@ -1,5 +1,12 @@
 // src/constants.js
-export const getImageUrl = (pokemonNumber) => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonNumber}.png`;
+
+export const getImageUrl = (pokemonNumber) => {
+    // Pad the number to 3 digits
+    const paddedNumber = String(pokemonNumber).padStart(3, '0');
+
+    // Construct and return the new URL
+    return `https://www.pokencyclopedia.info/sprites/gen3/ani_emerald/ani_e_${paddedNumber}.gif`;
+};
 
 export const ATK_ICON = "https://i.imgur.com/X4Fo2c5.png";
 export const HP_ICON = "https://i.imgur.com/MP4IoUo.png";
