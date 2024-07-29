@@ -6,7 +6,6 @@ const Game = {
     setup: () => ({
         gold: 10,
         storage: {},
-        board: {},
         bags: { 0: {}, 1: {} },
         roster: [null, null],
         P2: initialCardData[PLAYER_TWO],

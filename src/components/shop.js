@@ -13,6 +13,10 @@ export function ItemShop({ G, moves, _nextPage }) {
         return { name, ...value };
     };
 
+
+    const isRosterIncomplete = () => roster.some(card => card === null);
+
+
     const ItemDrag = ({ obj, itemType, bagId, ...props }) => {
         const p = {};
         p.className = "shop-item-card";
@@ -131,7 +135,7 @@ export function ItemShop({ G, moves, _nextPage }) {
 
     return (
         <div className="shop-container">
-            <button className="generate-log-button" onClick={() => _nextPage()} >battle</button>
+            <button className="generate-log-button" onClick={() => _nextPage()} disabled={isRosterIncomplete()}>battle</button>
             <DragdropWrapper className="shop-main">
                 <div className="shop-bag-container">
                     {Object.keys(bags).map((bagId, index) => (
