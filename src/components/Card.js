@@ -46,20 +46,16 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
             </div>
             {/* Card information */}
             <div className="card-info">
-                {/* Card name and ID */}
-                <div className="card-name">{name} #{id}</div>
                 {/* Card stats */}
-                <div className="card-stats">
-                    {/* Attack stat */}
-                    <div className="card-stat">
-                        <img src={ATK_ICON} alt="Attack" className="stat-icon" />
-                        <span>{atk}</span>
-                    </div>
-                    {/* Health stat */}
-                    <div ref={healthRef} className="card-stat health">
-                        <img src={HP_ICON} alt="Health" className="stat-icon" />
-                        <span>{currentHp}/{hp}</span>
-                    </div>
+                {/* Attack stat */}
+                <div className="card-stat">
+                    <img src={ATK_ICON} alt="Attack" className="stat-icon" />
+                    <span>{atk}</span>
+                </div>
+                {/* Health stat */}
+                <div ref={healthRef} className="card-stat health">
+                    <img src={HP_ICON} alt="Health" className="stat-icon" />
+                    <span>{currentHp}/{hp}</span>
                 </div>
             </div>
         </div>
