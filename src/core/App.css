@@ -89,6 +89,10 @@
   border-radius: 4px;
   transition: background-color 0.3s;
   margin-bottom: 10px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
 }
 
 .generate-log-button:hover {
