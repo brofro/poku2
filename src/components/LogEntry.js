@@ -1,9 +1,7 @@
 import React from 'react';
-import { useGame } from '../contexts/GameContext';
 import './LogEntry.css';
 
-const LogEntry = ({ entry, index, currentIndex }) => {
-    const { setGameStateFromLog } = useGame();
+const LogEntry = ({ entry, index, currentIndex, setGameStateFromLog }) => {
 
     const handleClick = () => {
         setGameStateFromLog(index);

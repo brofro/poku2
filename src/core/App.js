@@ -1,44 +1,25 @@
-import React from 'react';
+import React from "react";
+import { useState, useEffect } from "react";
 import './App.css';
-import BattleField from '../components/Battlefield';
-import ControlButtons from '../components/ControlButtons';
-import GameLog from '../components/GameLog';
-import GenerateLogButton from '../components/GenerateLogButton';
-import { GameProvider, useGame } from '../contexts/GameContext';
-import { ItemShop } from '../components/shop';
+import { Client } from "boardgame.io/react";
+import { Debug } from "boardgame.io/debug"
+import { ItemShop } from "../components/shop";
+import Game from "./Game"
+import BattleDebug from "../components/BattleDebug";
 
-function AppContent() {
-  const { isLogGenerated } = useGame()
 
-  return <div className="App">
-    <div className="game-container">
-      {/* Control buttons for game flow */}
-      <ControlButtons />
-      <div className="battlefield-container">
-        {/* The main game board */}
-        <GenerateLogButton />
-        {isLogGenerated ? (
-          <BattleField />
-        ) : (
-          <>
-            <ItemShop />
-          </>
-        )}
-      </div>
-      {/* Log of game actions */}
-      <GameLog />
-    </div>
-  </div>
 
+const Main = (props) => {
+  const [page1, setPage1] = useState(true)
+  const nextPage = () => setPage1(!page1)
+
+  return page1 ? <ItemShop {...props} _nextPage={nextPage} /> : <BattleDebug {...props} _nextPage={nextPage} />
 }
 
-function App() {
-  return (
-    // Wrap the entire app with the GameProvider to make game state available everywhere
-    <GameProvider>
-      <AppContent />
-    </GameProvider>
-  );
-}
+const App = Client({
+  game: Game,
+  board: Main,
+  debug: { impl: Debug },
+});
 
-export default App;
+export default App

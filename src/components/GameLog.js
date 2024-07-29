@@ -1,11 +1,7 @@
 import React from 'react';
-import { useGame } from '../contexts/GameContext';
 import LogEntry from './LogEntry';
 
-const GameLog = () => {
-    // Get the game log and current log index from our game context
-    const { gameLog, currentLogIndex, isLogGenerated } = useGame();
-
+const GameLog = ({ gameLog, currentLogIndex, isLogGenerated, setGameStateFromLog }) => {
     if (!isLogGenerated) return null;
 
     return (
@@ -18,6 +14,7 @@ const GameLog = () => {
                         entry={entry}
                         index={index}
                         currentIndex={currentLogIndex}
+                        setGameStateFromLog={setGameStateFromLog}
                     />
                 ))}
             </div>

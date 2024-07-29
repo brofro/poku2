@@ -1,11 +1,8 @@
 import React from 'react';
 import Card from './Card';
-import { useGame } from '../contexts/GameContext';
 import { PLAYER_ONE, PLAYER_TWO } from '../data/constants';
 
-const BattleField = () => {
-    // Get the current game state and action from our game context
-    const { gameState, currentAction, isLogGenerated } = useGame();
+const BattleField = ({ gameState, currentAction, isLogGenerated }) => {
 
     // If the game state hasn't been initialized, don't render anything
     if (!isLogGenerated) return null;

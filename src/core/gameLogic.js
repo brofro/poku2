@@ -336,7 +336,7 @@ function runGameLoop(initialCardData, bag) {
         log: ACTION_TYPES.GAME_END,
     });
 
-    return { finalState: gameState, gameLog };
+    return gameLog;
 }
 
 export {

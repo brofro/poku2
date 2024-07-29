@@ -1,31 +1,18 @@
-import { useState, useEffect } from 'react';
-import { initialCardData } from '../data/cardData';
-import { initialShopData } from '../data/effectsData';
-import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from '../data/constants';
-import { runGameLoop, getGameStateAtLogIndex } from '../core/gameLogic';
+import React from "react";
+import { useState, useEffect } from "react";
+import ControlButtons from '../components/ControlButtons';
+import GameLog from '../components/GameLog';
+import { runGameLoop, getGameStateAtLogIndex } from "../core/gameLogic";
+import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
+import BattleField from "../components/Battlefield";
 
-const useGameState = () => {
-    // State variables to manage the game
+const BattleDebug = ({ G, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board
     const [gameLog, setGameLog] = useState([]);  // Log of all game actions
     const [currentLogIndex, setCurrentLogIndex] = useState(-1);  // Index of current action in the log
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
-
-    // states for roster and bag
-    const [roster, setRoster] = useState([null, null]);
-    const [bench, setBench] = useState(initialCardData[PLAYER_ONE])
-    const [bags, setBags] = useState(Object.fromEntries(Array.from({ length: roster.length }, (_, i) => [i, {}])));
-    const [shop, setShop] = useState(initialShopData)
-    const [storage, setStorage] = useState({})
-
-    const handleGenerateLog = () => {
-        const { gameLog } = runGameLoop({ [PLAYER_ONE]: roster, [PLAYER_TWO]: initialCardData[PLAYER_TWO] }, bags);
-        setGameState(getGameStateAtLogIndex(gameLog, -1));
-        setGameLog(gameLog);
-        setIsLogGenerated(true);
-    };
 
     const resetGameState = () => {
         setGameLog([])
@@ -34,10 +21,6 @@ const useGameState = () => {
         setCurrentLogIndex(-1)
     }
 
-    //updates bag at index
-    const updateBag = (index, effects) => setBags(prev => ({ ...prev, [index]: Object.fromEntries(effects.map((effect, i) => [i, effect])) }));
-
-    // Function to play the next action in the log
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
             const nextIndex = currentLogIndex + 1;
@@ -68,8 +51,6 @@ const useGameState = () => {
         return () => clearTimeout(timeoutId);
     }, [isPlaying, currentLogIndex, gameLog.length]);
 
-
-
     // Function to start or pause auto-play
     const handlePlayPause = () => {
         if (!isPlaying) {
@@ -94,31 +75,30 @@ const useGameState = () => {
         setCurrentAction(gameLog[index]);
     };
 
-    // Return all necessary state and functions
-    return {
-        gameState,
-        gameLog,
-        currentLogIndex,
-        isPlaying,
-        isLogGenerated,
-        currentAction,
-        roster,
-        bench,
-        bags,
-        shop,
-        storage,
-        handleGenerateLog,
-        handlePlayNext,
-        handlePlayPause,
-        handleRestart,
-        setGameStateFromLog,
-        resetGameState,
-        setShop,
-        setStorage,
-        setBags,
-        setRoster,
-        setBench
-    };
-};
+    useEffect(() => {
+        let gl = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
+        setGameLog(gl)
+        setGameState(getGameStateAtLogIndex(gl, -1));
+        setIsLogGenerated(true);
+    }, [])
 
-export default useGameState;
+
+    return (
+        <div className="game-container">
+            {/* Control buttons for game flow */}
+            <ControlButtons handlePlayNext={handlePlayNext} handlePlayPause={handlePlayPause} handleRestart={handleRestart} isPlaying={isPlaying} isLogGenerated={isLogGenerated} />
+            <div className="battlefield-container">
+                <button className="generate-log-button" onClick={_nextPage}>Shop </button>
+
+                {/* The main game board */}
+
+                <BattleField gameState={gameState} currentAction={currentAction} isLogGenerated={isLogGenerated} />
+
+            </div>
+            {/* Log of game actions */}
+            <GameLog gameLog={gameLog} currentLogIndex={currentLogIndex} isLogGenerated={isLogGenerated} setGameStateFromLog={setGameStateFromLog} />
+        </div>
+    )
+}
+
+export default BattleDebug

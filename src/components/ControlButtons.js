@@ -1,9 +1,6 @@
 import React from 'react';
-import { useGame } from '../contexts/GameContext';
 
-const ControlButtons = () => {
-    // Get the necessary functions and state from our game context
-    const { handlePlayNext, handlePlayPause, handleRestart, isPlaying, isLogGenerated } = useGame();
+const ControlButtons = ({ handlePlayNext, handlePlayPause, handleRestart, isPlaying, isLogGenerated }) => {
     if (!isLogGenerated) return null;
     return (
         <div className="control-buttons">

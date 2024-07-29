@@ -3,21 +3,15 @@ import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css"
 import Card from './Card';
-import { useGame } from '../contexts/GameContext';
 import ItemEffect from './ItemEffect';
 
-export function ItemShop() {
-    const { roster, setRoster, bench, setBench, shop, setShop, bags, setBags, storage, setStorage } = useGame();
-
+export function ItemShop({ G, moves, _nextPage }) {
+    const { roster, bench, bags, storage, shop } = G
 
     const remove = (id, obj) => {
         const copy = { ...obj };
         delete copy[id];
         return copy;
-    };
-
-    const ItemCard = ({ obj, ...props }) => {
-        return <img src={obj.icon} />;
     };
 
     const flattenObject = ({ id, ...rest }) => {
@@ -51,10 +45,8 @@ export function ItemShop() {
         p.itemType = ["shop", "bag"];
         p._canDrop = () => true;
         p._afterDrop = ({ data, itemType, bagId }) => {
-            if (itemType === "shop") setShop(remove(data.id, shop));
-            if (itemType === "bag")
-                setBags({ ...bags, [bagId]: remove(data.id, bags[bagId]) });
-            setStorage({ ...storage, [data.id]: data });
+            if (itemType === "shop") moves.buy(data);
+            if (itemType === "bag") moves.bag2storage(bagId, data)
         };
         p.canDropStyle = { backgroundColor: COLORS.green };
         p.isOverStyle = { opacity: "50%" };
@@ -68,10 +60,7 @@ export function ItemShop() {
         p._canDrop = () => true;
         p._afterDrop = ({ data, itemType }) => {
             //storage to bag
-            if (itemType === "storage") {
-                setStorage(remove(data.id, storage));
-                setBags({ ...bags, [bagId]: { ...bags[bagId], [data.id]: data } });
-            }
+            if (itemType === "storage") moves.storage2bag(bagId, data)
         };
         p.canDropStyle = { backgroundColor: COLORS.green };
         p.isOverStyle = { opacity: "50%" };
@@ -86,16 +75,13 @@ export function ItemShop() {
     };
 
     //Card DND
-    const RosterDrop = ({ rosterCard, setRosterCard, removeBenchCard, index, ...props }) => {
+    const RosterDrop = ({ rosterCard, index, ...props }) => {
         const p = {};
         p.className = "shop-roster";
         p.itemType = "card";
         p._canDrop = (item) => item.itemType === "card" && item.from === "bench";
-        p._afterDrop = ({ data, from }) => {
-            if (from === "bench") {
-                setRosterCard(index, data);
-                removeBenchCard(data.id);
-            }
+        p._afterDrop = ({ card, from }) => {
+            if (from === "bench") moves.bench2roster(index, card)
         };
         p.canDropStyle = { backgroundColor: COLORS.green };
         p.isOverStyle = { opacity: "50%" };
@@ -111,16 +97,13 @@ export function ItemShop() {
         );
     };
 
-    const BenchDrop = ({ bench, setBench, removeRosterCard, ...props }) => {
+    const BenchDrop = ({ bench, ...props }) => {
         const p = {};
         p.className = "shop-bench";
         p.itemType = "card";
         p._canDrop = (item) => item.itemType === "card" && item.from === "roster";
-        p._afterDrop = ({ data, from, index }) => {
-            if (from === "roster") {
-                setBench(prev => [...prev, data]);
-                removeRosterCard(index);
-            }
+        p._afterDrop = ({ card, from, index }) => {
+            if (from === "roster") moves.roster2bench(index, card)
         };
         p.canDropStyle = { backgroundColor: COLORS.green };
         p.isOverStyle = { opacity: "50%" };
@@ -134,12 +117,11 @@ export function ItemShop() {
         );
     };
 
-
     const CardDrag = ({ card, from, index, ...props }) => {
         const p = {};
         p.className = "shop-card-drag";
         p.itemType = "card";
-        p.dragData = { data: card, itemType: "card", from, index };
+        p.dragData = { card: card, itemType: "card", from, index };
         p._canDrag = () => true;
         p.isDraggingStyle = {
             opacity: 0.5,
@@ -153,44 +135,15 @@ export function ItemShop() {
         );
     };
 
-
-    const removeBenchCard = (cardId) => {
-        setBench(prev => prev.filter(card => card.id !== cardId));
-    };
-
-    const setRosterCard = (index, card) => {
-        setRoster(prev => {
-            const newRoster = [...prev];
-            newRoster[index] = card;
-            return newRoster;
-        });
-    };
-
-    const removeRosterCard = (index) => {
-        setRoster(prev => {
-            const newRoster = [...prev];
-            newRoster[index] = null;
-            return newRoster;
-        });
-    };
-
     return (
         <div className="shop-container">
+            <button className="generate-log-button" onClick={() => _nextPage()} >battle</button>
             <DragdropWrapper className="shop-main">
                 <div className="shop-bag-container">
                     {Object.keys(bags).map((bagId, index) => (
                         <div key={bagId} className="shop-bag">
-                            {/* <div className="shop-roster">
-                                {roster[index] && (
-                                    <Card
-                                        {...roster[index]}
-                                    />
-                                )}
-                            </div> */}
                             <RosterDrop
                                 rosterCard={roster[index]}
-                                setRosterCard={setRosterCard}
-                                removeBenchCard={removeBenchCard}
                                 index={index}
                             />
                             <BagDrop bagId={bagId} className="shop-bag-box">
@@ -216,8 +169,6 @@ export function ItemShop() {
                 </div>
                 <BenchDrop
                     bench={bench}
-                    setBench={setBench}
-                    removeRosterCard={removeRosterCard}
                 />
             </DragdropWrapper>
         </div>
