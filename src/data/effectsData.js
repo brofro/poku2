@@ -4,6 +4,7 @@ import rangedicon from "../components/ranged.svg"
 import divineShieldIcon from "../components/divineshield.svg"
 import deathrattleIcon from "../components/deathrattle.svg"
 import growIcon from "../components/grow.svg"
+import { shapes } from "../components/inventory/allShapes"
 
 let bagId = 0
 
@@ -28,6 +29,7 @@ export const EFFECTS_FUNCTIONS = {
 export const EFFECTS = {
     [KEY_EFFECTS.GROW]: {
         icon: growIcon,
+        shapeId: "L",
         active: true,
         cost: 3,
         text: "Gains +1/+1 at the end of every round",
@@ -35,18 +37,21 @@ export const EFFECTS = {
     },
     [KEY_EFFECTS.RANGED]: {
         icon: rangedicon,
+        shapeId: "T",
         active: true,
         cost: 10,
         text: "Cannot be counter-attacked"
     },
     [KEY_EFFECTS.DIVINE_SHIELD]: {
         icon: divineShieldIcon,
+        shapeId: "T2",
         active: true,
         cost: 2,
         text: "Negates first instance of attack damage"
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
         icon: deathrattleIcon,
+        shapeId: "COR",
         active: true,
         cost: 1,
         text: "Deathrattle: Summon a 1/1 Magikarp",
@@ -74,7 +79,7 @@ export function selectEffects(keys = []) {
     return keys.reduce((selectedEffects, key) => {
         if (key in EFFECTS) {
             //Not sure if bubbling up cost here is problematic, we need to access cost from moves
-            selectedEffects[bagId] = { id: bagId, [key]: deepCopy(EFFECTS[key]), cost: EFFECTS[key].cost }
+            selectedEffects[bagId] = { id: bagId, shape: shapes[EFFECTS[key].shapeId], [key]: deepCopy(EFFECTS[key]), cost: EFFECTS[key].cost }
             bagId++
         }
         return selectedEffects;

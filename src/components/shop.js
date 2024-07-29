@@ -4,6 +4,8 @@ import { COLORS } from './dnd-wrapper';
 import "./shop.css";
 import Card from './Card';
 import ItemEffect from './ItemEffect';
+import ShapeView from './inventory/ShapeView';
+import BagGrid from './inventory/BagGrid';
 
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
@@ -16,10 +18,14 @@ export function ItemShop({ G, moves, _nextPage }) {
         return { name, ...value };
     };
 
-    const ItemDrag = ({ obj, itemType, bagId, ...props }) => {
+    const ItemDrag = ({ obj, itemType, bagId, sIndex = 0, ...props }) => {
+        const [shapeIndex, setShapeIndex] = React.useState(sIndex)
+
+
         const dragProps = {
+            dependencyArr: [shapeIndex],
             itemType: itemType,
-            dragData: { data: obj, itemType, bagId },
+            dragData: { data: obj, itemType, bagId, shape: obj.shape[shapeIndex] },
             _canDrag: () => true,
             isDraggingStyle: {
                 boxSizing: "border-box",
@@ -28,11 +34,14 @@ export function ItemShop({ G, moves, _nextPage }) {
             ...props
         };
 
+        const rotate = () =>  shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0)
+
         const flat = flattenObject(obj);
 
         return (
             <DragBox {...dragProps}>
                 <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} shopCost={flat.cost} />
+                <ShapeView shapes={obj.shape} shapeIndex={shapeIndex} _rotate={rotate} />
             </DragBox>
         );
     };
@@ -70,25 +79,11 @@ export function ItemShop({ G, moves, _nextPage }) {
         return <DropBox {...dropProps}>{children}</DropBox>;
     };
 
-    const BagDrop = ({ bagId, bags, ...props }) => {
-        const dropProps = {
-            itemType: "storage",
-            _canDrop: () => true,
-            _afterDrop: ({ data }) => props.moves.storage2bag(bagId, data),
-            canDropStyle: { backgroundColor: COLORS.green },
-            isOverStyle: { opacity: "50%" },
-            ...props
-        };
-
-        return (
-            <DropBox {...dropProps}>
-                <div className="shop-bag-content">
-                    {Object.values(bags[bagId]).map((obj, index) => (
-                        <ItemDrag itemType="bag" bagId={bagId} obj={obj} key={index} />
-                    ))}
-                </div>
-            </DropBox>
-        );
+    const BagDrop = ({ bagId }) => {
+        const addItem = (data) => {
+            moves.storage2bag(bagId, data)
+        }
+        return <BagGrid _addItem={addItem} bagItems={bags[bagId]} />
     };
 
     const RosterDrop = ({ rosterCard, index, ...props }) => {
