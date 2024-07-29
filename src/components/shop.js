@@ -1,18 +1,12 @@
 import React from 'react';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
-import "./shop.css"
+import "./Shop.css"
 import Card from './Card';
 import ItemEffect from './ItemEffect';
 
 export function ItemShop({ G, moves, _nextPage }) {
     const { roster, bench, bags, storage, shop } = G
-
-    const remove = (id, obj) => {
-        const copy = { ...obj };
-        delete copy[id];
-        return copy;
-    };
 
     const flattenObject = ({ id, ...rest }) => {
         const [name, value] = Object.entries(rest)[0];
