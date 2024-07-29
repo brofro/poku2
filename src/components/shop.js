@@ -13,7 +13,7 @@ export function ItemShop({ G, moves, _nextPage }) {
     const { roster, bench, bags, storage, gold, shop } = G;
     const isRosterIncomplete = () => roster.some(card => card === null);
 
-    const flattenObject = ({ id, ...rest }) => {
+    const flattenObject = ({ id, shape, ...rest }) => {
         const [name, value] = Object.entries(rest)[0];
         return { name, ...value };
     };
@@ -34,8 +34,9 @@ export function ItemShop({ G, moves, _nextPage }) {
             ...props
         };
 
-        const rotate = () =>  shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0)
+        const rotate = () => shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0)
 
+        //Flatten the item types, ignore shape
         const flat = flattenObject(obj);
 
         return (
