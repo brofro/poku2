@@ -3,7 +3,7 @@ import { useState } from "react";
 import './App.css';
 import { Client } from "boardgame.io/react";
 import { Debug } from "boardgame.io/debug"
-import { ItemShop } from "../components/Shop";
+import { ItemShop } from "../components/shop";
 import Game from "./Game"
 import BattleDebug from "../components/BattleDebug";
 

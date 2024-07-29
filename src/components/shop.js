@@ -1,91 +1,91 @@
 import React from 'react';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
-import "./Shop.css"
+import "./shop.css";
 import Card from './Card';
 import ItemEffect from './ItemEffect';
 
 export function ItemShop({ G, moves, _nextPage }) {
-    const { roster, bench, bags, storage, shop } = G
+    const { roster, bench, bags, storage, shop } = G;
+    const isRosterIncomplete = () => roster.some(card => card === null);
 
     const flattenObject = ({ id, ...rest }) => {
         const [name, value] = Object.entries(rest)[0];
         return { name, ...value };
     };
 
-
-    const isRosterIncomplete = () => roster.some(card => card === null);
-
-
     const ItemDrag = ({ obj, itemType, bagId, ...props }) => {
-        const p = {};
-        p.className = "shop-item-card";
-        p.itemType = itemType; //"shop", "storage", "bag"
-        p.dragData = { data: obj, itemType, bagId };
-        p._canDrag = () => true;
-        p.isDraggingStyle = {
-            boxSizing: "border-box",
-            borderWidth: "4px"
+        const dragProps = {
+            itemType: itemType,
+            dragData: { data: obj, itemType, bagId },
+            _canDrag: () => true,
+            isDraggingStyle: {
+                boxSizing: "border-box",
+                borderWidth: "4px"
+            },
+            ...props
         };
 
-        const flat = flattenObject(obj)
+        const flat = flattenObject(obj);
 
         return (
-            <DragBox {...p} {...props}>
+            <DragBox {...dragProps}>
                 <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} isShopItem={true} />
             </DragBox>
         );
     };
 
-    const StorageDrop = (props) => {
-        const p = {};
-        p.className = "shop-storage";
-        p.itemType = ["shop", "bag"];
-        p._canDrop = () => true;
-        p._afterDrop = ({ data, itemType, bagId }) => {
-            if (itemType === "shop") moves.buy(data);
-            if (itemType === "bag") moves.bag2storage(bagId, data)
+    const StorageDrop = ({ children, ...props }) => {
+        const dropProps = {
+            className: "shop-storage",
+            itemType: ["shop", "bag"],
+            _canDrop: () => true,
+            _afterDrop: ({ data, itemType, bagId }) => {
+                if (itemType === "shop") props.moves.buy(data);
+                if (itemType === "bag") props.moves.bag2storage(bagId, data);
+            },
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
         };
-        p.canDropStyle = { backgroundColor: COLORS.green };
-        p.isOverStyle = { opacity: "50%" };
 
-        return <DropBox {...p} {...props} />;
+        return <DropBox {...dropProps}>{children}</DropBox>;
     };
 
-    const BagDrop = ({ bagId, ...props }) => {
-        const p = {};
-        p.itemType = "storage";
-        p._canDrop = () => true;
-        p._afterDrop = ({ data, itemType }) => {
-            //storage to bag
-            if (itemType === "storage") moves.storage2bag(bagId, data)
+    const BagDrop = ({ bagId, bags, ...props }) => {
+        const dropProps = {
+            itemType: "storage",
+            _canDrop: () => true,
+            _afterDrop: ({ data }) => props.moves.storage2bag(bagId, data),
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
         };
-        p.canDropStyle = { backgroundColor: COLORS.green };
-        p.isOverStyle = { opacity: "50%" };
+
         return (
-            <DropBox {...p} {...props}>
-                {bagId}
-                {Object.values(bags[bagId]).map((obj, index) => (
-                    <ItemDrag itemType="bag" bagId={bagId} obj={obj} key={index} />
-                ))}
+            <DropBox {...dropProps}>
+                <div className="shop-bag-content">
+                    {Object.values(bags[bagId]).map((obj, index) => (
+                        <ItemDrag itemType="bag" bagId={bagId} obj={obj} key={index} />
+                    ))}
+                </div>
             </DropBox>
         );
     };
 
-    //Card DND
     const RosterDrop = ({ rosterCard, index, ...props }) => {
-        const p = {};
-        p.className = "shop-roster";
-        p.itemType = "card";
-        p._canDrop = (item) => item.itemType === "card" && item.from === "bench";
-        p._afterDrop = ({ card, from }) => {
-            if (from === "bench") moves.bench2roster(index, card)
+        const dropProps = {
+            className: "shop-roster",
+            itemType: "card",
+            _canDrop: (item) => item.itemType === "card" && item.from === "bench",
+            _afterDrop: ({ card }) => props.moves.bench2roster(index, card),
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
         };
-        p.canDropStyle = { backgroundColor: COLORS.green };
-        p.isOverStyle = { opacity: "50%" };
 
         return (
-            <DropBox {...p} {...props}>
+            <DropBox {...dropProps}>
                 {rosterCard ? (
                     <CardDrag card={rosterCard} from="roster" index={index} />
                 ) : (
@@ -96,18 +96,19 @@ export function ItemShop({ G, moves, _nextPage }) {
     };
 
     const BenchDrop = ({ bench, ...props }) => {
-        const p = {};
-        p.className = "shop-bench";
-        p.itemType = "card";
-        p._canDrop = (item) => item.itemType === "card" && item.from === "roster";
-        p._afterDrop = ({ card, from, index }) => {
-            if (from === "roster") moves.roster2bench(index, card)
+        const dropProps = {
+            className: "shop-bench",
+            itemType: "card",
+            _canDrop: (item) => item.itemType === "card" && item.from === "roster",
+            _afterDrop: ({ card, index }) => props.moves.roster2bench(index, card),
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
         };
-        p.canDropStyle = { backgroundColor: COLORS.green };
-        p.isOverStyle = { opacity: "50%" };
 
         return (
-            <DropBox {...p} {...props}>
+            <DropBox {...dropProps}>
+                Bench
                 {bench.map((card, index) => (
                     <CardDrag key={card.id} card={card} index={index} from="bench" />
                 ))}
@@ -116,58 +117,56 @@ export function ItemShop({ G, moves, _nextPage }) {
     };
 
     const CardDrag = ({ card, from, index, ...props }) => {
-        const p = {};
-        p.className = "shop-card-drag";
-        p.itemType = "card";
-        p.dragData = { card: card, itemType: "card", from, index };
-        p._canDrag = () => true;
-        p.isDraggingStyle = {
-            opacity: 0.5,
-            boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+        const dragProps = {
+            className: "shop-card-drag",
+            itemType: "card",
+            dragData: { card: card, itemType: "card", from, index },
+            _canDrag: () => true,
+            isDraggingStyle: {
+                opacity: 0.5,
+                boxShadow: '0 0 10px rgba(0,0,0,0.3)'
+            },
+            ...props
         };
 
         return (
-            <DragBox {...p} {...props}>
+            <DragBox {...dragProps}>
                 <Card {...card} isShopCard={true} />
             </DragBox>
         );
     };
 
     return (
-        <div className="shop-container">
-            <button className="generate-log-button" onClick={() => _nextPage()} disabled={isRosterIncomplete()}>battle</button>
-            <DragdropWrapper className="shop-main">
-                <div className="shop-bag-container">
-                    {Object.keys(bags).map((bagId, index) => (
-                        <div key={bagId} className="shop-bag">
-                            <RosterDrop
-                                rosterCard={roster[index]}
-                                index={index}
-                            />
-                            <BagDrop bagId={bagId} className="shop-bag-box">
-                                {bagId}
-                                {Object.values(bags[bagId]).map((obj, idx) => (
-                                    <ItemDrag itemType="bag" bagId={bagId} obj={obj} key={idx} />
-                                ))}
-                            </BagDrop>
-                        </div>
-                    ))}
+        <div className="shop-page">
+            <button
+                className="generate-log-button"
+                onClick={() => _nextPage()}
+                disabled={isRosterIncomplete()}
+            >
+                Battle
+            </button>
+            <DragdropWrapper className='shop-container'>
+                <div className='shop-card-1'>
+                    <RosterDrop rosterCard={roster[0]} index={0} moves={moves} />
+                    <BagDrop bagId={0} bags={bags} moves={moves} />
                 </div>
-                <StorageDrop className="shop-storage">
-                    storage
+                <div className='shop-card-2'>
+                    <RosterDrop rosterCard={roster[1]} index={1} moves={moves} />
+                    <BagDrop bagId={1} bags={bags} moves={moves} />
+                </div>
+                <StorageDrop moves={moves}>
+                    Storage
                     {Object.values(storage).map((obj, index) => (
                         <ItemDrag itemType="storage" obj={obj} key={index} />
                     ))}
                 </StorageDrop>
-                <div className="shop-items">
-                    shop
+                <div className="shop-shopItems">
+                    Shop
                     {Object.values(shop).map((obj, index) => (
                         <ItemDrag itemType="shop" obj={obj} key={index} />
                     ))}
                 </div>
-                <BenchDrop
-                    bench={bench}
-                />
+                <BenchDrop bench={bench} moves={moves} />
             </DragdropWrapper>
         </div>
     );

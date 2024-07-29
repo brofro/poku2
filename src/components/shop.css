@@ -1,88 +1,111 @@
+/* ShopStyles.css */
+.shop-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
 .shop-container {
-    border: 1px solid;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, auto);
+    grid-template-areas:
+        ". card1 card2 ."
+        "storage storage shop shop"
+        "bench bench bench bench"
+        ". . . .";
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.shop-card-1,
+.shop-card-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    background-color: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shop-card-1 {
+    grid-area: card1;
+}
+
+.shop-card-2 {
+    grid-area: card2;
+}
+
+.shop-storage {
+    grid-area: storage;
+    background-color: #fff2e6;
+}
+
+.shop-shopItems {
+    grid-area: shop;
+    background-color: #e6ffe6;
+}
+
+.shop-bench {
+    grid-area: bench;
+    display: flex;
+    background-color: #f0f8ff;
+}
+
+.shop-storage,
+.shop-shopItems,
+.shop-bench,
+.shop-bag {
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.shop-bag {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    max-width: 800px;
-    margin: 0 auto;
-    font-family: verdana;
-    font-size: 10px;
+    gap: 0.5rem;
+}
+
+.shop-bag-content {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 10px;
 }
 
 .shop-roster {
     display: flex;
     justify-content: space-around;
-    margin-right: 20px;
-}
-
-.shop-main {
-    display: flex;
-    flex-direction: column;
-    height: 400px;
-    /* Reduced height */
-}
-
-.shop-bag-container {
-    display: flex;
-    justify-content: space-around;
-    flex: 2;
-}
-
-.shop-bag {
-    border: 1px solid;
-    background-color: #e6f2ff;
-    /* Light blue for bags */
-    flex: 1;
-    margin-bottom: 20px;
-    padding: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.shop-storage {
-    border: 1px solid;
-    background-color: #fff2e6;
-    /* Light orange for storage */
-    flex: 1;
-    margin: 5px;
-    padding: 5px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.shop-items {
-    border: 1px solid;
-    background-color: #e6ffe6;
-    /* Light green for shop */
-    flex: 1;
-    margin: 5px;
-    padding: 5px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.shop-bag-box {
-    width: 100%;
-    border: 1px dashed #999;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100px;
+    margin-bottom: 1rem;
 }
 
 .shop-item-card {
-    margin: 2px;
-    padding: 2px;
+    margin: 0.5rem;
+    padding: 0.5rem;
     white-space: pre-wrap;
-    font-size: 8px;
+    font-size: 12px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .shop-card-drag {
     cursor: move;
     transition: all 0.3s ease;
-    margin: 5px;
+    margin: 0.5rem;
     width: 120px;
     height: 120px;
 }
@@ -90,29 +113,6 @@
 .shop-card-drag:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.shop-bench {
-    border: 2px dashed #007bff;
-    background-color: #f0f8ff;
-    border-radius: 8px;
-    min-height: 180px;
-    padding: 10px;
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.shop-bench::before {
-    content: 'Bench';
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #007bff;
 }
 
 .empty-roster-slot {
@@ -129,18 +129,40 @@
     padding: 10px;
 }
 
-/* Responsive design for smaller screens */
+.generate-log-button {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-bottom: 1rem;
+}
+
+.generate-log-button:hover {
+    background-color: #45a049;
+}
+
 @media (max-width: 768px) {
-    .shop-bag {
-        flex-direction: column;
+    .shop-container {
+        grid-template-areas:
+            "card1" "card2"
+            "storage"
+            "shop"
+            "bench";
     }
 
-    .shop-roster {
-        margin-right: 0;
-        margin-bottom: 20px;
-    }
-
-    .shop-bag-box {
-        width: 100%;
+    .shop-card-1,
+    .shop-card-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        background-color: #f9f9f9;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        height: 60px;
     }
 }

@@ -11,7 +11,6 @@ const Game = {
         P2: initialCardData[PLAYER_TWO],
         bench: initialCardData[PLAYER_ONE],
         shop: initialShopData,
-        b1: {}, b2: {}, b3: {}
     }),
     moves: {
         buy: ({ G }, data) => {

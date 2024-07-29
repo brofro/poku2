@@ -1,17 +1,17 @@
-/* Base card styles */
+/* Card.css */
 .card {
     border: 1px solid #ccc;
     border-radius: 8px;
     width: 120px;
     height: 160px;
-    background-color: #f0f0f0;
+    background-color: white;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 8px;
     box-sizing: border-box;
     transition: all 0.3s ease;
-    position: relative
+    position: relative;
 }
 
 .card.divine-shield::after {
@@ -26,23 +26,29 @@
     pointer-events: none;
 }
 
-/* Card image container styles */
 .card-image-container {
     height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
 }
 
-/* Card image styles */
 .card-image {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
 }
 
-/* Card information styles */
+.card-icons {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: flex;
+    gap: 2px;
+}
+
 .card-info {
     display: flex;
     flex-direction: column;
@@ -50,7 +56,6 @@
     height: 50px;
 }
 
-/* Card name styles */
 .card-name {
     font-weight: bold;
     font-size: 0.9em;
@@ -60,7 +65,6 @@
     text-overflow: ellipsis;
 }
 
-/* Card stats styles */
 .card-stats {
     display: flex;
     justify-content: space-between;
@@ -68,7 +72,6 @@
     margin-top: 4px;
 }
 
-/* Individual stat styles */
 .card-stat {
     display: flex;
     align-items: center;
@@ -77,56 +80,23 @@
     border-radius: 3px;
 }
 
-/* Stat icon styles */
 .stat-icon {
     width: 16px;
     height: 16px;
     margin-right: 4px;
 }
 
-/* Styles for a fatigued card */
 .card.fatigued {
     transform: rotate(45deg);
 }
 
-/* Styles for a fainted card */
 .card.fainted {
     transform: rotate(90deg);
     opacity: 0.6;
 }
 
-/* Define the glowing red animation */
-@keyframes glowingRed {
-    0% {
-        box-shadow: 0 0 5px #ff0000;
-    }
-
-    50% {
-        box-shadow: 0 0 20px #ff0000;
-    }
-
-    100% {
-        box-shadow: 0 0 5px #ff0000;
-    }
-}
-
-/* Apply the glowing animation to cards with the 'attacking' class */
 .card.attacking {
     animation: glowingRed 1s infinite;
-}
-
-@keyframes glowingBlue {
-    0% {
-        box-shadow: 0 0 5px #0000ff;
-    }
-
-    50% {
-        box-shadow: 0 0 20px #0000ff;
-    }
-
-    100% {
-        box-shadow: 0 0 5px #0000ff;
-    }
 }
 
 .card.counter-attacking {
@@ -159,31 +129,6 @@
     100% {
         box-shadow: 0 0 5px #0000ff;
     }
-}
-
-.card.attacking {
-    animation: glowingRed 1s infinite;
-}
-
-.card.counter-attacking {
-    animation: glowingBlue 1s infinite;
-}
-
-.card-image-container {
-    position: relative;
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.card-icons {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    display: flex;
-    gap: 2px;
 }
 
 .card-stat.health {
