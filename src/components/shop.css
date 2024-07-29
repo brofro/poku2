@@ -46,6 +46,8 @@
 
 .shop-shopItems {
     grid-area: shop;
+    display: flex;
+    justify-content: space-evenly;
     background-color: #e6ffe6;
 }
 

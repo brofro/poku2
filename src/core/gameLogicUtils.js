@@ -71,3 +71,13 @@ export function getGameStateAtLogIndex(gameLog, index) {
     // If no board state found, return the initial state
     return gameLog[0].board_state;
 }
+
+/**
+ * Checks if a card has an effect and if it is active
+ * @param {*} effect 
+ * @param {*} card 
+ * @returns 
+ */
+export function isEffectActiveOnCard(effect, card) {
+    return card.effects.hasOwnProperty(effect) && card.effects[effect].active;
+}

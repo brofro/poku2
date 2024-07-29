@@ -27,6 +27,7 @@ export const ACTION_TYPES = {
     DEATHRATTLE: 'DEATHRATTLE',
     FAINTED: 'FAINTED',
     TURN_SKIPPED: 'TURN_SKIPPED',
+    ROUND_START: 'ROUND_START',
     ROUND_END: 'ROUND_END',
     GAME_START: 'GAME_START',
     GAME_END: 'GAME_END'
@@ -35,7 +36,8 @@ export const ACTION_TYPES = {
 export const KEY_EFFECTS = {
     RANGED: 'ranged',
     DIVINE_SHIELD: 'divineShield',
-    DEATHRATTLE: 'deathrattle'
+    DEATHRATTLE: 'deathrattle',
+    GROW: 'grow'
 }
 
 export const PLAY_SPEED = 500;

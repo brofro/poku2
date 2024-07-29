@@ -1,11 +1,37 @@
 import { CARD_STATE, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
+import { CARD_DEFINITIONS } from "./cardData"
 import rangedicon from "../components/ranged.svg"
 import divineShieldIcon from "../components/divineshield.svg"
 import deathrattleIcon from "../components/deathrattle.svg"
+import growIcon from "../components/grow.svg"
 
 let bagId = 0
 
+//This is needed because boardgame.io G state has to be a JSON serializable object
+export const EFFECTS_FUNCTIONS = {
+    [KEY_EFFECTS.GROW]: (card) => {
+        return { ...card, atk: card.atk + 1, hp: card.hp + 1, currentHp: card.currentHp + 1 }
+    },
+    [`${KEY_EFFECTS.DEATHRATTLE}0`]: (card) => {
+        return {
+            ...CARD_DEFINITIONS[129],
+            position: card.position,
+            currentHp: 1,
+            state: CARD_STATE.FATIGUED,
+            effects: {}
+        }
+    }
+
+}
+
+//Shop -> storage -> bag data is pulled directly from this so it must be JSON serializble
 export const EFFECTS = {
+    [KEY_EFFECTS.GROW]: {
+        icon: growIcon,
+        active: true,
+        text: "Gains +1/+1 at the end of every round",
+        effectFunctionId: KEY_EFFECTS.GROW
+    },
     [KEY_EFFECTS.RANGED]: {
         icon: rangedicon,
         active: true,
@@ -19,19 +45,8 @@ export const EFFECTS = {
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
         icon: deathrattleIcon,
         active: true,
-        deathrattle() {
-            return {
-                id: 446,
-                name: "Munchlax",
-                atk: 1,
-                hp: 1,
-                currentHp: 1,
-                img: getImageUrl(446),
-                state: CARD_STATE.FATIGUED,
-                effects: {}
-            }
-        },
-        text: "Summon a 1/1 Munchlax"
+        effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
+        text: "Deathrattle: Summon a 1/1 Magikarp"
     }
 }
 
@@ -61,9 +76,28 @@ export function selectEffects(keys = []) {
     }, {});
 }
 
+export function hasValidEffectFunction(effectKey) {
+    // Check if the effect exists
+    if (!EFFECTS.hasOwnProperty(effectKey)) {
+        return false;
+    }
+
+    const effect = EFFECTS[effectKey];
+
+    // Check if the effect has an effectFunctionId
+    if (!effect.hasOwnProperty('effectFunctionId')) {
+        return false;
+    }
+
+    const functionId = effect.effectFunctionId;
+
+    // Check if the functionId corresponds to a function in EFFECTS_FUNCTIONS
+    return typeof EFFECTS_FUNCTIONS[functionId] === 'function';
+}
+
 export const initialBagData = {
     [PLAYER_ONE]: [selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED]), selectEffects([])],
     [PLAYER_TWO]: [selectEffects([]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }
 
-export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED])
+export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED, KEY_EFFECTS.GROW, `${KEY_EFFECTS.DEATHRATTLE}0`])

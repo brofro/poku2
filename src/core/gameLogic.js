@@ -1,6 +1,6 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
-import { initialBagData, deepCopy, selectEffects } from '../data/effectsData.js';
-import { getOpposingPlayer, findLeftmostActiveCard, findLeftmostNonFaintedCard, areAllCardsInState, areAnyCardsInState, abbreviateName } from './gameLogicUtils.js';
+import { initialBagData, deepCopy, selectEffects, EFFECTS_FUNCTIONS, hasValidEffectFunction } from '../data/effectsData.js';
+import { getOpposingPlayer, findLeftmostActiveCard, findLeftmostNonFaintedCard, areAllCardsInState, areAnyCardsInState, abbreviateName, isEffectActiveOnCard } from './gameLogicUtils.js';
 
 let actionId = 0;
 let gameLog = [];
@@ -57,12 +57,13 @@ function handleFainted(card, player, position) {
             faintedCardPos: position,
             faintedCardName: card.name,
         });
-        const deathrattleKeys = Object.keys(card.effects).filter(str => { return str.includes('deathrattle') })
+        const deathrattleKeys = Object.keys(card.effects).filter(str => { return str.includes(KEY_EFFECTS.DEATHRATTLE) })
         if (deathrattleKeys.length > 0 && !card.triggeredDeathrattle) {
             //only act on the first deathrattle for now, handle multi deathrattle later
-            const deathrattleEffect = { ...card.effects[`${deathrattleKeys[0]}`] }
-            if (!deathrattleEffect.active) { return }
-            gameState[player][position] = { position: card.position, ...deathrattleEffect.deathrattle() }
+            // const deathrattleEffect = { ...card.effects[`${deathrattleKeys[0]}`] }
+            // if (!deathrattleEffect.active) { return }
+            // gameState[player][position] = { position: card.position, ...deathrattleEffect.deathrattle() }
+            deathrattleKeys.forEach(key => performEffectForCardIfExists(card, player, position, key))
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
                 sourceCardName: card.name,
@@ -80,7 +81,7 @@ function handleFainted(card, player, position) {
 function performAttack(attacker, defender, attackingPlayer, defendingPlayer, type) {
     //attacker and defender are copies and not the actual cards, actual cards are in gameState
     let atkValue = 0
-    if (defender.effects.hasOwnProperty(KEY_EFFECTS.DIVINE_SHIELD) && defender.effects.divineShield.active) {
+    if (isEffectActiveOnCard(KEY_EFFECTS.DIVINE_SHIELD, defender)) {
         gameState[defendingPlayer][defender.position].effects.divineShield.active = false
     }
     else {
@@ -123,7 +124,7 @@ function performTurn() {
     //Attack
     performAttack(attacker, defender, gameState.currentPlayer, opposingPlayer, ACTION_TYPES.ATTACK)
     //Counter Attack, skips if the attacker has ranged and ranged is active
-    if (!attacker.effects.hasOwnProperty(KEY_EFFECTS.RANGED) || (attacker.effects.hasOwnProperty(KEY_EFFECTS.RANGED) && !attacker.effects.ranged.active)) {
+    if (!isEffectActiveOnCard(KEY_EFFECTS.RANGED, attacker)) {
         performAttack(defender, attacker, opposingPlayer, gameState.currentPlayer, ACTION_TYPES.COUNTER_ATTACK)
     }
     //Faint Attacker
@@ -139,6 +140,9 @@ function performTurn() {
  * Performs a full round of the game
  */
 function performRound() {
+    createLogEntry(ACTION_TYPES.ROUND_START, {
+        log: `ROUND_${gameState.round}_START`,
+    });
 
     //The turn will continue as long as there are active cards and not game over
     while ((
@@ -156,6 +160,8 @@ function performRound() {
     createLogEntry(ACTION_TYPES.ROUND_END, {
         log: `ROUND_${gameState.round}_END`,
     });
+
+    performEffectsIfExistsAndActive(KEY_EFFECTS.GROW)
 
     gameState.round += 1
     //Refactor when starting player is randomized
@@ -234,6 +240,7 @@ function createLogEntry(action, data) {
             }
             break;
         case ACTION_TYPES.HP_UPDATE:
+        case ACTION_TYPES.ROUND_START:
         case ACTION_TYPES.ROUND_END:
         case ACTION_TYPES.GAME_END:
         case ACTION_TYPES.GAME_START:
@@ -247,6 +254,34 @@ function createLogEntry(action, data) {
 
     gameLog.push(logEntry);
     return logEntry;
+}
+
+/**
+ * Performs an effect for all cards if it exists and is active
+ *  Supported effects: GROW
+ */
+function performEffectsIfExistsAndActive(effect) {
+    [PLAYER_ONE, PLAYER_TWO].forEach(player => {
+        gameState[player].forEach((card, index) => {
+            if (isEffectActiveOnCard(effect, card) && hasValidEffectFunction(effect)) {
+                gameState[player][index] = EFFECTS_FUNCTIONS[card.effects[effect].effectFunctionId](card)
+            }
+        });
+    });
+}
+
+/**
+ * Performs an effect for a single card if it exists and is active
+ * @param {Object} card - The card object
+ * @param {string} player - The player (PLAYER_ONE or PLAYER_TWO)
+ * @param {number} position - The position of the card in the player's hand
+ * @param {string} effect - The effect to be applied (e.g., KEY_EFFECTS.GROW)
+ */
+function performEffectForCardIfExists(card, player, position, effect) {
+    if (isEffectActiveOnCard(effect, card) && hasValidEffectFunction(effect)) {
+        const updatedCard = EFFECTS_FUNCTIONS[card.effects[effect].effectFunctionId](card);
+        gameState[player][position] = updatedCard;
+    }
 }
 
 /**
