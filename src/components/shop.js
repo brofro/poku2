@@ -8,7 +8,7 @@ import ItemEffect from './ItemEffect';
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
     //Data passed in becomes inconsistent?
-    const { roster, bench, bags, storage, shop } = G;
+    const { roster, bench, bags, storage, gold, shop } = G;
     const isRosterIncomplete = () => roster.some(card => card === null);
 
     const flattenObject = ({ id, ...rest }) => {
@@ -32,7 +32,7 @@ export function ItemShop({ G, moves, _nextPage }) {
 
         return (
             <DragBox {...dragProps}>
-                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} />
+                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} shopCost={flat.cost} />
             </DragBox>
         );
     };
@@ -179,7 +179,7 @@ export function ItemShop({ G, moves, _nextPage }) {
                     ))}
                 </StorageDrop>
                 <ShopDrop moves={moves}>
-                    Shop
+                    Shop, Gold:{gold}
                     {Object.values(shop).map((obj, index) => (
                         <ItemDrag itemType="shop" obj={obj} key={index} />
                     ))}

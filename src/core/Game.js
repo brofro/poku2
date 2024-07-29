@@ -13,15 +13,20 @@ const Game = {
         shop: initialShopData,
     }),
     moves: {
+        //Should buy/sell just look up how much it cost vs. bubbling it in selectedEffects?
         buy: ({ G }, data) => {
-            delete G.shop[data.id]
-            G.storage[data.id] = data
+            if (data.cost <= G.gold) {
+                delete G.shop[data.id]
+                G.storage[data.id] = data
+                G.gold -= data.cost
+            }
         },
         sell: ({ G }, bagId, data) => {
             if (bagId !== undefined) {
                 delete G.bags[bagId][data.id]
             }
             else delete G.storage[data.id]
+            G.gold += data.cost
         },
         bag2storage: ({ G }, bagId, data) => {
             delete G.bags[bagId][data.id]

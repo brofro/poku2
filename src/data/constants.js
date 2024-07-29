@@ -40,4 +40,4 @@ export const KEY_EFFECTS = {
     GROW: 'grow'
 }
 
-export const PLAY_SPEED = 500;
+export const PLAY_SPEED = 250;

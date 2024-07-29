@@ -29,24 +29,28 @@ export const EFFECTS = {
     [KEY_EFFECTS.GROW]: {
         icon: growIcon,
         active: true,
+        cost: 3,
         text: "Gains +1/+1 at the end of every round",
         effectFunctionId: KEY_EFFECTS.GROW
     },
     [KEY_EFFECTS.RANGED]: {
         icon: rangedicon,
         active: true,
+        cost: 10,
         text: "Cannot be counter-attacked"
     },
     [KEY_EFFECTS.DIVINE_SHIELD]: {
         icon: divineShieldIcon,
         active: true,
+        cost: 2,
         text: "Negates first instance of attack damage"
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
         icon: deathrattleIcon,
         active: true,
+        cost: 1,
+        text: "Deathrattle: Summon a 1/1 Magikarp",
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
-        text: "Deathrattle: Summon a 1/1 Magikarp"
     }
 }
 
@@ -64,12 +68,13 @@ export function deepCopy(obj, hash = new WeakMap()) {
     return copy;
 }
 
-
+//Turns keys into a bag with id:effect
+//Could probably be an array instead?
 export function selectEffects(keys = []) {
     return keys.reduce((selectedEffects, key) => {
         if (key in EFFECTS) {
-
-            selectedEffects[bagId] = { id: bagId, [key]: deepCopy(EFFECTS[key]) }
+            //Not sure if bubbling up cost here is problematic, we need to access cost from moves
+            selectedEffects[bagId] = { id: bagId, [key]: deepCopy(EFFECTS[key]), cost: EFFECTS[key].cost }
             bagId++
         }
         return selectedEffects;
