@@ -76,6 +76,7 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
         setGameLog(gameLog)
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setIsLogGenerated(true);
+        moves.getNewOpponent()
     }, [])
 
     useEffect(() => {

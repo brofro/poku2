@@ -1,4 +1,4 @@
-import { initialCardData } from "../data/cardData";
+import { initialCardData, getNewTeam } from "../data/cardData";
 import { PLAYER_ONE, PLAYER_TWO } from "../data/constants";
 import { initialShopData } from "../data/effectsData";
 
@@ -8,7 +8,7 @@ const Game = {
         storage: {},
         bags: { 0: {}, 1: {} },
         roster: [null, null],
-        P2: initialCardData[PLAYER_TWO],
+        P2: getNewTeam(),
         bench: initialCardData[PLAYER_ONE],
         shop: initialShopData,
     }),
@@ -46,6 +46,9 @@ const Game = {
         },
         addGold: ({ G }, amount) => {
             G.gold += amount
+        },
+        getNewOpponent: ({ G }) => {
+            G.P2 = getNewTeam()
         }
     }
 }
