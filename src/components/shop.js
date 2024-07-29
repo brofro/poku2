@@ -6,6 +6,8 @@ import Card from './Card';
 import ItemEffect from './ItemEffect';
 
 export function ItemShop({ G, moves, _nextPage }) {
+    //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
+    //Data passed in becomes inconsistent?
     const { roster, bench, bags, storage, shop } = G;
     const isRosterIncomplete = () => roster.some(card => card === null);
 
@@ -43,6 +45,22 @@ export function ItemShop({ G, moves, _nextPage }) {
             _afterDrop: ({ data, itemType, bagId }) => {
                 if (itemType === "shop") props.moves.buy(data);
                 if (itemType === "bag") props.moves.bag2storage(bagId, data);
+            },
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
+        };
+
+        return <DropBox {...dropProps}>{children}</DropBox>;
+    };
+
+    const ShopDrop = ({ children, ...props }) => {
+        const dropProps = {
+            className: "shop-shopItems",
+            itemType: ["storage", "bag"],
+            _canDrop: () => true,
+            _afterDrop: ({ data, bagId }) => {
+                props.moves.sell(bagId, data)
             },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
@@ -160,12 +178,12 @@ export function ItemShop({ G, moves, _nextPage }) {
                         <ItemDrag itemType="storage" obj={obj} key={index} />
                     ))}
                 </StorageDrop>
-                <div className="shop-shopItems">
+                <ShopDrop moves={moves}>
                     Shop
                     {Object.values(shop).map((obj, index) => (
                         <ItemDrag itemType="shop" obj={obj} key={index} />
                     ))}
-                </div>
+                </ShopDrop>
                 <BenchDrop bench={bench} moves={moves} />
             </DragdropWrapper>
         </div>

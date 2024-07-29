@@ -17,6 +17,12 @@ const Game = {
             delete G.shop[data.id]
             G.storage[data.id] = data
         },
+        sell: ({ G }, bagId, data) => {
+            if (bagId !== undefined) {
+                delete G.bags[bagId][data.id]
+            }
+            else delete G.storage[data.id]
+        },
         bag2storage: ({ G }, bagId, data) => {
             delete G.bags[bagId][data.id]
             G.storage[data.id] = data
