@@ -43,6 +43,9 @@ const Game = {
         roster2bench: ({ G }, index, card) => {
             G.bench = [...G.bench, card]
             G.roster[index] = null
+        },
+        addGold: ({ G }, amount) => {
+            G.gold += amount
         }
     }
 }

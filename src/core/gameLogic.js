@@ -189,7 +189,7 @@ function runGameLoop(initialCardData, bag) {
         log: ACTION_TYPES.GAME_END,
     });
 
-    return gameLog;
+    return { playerWin: !areAllCardsInState(gameState[PLAYER_ONE], CARD_STATE.FAINTED), gameLog };
 }
 
 /**

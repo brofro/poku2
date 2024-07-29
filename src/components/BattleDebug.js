@@ -7,13 +7,14 @@ import { getGameStateAtLogIndex } from "../core/gameLogicUtils";
 import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
 import BattleField from "../components/Battlefield";
 
-const BattleDebug = ({ G, _nextPage }) => {
+const BattleDebug = ({ G, moves, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board
     const [gameLog, setGameLog] = useState([]);  // Log of all game actions
     const [currentLogIndex, setCurrentLogIndex] = useState(-1);  // Index of current action in the log
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
+    const [playerWin, setPlayerWin] = useState(false)
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
@@ -70,11 +71,16 @@ const BattleDebug = ({ G, _nextPage }) => {
     };
 
     useEffect(() => {
-        let gl = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
-        setGameLog(gl)
-        setGameState(getGameStateAtLogIndex(gl, -1));
+        const { playerWin, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
+        setPlayerWin(playerWin)
+        setGameLog(gameLog)
+        setGameState(getGameStateAtLogIndex(gameLog, -1));
         setIsLogGenerated(true);
     }, [])
+
+    useEffect(() => {
+        if (playerWin) moves.addGold(5)
+    }, [playerWin, gameLog])
 
 
     return (
