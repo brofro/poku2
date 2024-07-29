@@ -39,6 +39,7 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
                                 key={effectName}
                                 icon={effectData.icon}
                                 alt={effectName}
+                                text={effectData.text}
                             />
                         )
                     )}

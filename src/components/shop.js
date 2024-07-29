@@ -30,7 +30,7 @@ export function ItemShop({ G, moves, _nextPage }) {
 
         return (
             <DragBox {...dragProps}>
-                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} isShopItem={true} />
+                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} />
             </DragBox>
         );
     };

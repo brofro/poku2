@@ -8,11 +8,13 @@ let bagId = 0
 export const EFFECTS = {
     [KEY_EFFECTS.RANGED]: {
         icon: rangedicon,
-        active: true
+        active: true,
+        text: "Cannot be counter-attacked"
     },
     [KEY_EFFECTS.DIVINE_SHIELD]: {
         icon: divineShieldIcon,
-        active: true
+        active: true,
+        text: "Negates first instance of attack damage"
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
         icon: deathrattleIcon,
@@ -29,8 +31,7 @@ export const EFFECTS = {
                 effects: {}
             }
         },
-        //deathrattle text is also the indicator for the icon
-        deathrattleText: "Summon a 1/1 Munchlax"
+        text: "Summon a 1/1 Munchlax"
     }
 }
 
