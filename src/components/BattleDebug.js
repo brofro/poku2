@@ -2,7 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import ControlButtons from '../components/ControlButtons';
 import GameLog from '../components/GameLog';
-import { runGameLoop, getGameStateAtLogIndex } from "../core/gameLogic";
+import { runGameLoop } from "../core/gameLogic";
+import { getGameStateAtLogIndex } from "../core/gameLogicUtils";
 import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
 import BattleField from "../components/Battlefield";
 
@@ -13,13 +14,6 @@ const BattleDebug = ({ G, _nextPage }) => {
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
-
-    const resetGameState = () => {
-        setGameLog([])
-        setIsLogGenerated(false)
-        setCurrentAction(null)
-        setCurrentLogIndex(-1)
-    }
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
