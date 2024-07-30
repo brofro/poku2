@@ -78,7 +78,7 @@ export function getGameStateAtLogIndex(gameLog, index) {
 export function isEffectActiveOnCard(effectName, card) {
     // Check if card.effects exists and is an array
     if (!card.effects || !Array.isArray(card.effects)) {
-        console.log("Invalid card effects structure")
+        console.log("Invalid card effects structure", card, card.effects)
         return false;
     }
 

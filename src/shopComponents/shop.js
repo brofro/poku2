@@ -32,7 +32,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         return (
             <DragBox {...dragProps}>
                 <Badge count={item.cost} color={"gold"}>
-                    <ItemEffect key={item.id} icon={item.icon} alt={item.name} text={item.text} isShopItem={true} shopCost={item.cost} rarity={item.staticRarity ? item.staticRarity : item.rarity} />
+                    <ItemEffect key={item.id} icon={item.icon} alt={item.name} text={item.text} isShopItem={true} shopCost={item.cost} rarity={item.staticRarity ? item.staticRarity : item.rarityDetails.rarity} />
                 </Badge>
             </DragBox>
         );

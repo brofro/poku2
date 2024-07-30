@@ -129,6 +129,12 @@ function performTurn() {
     //Faint Defender
     handleFainted(defender, opposingPlayer, defender.position)
 
+    //Heal attacker
+    performEffectForCardIfExists(attacker, gameState.currentPlayer, attacker.position, KEY_EFFECTS.HEAL)
+    createLogEntry(ACTION_TYPES.HP_UPDATE, {
+        log: ACTION_TYPES.HP_UPDATE
+    })
+
     //Flip turns in game state
     gameState.currentPlayer = opposingPlayer
 }
@@ -177,6 +183,13 @@ function runGameLoop(initialCardData, bag) {
     createLogEntry(ACTION_TYPES.GAME_START, {
         log: ACTION_TYPES.GAME_START,
     });
+
+    performEffectsIfExistsAndActive(KEY_EFFECTS.EQUIP)
+    createLogEntry(ACTION_TYPES.HP_UPDATE, {
+        log: ACTION_TYPES.HP_UPDATE
+    })
+
+
 
     while (!isGameOver()) {
         performRound();
@@ -266,8 +279,7 @@ function performEffectsIfExistsAndActive(effectName) {
                     if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
                         gameState[player][index] = EFFECTS_FUNCTIONS[effect.effectFunctionId](
                             gameState[player][index],
-                            effect.rarity,
-                            effect.rarityValue
+                            effect.rarityDetails
                         );
                     }
                 });
@@ -290,8 +302,8 @@ function performEffectForCardIfExists(card, player, position, effectName) {
             if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
                 gameState[player][position] = EFFECTS_FUNCTIONS[effect.effectFunctionId](
                     gameState[player][position],
-                    effect.rarity,
-                    effect.rarityValue);
+                    effect.rarityDetails
+                )
             }
         });
     }

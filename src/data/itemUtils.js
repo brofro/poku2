@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
-import { getItemRarity } from "./itemFramework"
+import { getItemRarity, distributeRarityValue } from "./itemFramework"
 import { shapes } from "../shopComponents/inventory/allShapes"
 import { EFFECTS, EFFECTS_FUNCTIONS } from "./effectsData";
-import { ITEM_RARITY } from './constants';
+import { ITEM_RARITY, KEY_EFFECTS } from './constants';
 
 const id = require('uuid-readable')
 
@@ -43,10 +43,21 @@ export function selectEffects(keys = [], presetRarity = ITEM_RARITY.NONE, preset
                     rarity = presetRarity
                     rarityValue = presetRarityValue
                 }
-                effectCopy.text += ` [${rarity}: +${rarityValue}/+${rarityValue}]`
-                effectCopy.rarity = rarity
-                effectCopy.rarityValue = rarityValue
+                effectCopy.rarityDetails = {
+                    rarity: rarity,
+                    rarityValue: rarityValue,
+                    ...distributeRarityValue(rarityValue)
+                }
             }
+
+            //Handle tool tip text, can probably be a pure function abstracted
+            effectCopy.text += ` [${effectCopy.staticRarity ? effectCopy.staticRarity : effectCopy.rarityDetails.rarity}] `
+            if (effectCopy.effect === KEY_EFFECTS.GROW)
+                effectCopy.text += `+${effectCopy.rarityDetails.rarityValue}/+${effectCopy.rarityDetails.rarityValue}`
+            if (effectCopy.effect === KEY_EFFECTS.EQUIP)
+                effectCopy.text += `+${effectCopy.rarityDetails.atk}/+${effectCopy.rarityDetails.hp}`
+            if (effectCopy.effect === KEY_EFFECTS.HEAL)
+                effectCopy.text += `HEAL ${effectCopy.rarityDetails.rarityValue}`
 
             return effectCopy;
         });

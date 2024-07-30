@@ -26,3 +26,17 @@ export function getItemRarity(shopLevel) {
         rarity: rarity
     };
 }
+
+//Randomly distributes rarity value among stats
+export function distributeRarityValue(rarityValue) {
+    // Handle edge case
+    if (rarityValue <= 0) {
+        return { atk: 0, hp: 0 };
+    }
+
+    // Randomly distribute the rarityValue
+    const atkBoost = Math.floor(Math.random() * (rarityValue + 1));
+    const hpBoost = rarityValue - atkBoost;
+
+    return { atk: atkBoost, hp: hpBoost };
+}

@@ -46,7 +46,9 @@ export const KEY_EFFECTS = {
     RANGED: 'ranged',
     DIVINE_SHIELD: 'divineShield',
     DEATHRATTLE: 'deathrattle',
-    GROW: 'grow'
+    GROW: 'grow',
+    EQUIP: 'equip',
+    HEAL: 'heal'
 }
 
 export const PLAY_SPEED = 250;

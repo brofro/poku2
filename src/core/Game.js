@@ -1,5 +1,4 @@
 import { getNewTeam } from "../data/cardData";
-import { initialShopData } from "../data/effectsData";
 import { generateMultipleItems } from "../data/itemUtils";
 import { INVALID_MOVE } from "boardgame.io/core";
 
