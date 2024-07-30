@@ -1,11 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import ControlButtons from '../components/ControlButtons';
-import GameLog from '../components/GameLog';
+import ControlButtons from './ControlButtons';
+import GameLog from './GameLog';
 import { runGameLoop } from "../core/gameLogic";
 import { getGameStateAtLogIndex } from "../core/gameLogicUtils";
 import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
-import BattleField from "../components/Battlefield";
+import BattleField from "../commonComponents/Battlefield";
 
 const BattleDebug = ({ G, moves, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board

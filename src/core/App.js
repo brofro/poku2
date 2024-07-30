@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
-import './App.css';
+import '../css/App.css';
 import { Client } from "boardgame.io/react";
 import { Debug } from "boardgame.io/debug"
-import { ItemShop } from "../components/shop";
+import { ItemShop } from "../shopComponents/shop";
 import Game from "./Game"
-import BattleDebug from "../components/BattleDebug";
+import BattleDebug from "../debugComponents/BattleDebug";
 
 
 

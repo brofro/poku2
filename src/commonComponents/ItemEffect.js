@@ -1,5 +1,5 @@
 import React from 'react';
-import './ItemEffect.css';
+import '../css/ItemEffect.css';
 import { Popover } from 'antd';
 
 const ItemEffect = ({ icon, alt, text, isShopItem }) => (

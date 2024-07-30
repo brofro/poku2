@@ -1,10 +1,10 @@
 import { CARD_STATE, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
 import { CARD_DEFINITIONS } from "./cardData"
-import rangedicon from "../components/ranged.svg"
-import divineShieldIcon from "../components/divineshield.svg"
-import deathrattleIcon from "../components/deathrattle.svg"
-import growIcon from "../components/grow.svg"
-import { shapes } from "../components/inventory/allShapes"
+import rangedicon from "../icons/ranged.svg"
+import divineShieldIcon from "../icons/divineshield.svg"
+import deathrattleIcon from "../icons/deathrattle.svg"
+import growIcon from "../icons/grow.svg"
+import { shapes } from "../shopComponents/inventory/allShapes"
 
 let bagId = 0
 const id = require('uuid-readable')

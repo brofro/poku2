@@ -16,12 +16,12 @@ export default function BagGrid({
     //populate items
     React.useEffect(() => {
         if (Object.keys(bagItems).length === 0) return
-    
+
         let m = bag
         Object.entries(bagItems).forEach(([key, value]) => {
             m = updateMatrix(m, value.bagPosition, key);
             setBag(m);
-          });
+        });
     }, [bagItems])
 
     const GridDrop = ({ index1, index2 }) => {

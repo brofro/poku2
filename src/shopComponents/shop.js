@@ -2,9 +2,9 @@ import React from 'react';
 import { Badge } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
-import "./shop.css";
-import Card from './Card';
-import ItemEffect from './ItemEffect';
+import "../css/shop.css";
+import Card from '../commonComponents/Card';
+import ItemEffect from '../commonComponents/ItemEffect';
 import ShapeView from './inventory/ShapeView';
 import BagGrid from './inventory/BagGrid';
 

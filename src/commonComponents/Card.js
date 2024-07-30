@@ -1,6 +1,6 @@
 import { useEffect, useRef, React } from 'react';
 import { ATK_ICON, HP_ICON, getImageUrl } from '../data/constants';
-import './Card.css';
+import '../css/Card.css';
 import ItemEffect from './ItemEffect';
 
 const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, isCounterAttacking, isShopCard }) => {
