@@ -19,14 +19,14 @@ export function ItemShop({ G, moves, _nextPage }) {
         return { name, ...value };
     };
 
-    const ItemDrag = ({ obj, itemType, bagId, sIndex = 0, ...props }) => {
+    const ItemDrag = ({ item, itemType, bagId, sIndex = 0, ...props }) => {
         const [shapeIndex, setShapeIndex] = React.useState(sIndex)
 
 
         const dragProps = {
             dependencyArr: [shapeIndex],
             itemType: itemType,
-            dragData: { data: obj, itemType, bagId, shape: obj.shape[shapeIndex] },
+            dragData: { data: item, itemType, bagId, shape: item.shape[shapeIndex] },
             _canDrag: () => true,
             isDraggingStyle: {
                 boxSizing: "border-box",
@@ -37,15 +37,12 @@ export function ItemShop({ G, moves, _nextPage }) {
 
         const rotate = () => shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0)
 
-        //Flatten the item types, ignore shape
-        const flat = flattenObject(obj);
-
         return (
             <DragBox {...dragProps}>
-                <Badge count={flat.cost} color={"gold"}>
-                    <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} shopCost={flat.cost} />
+                <Badge count={item.cost} color={"gold"}>
+                    <ItemEffect key={item.id} icon={item.icon} alt={item.name} text={item.text} isShopItem={true} shopCost={item.cost} />
                 </Badge>
-                <ShapeView shapes={obj.shape} shapeIndex={shapeIndex} _rotate={rotate} />
+                <ShapeView shapes={item.shape} shapeIndex={shapeIndex} _rotate={rotate} />
             </DragBox>
         );
     };
@@ -87,7 +84,9 @@ export function ItemShop({ G, moves, _nextPage }) {
         const addItem = (data) => {
             moves.storage2bag(bagId, data)
         }
-        return <BagGrid _addItem={addItem} bagItems={bags[bagId]} />
+        //Workaround for now, turns it back to {index:item}
+        const gridCompatibleBag = bags[bagId].reduce((obj, item, index) => ({ ...obj, [index]: item }), {})
+        return <BagGrid _addItem={addItem} bagItems={gridCompatibleBag} />
     };
 
     const RosterDrop = ({ rosterCard, index, ...props }) => {
@@ -209,14 +208,14 @@ export function ItemShop({ G, moves, _nextPage }) {
                 </div>
                 <StorageDrop moves={moves}>
                     Storage
-                    {Object.values(storage).map((obj, index) => (
-                        <ItemDrag itemType="storage" obj={obj} key={index} />
+                    {storage.map((item) => (
+                        <ItemDrag itemType="storage" item={item} key={item.id} />
                     ))}
                 </StorageDrop>
                 <ShopDrop moves={moves}>
                     Shop, Gold:{gold}
-                    {Object.values(shop).map((obj, index) => (
-                        <ItemDrag itemType="shop" obj={obj} key={index} />
+                    {shop.map((item) => (
+                        <ItemDrag itemType="shop" item={item} key={item.id} />
                     ))}
                 </ShopDrop>
                 <BenchDrop bench={bench} moves={moves} />

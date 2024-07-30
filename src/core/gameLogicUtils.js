@@ -74,10 +74,17 @@ export function getGameStateAtLogIndex(gameLog, index) {
 
 /**
  * Checks if a card has an effect and if it is active
- * @param {*} effect 
- * @param {*} card 
- * @returns 
  */
-export function isEffectActiveOnCard(effect, card) {
-    return card.effects.hasOwnProperty(effect) && card.effects[effect].active;
+export function isEffectActiveOnCard(effectName, card) {
+    // Check if card.effects exists and is an array
+    if (!card.effects || !Array.isArray(card.effects)) {
+        console.log("Invalid card effects structure")
+        return false;
+    }
+
+    const effect = card.effects.find(e => e.effect === effectName);
+    if (!effect) {
+        return false; // Effect not found on the card
+    }
+    return effect.active;
 }

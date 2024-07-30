@@ -14,11 +14,10 @@ let gameState = {};
  */
 function initializeCard(cardData, bagData = {}, index) {
     //Get array of inner objects (ie effects) from bag and data, deep copy spread into a new object
-    const abilities = Object.assign({}, ...Object.values(deepCopy(selectEffects(cardData.abilities))))
-    const bagEffects = Object.assign({}, ...Object.values(deepCopy(bagData)))
+    //const abilities = Object.assign({}, ...Object.values(deepCopy(selectEffects(cardData.abilities))))
     return {
         ...cardData,
-        effects: { ...abilities, ...bagEffects },
+        effects: deepCopy(bagData),
         state: CARD_STATE.ACTIVE,
         currentHp: cardData.hp,
         position: index
@@ -57,13 +56,8 @@ function handleFainted(card, player, position) {
             faintedCardPos: position,
             faintedCardName: card.name,
         });
-        const deathrattleKeys = Object.keys(card.effects).filter(str => { return str.includes(KEY_EFFECTS.DEATHRATTLE) })
-        if (deathrattleKeys.length > 0 && !card.triggeredDeathrattle) {
-            //only act on the first deathrattle for now, handle multi deathrattle later
-            // const deathrattleEffect = { ...card.effects[`${deathrattleKeys[0]}`] }
-            // if (!deathrattleEffect.active) { return }
-            // gameState[player][position] = { position: card.position, ...deathrattleEffect.deathrattle() }
-            deathrattleKeys.forEach(key => performEffectForCardIfExists(card, player, position, key))
+        if (isEffectActiveOnCard(KEY_EFFECTS.DEATHRATTLE, card)) {
+            performEffectForCardIfExists(card, player, position, KEY_EFFECTS.DEATHRATTLE)
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
                 sourceCardName: card.name,
@@ -82,7 +76,8 @@ function performAttack(attacker, defender, attackingPlayer, defendingPlayer, typ
     //attacker and defender are copies and not the actual cards, actual cards are in gameState
     let atkValue = 0
     if (isEffectActiveOnCard(KEY_EFFECTS.DIVINE_SHIELD, defender)) {
-        gameState[defendingPlayer][defender.position].effects.divineShield.active = false
+        //Toggle the first instance divine shield
+        toggleCardEffect(KEY_EFFECTS.DIVINE_SHIELD, defendingPlayer, defender.position, true)
     }
     else {
         atkValue = attacker.atk
@@ -257,31 +252,86 @@ function createLogEntry(action, data) {
 }
 
 /**
- * Performs an effect for all cards if it exists and is active
+ *  Performs all matching effects for all cards if it exists and is active
  *  Supported effects: GROW
  */
-function performEffectsIfExistsAndActive(effect) {
+function performEffectsIfExistsAndActive(effectName) {
     [PLAYER_ONE, PLAYER_TWO].forEach(player => {
         gameState[player].forEach((card, index) => {
-            if (isEffectActiveOnCard(effect, card) && hasValidEffectFunction(effect)) {
-                gameState[player][index] = EFFECTS_FUNCTIONS[card.effects[effect].effectFunctionId](card)
+            if (card.effects && Array.isArray(card.effects)) {
+                const matchingEffects = card.effects.filter(e => e.effect === effectName && e.active);
+                matchingEffects.forEach(effect => {
+                    if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
+                        gameState[player][index] = EFFECTS_FUNCTIONS[effect.effectFunctionId](gameState[player][index]);
+                    }
+                });
             }
         });
     });
 }
 
 /**
- * Performs an effect for a single card if it exists and is active
+ * Performs all effects for a single card in a position if it exists and is active
  * @param {Object} card - The card object
  * @param {string} player - The player (PLAYER_ONE or PLAYER_TWO)
  * @param {number} position - The position of the card in the player's hand
  * @param {string} effect - The effect to be applied (e.g., KEY_EFFECTS.GROW)
  */
-function performEffectForCardIfExists(card, player, position, effect) {
-    if (isEffectActiveOnCard(effect, card) && hasValidEffectFunction(effect)) {
-        const updatedCard = EFFECTS_FUNCTIONS[card.effects[effect].effectFunctionId](card);
-        gameState[player][position] = updatedCard;
+function performEffectForCardIfExists(card, player, position, effectName) {
+    if (card.effects && Array.isArray(card.effects)) {
+        const matchingEffects = card.effects.filter(e => e.effect === effectName && e.active);
+        matchingEffects.forEach(effect => {
+            if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
+                gameState[player][position] = EFFECTS_FUNCTIONS[effect.effectFunctionId](gameState[player][position]);
+            }
+        });
     }
+}
+
+/**
+ * Toggles one or all effects for a card
+ * @param {*} KEY_EFFECT 
+ * @param {*} player 
+ * @param {*} position 
+ * @param {*} active : whether it should target active or inactive effects
+ * @param {*} flipAll : whether it should target the first match or all
+ * @returns 
+ */
+function toggleCardEffect(KEY_EFFECT, player, position, activeState, flipAll = false) {
+    // Find the card in gameState
+    const card = gameState[player][position];
+
+    // Check if the card exists and has effects
+    if (!card || !Array.isArray(card.effects)) {
+        console.warn(`Card not found or has no effects: Player ${player}, Position ${position}`);
+        return;
+    }
+
+    // Find all effects that match KEY_EFFECT and the active state
+    const matchingEffects = card.effects.filter(effect =>
+        effect.effect === KEY_EFFECT && effect.active === activeState
+    );
+
+    if (matchingEffects.length === 0) {
+        console.warn(`No matching effects found for ${KEY_EFFECT} with active state ${activeState}`);
+        return;
+    }
+
+    // Flip the effects
+    if (flipAll) {
+        // Flip all matching effects
+        matchingEffects.forEach(effect => {
+            effect.active = !effect.activeState;
+        });
+    } else {
+        // Flip only the first matching effect
+        matchingEffects[0].active = !matchingEffects[0].active;
+    }
+
+    // Update the card in the gameState
+    gameState[player][position] = { ...card, effects: [...card.effects] };
+
+    console.log(`Flipped ${flipAll ? 'all' : 'one'} ${KEY_EFFECT} effect(s) for Player ${player}, Position ${position}`);
 }
 
 /**

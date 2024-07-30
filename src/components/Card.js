@@ -32,18 +32,20 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
-                {effects && <div className='card-icons'>
-                    {Object.entries(effects).map(([effectName, effectData]) =>
-                        effectData.active && (
-                            <ItemEffect
-                                key={effectName}
-                                icon={effectData.icon}
-                                alt={effectName}
-                                text={effectData.text}
-                            />
-                        )
-                    )}
-                </div>}
+                {effects && effects.length > 0 && (
+                    <div className='card-icons'>
+                        {effects.map(effect =>
+                            effect.active ? (
+                                <ItemEffect
+                                    key={effect.id}
+                                    icon={effect.icon}
+                                    alt={effect.effect}
+                                    text={effect.text}
+                                />
+                            ) : null
+                        )}
+                    </div>
+                )}
             </div>
             {/* Card information */}
             <div className="card-info">

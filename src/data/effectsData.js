@@ -7,6 +7,7 @@ import growIcon from "../components/grow.svg"
 import { shapes } from "../components/inventory/allShapes"
 
 let bagId = 0
+const id = require('uuid-readable')
 
 //This is needed because boardgame.io G state has to be a JSON serializable object
 export const EFFECTS_FUNCTIONS = {
@@ -25,9 +26,9 @@ export const EFFECTS_FUNCTIONS = {
 
 }
 
-//Shop -> storage -> bag data is pulled directly from this so it must be JSON serializble
-export const EFFECTS = {
-    [KEY_EFFECTS.GROW]: {
+export const EFFECTS = [
+    {
+        effect: KEY_EFFECTS.GROW,
         icon: growIcon,
         shapeId: "L",
         active: true,
@@ -35,21 +36,24 @@ export const EFFECTS = {
         text: "Gains +1/+1 at the end of every round",
         effectFunctionId: KEY_EFFECTS.GROW
     },
-    [KEY_EFFECTS.RANGED]: {
+    {
+        effect: KEY_EFFECTS.RANGED,
         icon: rangedicon,
         shapeId: "T",
         active: true,
         cost: 10,
         text: "Cannot be counter-attacked"
     },
-    [KEY_EFFECTS.DIVINE_SHIELD]: {
+    {
+        effect: KEY_EFFECTS.DIVINE_SHIELD,
         icon: divineShieldIcon,
         shapeId: "T2",
         active: true,
         cost: 2,
         text: "Negates first instance of attack damage"
     },
-    [`${KEY_EFFECTS.DEATHRATTLE}0`]: {
+    {
+        effect: KEY_EFFECTS.DEATHRATTLE,
         icon: deathrattleIcon,
         shapeId: "COR",
         active: true,
@@ -57,7 +61,7 @@ export const EFFECTS = {
         text: "Deathrattle: Summon a 1/1 Magikarp",
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
     }
-}
+]
 
 export function deepCopy(obj, hash = new WeakMap()) {
     if (obj === null || typeof obj !== 'object') return obj;
@@ -73,26 +77,26 @@ export function deepCopy(obj, hash = new WeakMap()) {
     return copy;
 }
 
-//Turns keys into a bag with id:effect
-//Could probably be an array instead?
+//Utility function to get a deep copied list of matching keys
+//id is assigned to a deep copy here, cost, and all effect data are now on the same level
 export function selectEffects(keys = []) {
-    return keys.reduce((selectedEffects, key) => {
-        if (key in EFFECTS) {
-            //Not sure if bubbling up cost here is problematic, we need to access cost from moves
-            selectedEffects[bagId] = { id: bagId, shape: shapes[EFFECTS[key].shapeId], [key]: deepCopy(EFFECTS[key]), cost: EFFECTS[key].cost }
-            bagId++
-        }
-        return selectedEffects;
-    }, {});
+    return EFFECTS
+        .filter(effect => keys.includes(effect.effect))
+        .map(effect => {
+            const effectCopy = deepCopy(effect);
+            effectCopy.id = id.generate()
+            effectCopy.shape = shapes[effectCopy.shapeId]
+            return effectCopy;
+        });
 }
 
-export function hasValidEffectFunction(effectKey) {
+export function hasValidEffectFunction(effectName) {
+    const effect = EFFECTS.find(e => e.effect === effectName);
+
     // Check if the effect exists
-    if (!EFFECTS.hasOwnProperty(effectKey)) {
+    if (!effect) {
         return false;
     }
-
-    const effect = EFFECTS[effectKey];
 
     // Check if the effect has an effectFunctionId
     if (!effect.hasOwnProperty('effectFunctionId')) {
@@ -110,4 +114,4 @@ export const initialBagData = {
     [PLAYER_TWO]: [selectEffects([]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }
 
-export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED, KEY_EFFECTS.GROW, `${KEY_EFFECTS.DEATHRATTLE}0`])
+export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED, KEY_EFFECTS.GROW, `${KEY_EFFECTS.DEATHRATTLE}`])

@@ -4,8 +4,8 @@ import { initialShopData } from "../data/effectsData";
 const Game = {
     setup: () => ({
         gold: 10,
-        storage: {},
-        bags: { 0: {}, 1: {} },
+        storage: [],
+        bags: [[], []],
         roster: [null, null],
         P2: getNewTeam(2),
         bench: getNewTeam(2),
@@ -13,12 +13,13 @@ const Game = {
         wild: getNewTeam(1)[0]
     }),
     moves: {
-        //Should buy/sell just look up how much it cost vs. bubbling it in selectedEffects?
-        buyItem: ({ G }, data) => {
-            if (data.cost <= G.gold) {
-                delete G.shop[data.id]
-                G.storage[data.id] = data
-                G.gold -= data.cost
+        //Currently only supports shop->storage
+        buyItem: ({ G }, item) => {
+            if (item.cost <= G.gold) {
+                console.log(item)
+                G.shop = G.shop.filter(shopItem => shopItem.id !== item.id);
+                G.storage.push(item)
+                G.gold -= item.cost;
             }
         },
         buyCard: ({ G }, index, data) => {
@@ -38,12 +39,14 @@ const Game = {
             }
 
         },
-        sellItem: ({ G }, bagId, data) => {
+        sellItem: ({ G }, bagId, item) => {
+            //Currently unsupported
+            //Should probably not be operating on undefined
             if (bagId !== undefined) {
-                delete G.bags[bagId][data.id]
+                G.bags[bagId] = G.bags[bagId].filter(bagItem => bagItem.id !== item.id)
             }
-            else delete G.storage[data.id]
-            G.gold += data.cost
+            else G.storage = G.storage.filter(storageItem => storageItem.id !== item.id)
+            G.gold += item.cost
         },
         sellCard: ({ G }, rosterId, data) => {
             if (rosterId < 0) {
@@ -53,13 +56,14 @@ const Game = {
             //always sells for 10 gold
             G.gold += 10
         },
-        bag2storage: ({ G }, bagId, data) => {
-            delete G.bags[bagId][data.id]
-            G.storage[data.id] = data
+        bag2storage: ({ G }, bagId, item) => {
+            //Currently not supported
+            G.bags[bagId] = G.bags[bagId].filter(bagItem => bagItem.id !== item.id)
+            G.storage.push(item)
         },
-        storage2bag: ({ G }, bagId, data) => {
-            G.bags[bagId][data.id] = data
-            delete G.storage[data.id]
+        storage2bag: ({ G }, bagId, item) => {
+            G.bags[bagId].push(item)
+            G.storage = G.storage.filter(storageItems => storageItems.id !== item.id)
         },
         bench2roster: ({ G }, index, card) => {
             let currentCard = null
