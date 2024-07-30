@@ -262,7 +262,11 @@ function performEffectsIfExistsAndActive(effectName) {
                 const matchingEffects = card.effects.filter(e => e.effect === effectName && e.active);
                 matchingEffects.forEach(effect => {
                     if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
-                        gameState[player][index] = EFFECTS_FUNCTIONS[effect.effectFunctionId](gameState[player][index]);
+                        gameState[player][index] = EFFECTS_FUNCTIONS[effect.effectFunctionId](
+                            gameState[player][index],
+                            effect.rarity,
+                            effect.rarityValue
+                        );
                     }
                 });
             }
@@ -282,7 +286,10 @@ function performEffectForCardIfExists(card, player, position, effectName) {
         const matchingEffects = card.effects.filter(e => e.effect === effectName && e.active);
         matchingEffects.forEach(effect => {
             if (hasValidEffectFunction(effectName) && effect.effectFunctionId) {
-                gameState[player][position] = EFFECTS_FUNCTIONS[effect.effectFunctionId](gameState[player][position]);
+                gameState[player][position] = EFFECTS_FUNCTIONS[effect.effectFunctionId](
+                    gameState[player][position],
+                    effect.rarity,
+                    effect.rarityValue);
             }
         });
     }

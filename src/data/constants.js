@@ -20,6 +20,14 @@ export const CARD_STATE = {
     FAINTED: 'FAINTED'
 };
 
+export const ITEM_RARITY = {
+    COMMON: 'COMMON',
+    UNCOMMON: 'UNCOMMON',
+    RARE: 'RARE',
+    EPIC: 'EPIC',
+    LEGENDARY: 'LEGENDARY'
+}
+
 export const ACTION_TYPES = {
     ATTACK: 'ATTACK',
     COUNTER_ATTACK: 'COUNTER_ATTACK',

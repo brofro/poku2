@@ -1,21 +1,21 @@
 import { v4 as uuidv4 } from 'uuid'
-import { CARD_STATE, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
+import { CARD_STATE, ITEM_RARITY, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO } from "./constants"
 import { CARD_DEFINITIONS } from "./cardData"
+import { getItemRarity } from "./itemFramework"
 import rangedicon from "../icons/ranged.svg"
 import divineShieldIcon from "../icons/divineshield.svg"
 import deathrattleIcon from "../icons/deathrattle.svg"
 import growIcon from "../icons/grow.svg"
 import { shapes } from "../shopComponents/inventory/allShapes"
 
-let bagId = 0
 const id = require('uuid-readable')
 
 //This is needed because boardgame.io G state has to be a JSON serializable object
 export const EFFECTS_FUNCTIONS = {
-    [KEY_EFFECTS.GROW]: (card) => {
-        return { ...card, atk: card.atk + 1, hp: card.hp + 1, currentHp: card.currentHp + 1 }
+    [KEY_EFFECTS.GROW]: (card, rarity, rarityValue) => {
+        return { ...card, atk: card.atk + rarityValue, hp: card.hp + rarityValue, currentHp: card.currentHp + rarityValue }
     },
-    [`${KEY_EFFECTS.DEATHRATTLE}0`]: (card) => {
+    [`${KEY_EFFECTS.DEATHRATTLE}0`]: (card, rarity, rarityValue) => {
         return {
             ...CARD_DEFINITIONS[129],
             position: card.position,
@@ -34,8 +34,8 @@ export const EFFECTS = [
         shapeId: "L",
         active: true,
         cost: 3,
-        text: "Gains +1/+1 at the end of every round",
-        effectFunctionId: KEY_EFFECTS.GROW
+        text: `Gains stats at the end of every round`,
+        effectFunctionId: KEY_EFFECTS.GROW,
     },
     {
         effect: KEY_EFFECTS.RANGED,
@@ -43,7 +43,8 @@ export const EFFECTS = [
         shapeId: "T",
         active: true,
         cost: 10,
-        text: "Cannot be counter-attacked"
+        text: "Cannot be counter-attacked",
+        staticRarity: ITEM_RARITY.EPIC
     },
     {
         effect: KEY_EFFECTS.DIVINE_SHIELD,
@@ -51,7 +52,8 @@ export const EFFECTS = [
         shapeId: "T2",
         active: true,
         cost: 2,
-        text: "Negates first instance of attack damage"
+        text: "Negates first instance of attack damage",
+        staticRarity: ITEM_RARITY.UNCOMMON
     },
     {
         effect: KEY_EFFECTS.DEATHRATTLE,
@@ -60,6 +62,7 @@ export const EFFECTS = [
         active: true,
         cost: 1,
         text: "Deathrattle: Summon a 1/1 Magikarp",
+        staticRarity: ITEM_RARITY.COMMON,
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
     }
 ]
@@ -89,6 +92,15 @@ export function selectEffects(keys = []) {
             effectCopy.uuid = uuid
             effectCopy.id = id.short(uuid)
             effectCopy.shape = shapes[effectCopy.shapeId]
+
+            //Generate rarity
+            if (!effectCopy.staticRarity) {
+                const { rarityValue, rarity } = getItemRarity()
+                effectCopy.text += ` [${rarity}: +${rarityValue}/+${rarityValue}]`
+                effectCopy.rarity = rarity
+                effectCopy.rarityValue = rarityValue
+            }
+
             return effectCopy;
         });
 }
@@ -117,4 +129,4 @@ export const initialBagData = {
     [PLAYER_TWO]: [selectEffects([]), selectEffects([KEY_EFFECTS.RANGED, KEY_EFFECTS.DIVINE_SHIELD])]
 }
 
-export const initialShopData = selectEffects([KEY_EFFECTS.DIVINE_SHIELD, KEY_EFFECTS.RANGED, KEY_EFFECTS.GROW, `${KEY_EFFECTS.DEATHRATTLE}`])
+export const initialShopData = [...selectEffects([KEY_EFFECTS.GROW]), ...selectEffects([KEY_EFFECTS.GROW]), ...selectEffects([KEY_EFFECTS.GROW]), ...selectEffects([KEY_EFFECTS.GROW])]

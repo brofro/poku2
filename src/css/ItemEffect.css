@@ -1,7 +1,6 @@
 .item-effect-icon {
     width: 16px;
     height: 16px;
-    filter: drop-shadow(0px 0px 2px rgb(254, 145, 4));
 }
 
 .item-effect-icon.shop-item {
@@ -10,5 +9,46 @@
     border: 2px solid #333;
     border-radius: 8px;
     padding: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* No glow for common items */
+.item-effect-icon.rarity-common {
+    box-shadow: none;
+}
+
+/* Small green glow for uncommon items */
+.item-effect-icon.rarity-uncommon {
+    box-shadow: 0 0 4px 2px rgba(0, 255, 0, 0.5);
+}
+
+/* Medium blue glow for rare items */
+.item-effect-icon.rarity-rare {
+    box-shadow: 0 0 6px 3px rgba(0, 0, 255, 0.6);
+}
+
+/* Large purple glow for epic items */
+.item-effect-icon.rarity-epic {
+    box-shadow: 0 0 8px 4px rgba(128, 0, 128, 0.7);
+}
+
+/* Very large gold glow for legendary items */
+.item-effect-icon.rarity-legendary {
+    box-shadow: 0 0 10px 5px rgba(255, 215, 0, 0.8);
+}
+
+/* Adjust glow for shop items to be more pronounced */
+.item-effect-icon.shop-item.rarity-uncommon {
+    box-shadow: 0 0 6px 3px rgba(0, 255, 0, 0.5);
+}
+
+.item-effect-icon.shop-item.rarity-rare {
+    box-shadow: 0 0 8px 4px rgba(0, 0, 255, 0.6);
+}
+
+.item-effect-icon.shop-item.rarity-epic {
+    box-shadow: 0 0 10px 5px rgba(128, 0, 128, 0.7);
+}
+
+.item-effect-icon.shop-item.rarity-legendary {
+    box-shadow: 0 0 12px 6px rgba(255, 215, 0, 0.8);
 }
