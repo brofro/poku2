@@ -3,7 +3,7 @@ import { ITEM_RARITY } from './constants'
 
 //Samples a chi-square distribution to get a rarity based on item shop level
 //
-export function getItemRarity(shopLevel = 5) {
+export function getItemRarity(shopLevel) {
     // Add 0.5 to ensure minimum value is 1, and round immediately
     // Could add max value here
     const roundedValue = Math.round(jstat.chisquare.sample(shopLevel) + 0.5);

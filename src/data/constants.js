@@ -21,6 +21,7 @@ export const CARD_STATE = {
 };
 
 export const ITEM_RARITY = {
+    NONE: 'NO_RARITY',
     COMMON: 'COMMON',
     UNCOMMON: 'UNCOMMON',
     RARE: 'RARE',

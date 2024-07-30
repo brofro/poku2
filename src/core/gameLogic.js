@@ -1,5 +1,6 @@
 import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
-import { initialBagData, deepCopy, selectEffects, EFFECTS_FUNCTIONS, hasValidEffectFunction } from '../data/effectsData.js';
+import { EFFECTS_FUNCTIONS } from '../data/effectsData.js';
+import { deepCopy, generateMultipleItems, hasValidEffectFunction } from '../data/itemUtils.js';
 import { getOpposingPlayer, findLeftmostActiveCard, findLeftmostNonFaintedCard, areAllCardsInState, areAnyCardsInState, abbreviateName, isEffectActiveOnCard } from './gameLogicUtils.js';
 
 let actionId = 0;
@@ -33,7 +34,8 @@ function initializeGameState(initialCardData, bags) {
         [PLAYER_ONE]: initialCardData[PLAYER_ONE].map((card, index) =>
             initializeCard(card, bags[index], index)),
         [PLAYER_TWO]: initialCardData[PLAYER_TWO].map((card, index) =>
-            initializeCard(card, initialBagData[PLAYER_TWO][index], index)),
+            //not sure if this is where P2 should be getting his bag
+            initializeCard(card, generateMultipleItems(1), index)),
 
         //Refactor when starting player is randomized
         currentPlayer: PLAYER_ONE,

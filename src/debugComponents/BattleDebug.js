@@ -78,6 +78,7 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
         setIsLogGenerated(true);
         moves.getNewOpponent()
         moves.setNewWildCard()
+        moves.setNewShop()
     }, [])
 
     useEffect(() => {

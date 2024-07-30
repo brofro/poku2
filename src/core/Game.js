@@ -1,5 +1,6 @@
 import { getNewTeam } from "../data/cardData";
 import { initialShopData } from "../data/effectsData";
+import { generateMultipleItems } from "../data/itemUtils";
 import { INVALID_MOVE } from "boardgame.io/core";
 
 const Game = {
@@ -10,7 +11,7 @@ const Game = {
         roster: [null, null],
         P2: getNewTeam(2),
         bench: getNewTeam(2),
-        shop: initialShopData,
+        shop: generateMultipleItems(5),
         wild: getNewTeam(1)[0]
     }),
     moves: {
@@ -86,6 +87,9 @@ const Game = {
         },
         setNewWildCard: ({ G }) => {
             G.wild = getNewTeam(1)[0]
+        },
+        setNewShop: ({ G }) => {
+            G.shop = generateMultipleItems(5)
         }
     }
 }
