@@ -6,25 +6,21 @@ import { affordable, calculateCardCost } from './shopUtils';
 import "../css/shop.css";
 import Card from '../commonComponents/Card';
 import ItemEffect from '../commonComponents/ItemEffect';
-import ShapeView from './inventory/ShapeView';
-import BagGrid from './inventory/BagGrid';
+import BagEdit from './inventory/BagEdit';
 
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
     //Data passed in becomes inconsistent?
     const { roster, bench, bags, storage, gold, shop, wild } = G;
     const [messageApi, contextHold] = message.useMessage();
+    const [editBagId, setEditBagId] = React.useState(null)
 
     const isRosterIncomplete = () => roster.some(card => card === null);
 
-    const ItemDrag = ({ item, itemType, bagId, sIndex = 0, ...props }) => {
-        const [shapeIndex, setShapeIndex] = React.useState(sIndex)
-
-
+    const ItemDrag = ({ item, itemType, bagId, ...props }) => {
         const dragProps = {
-            dependencyArr: [shapeIndex],
             itemType: itemType,
-            dragData: { data: item, itemType, bagId, shape: item.shape[shapeIndex] },
+            dragData: { data: item, itemType, bagId },
             _canDrag: () => true,
             isDraggingStyle: {
                 boxSizing: "border-box",
@@ -33,14 +29,11 @@ export function ItemShop({ G, moves, _nextPage }) {
             ...props
         };
 
-        const rotate = () => shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0)
-
         return (
             <DragBox {...dragProps}>
                 <Badge count={item.cost} color={"gold"}>
                     <ItemEffect key={item.id} icon={item.icon} alt={item.name} text={item.text} isShopItem={true} shopCost={item.cost} rarity={item.staticRarity ? item.staticRarity : item.rarity} />
                 </Badge>
-                <ShapeView shapes={item.shape} shapeIndex={shapeIndex} _rotate={rotate} />
             </DragBox>
         );
     };
@@ -79,15 +72,6 @@ export function ItemShop({ G, moves, _nextPage }) {
         };
 
         return <DropBox {...dropProps}>{children}</DropBox>;
-    };
-
-    const BagDrop = ({ bagId }) => {
-        const addItem = (data) => {
-            moves.storage2bag(bagId, data)
-        }
-        //Workaround for now, turns it back to {index:item}
-        const gridCompatibleBag = bags[bagId].reduce((obj, item, index) => ({ ...obj, [index]: item }), {})
-        return <BagGrid _addItem={addItem} bagItems={gridCompatibleBag} />
     };
 
     const RosterDrop = ({ rosterCard, index, ...props }) => {
@@ -197,7 +181,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         );
     };
 
-    return (
+    return editBagId !== null ? <BagEdit bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <div className="shop-page">
             {contextHold}
             <button
@@ -211,11 +195,11 @@ export function ItemShop({ G, moves, _nextPage }) {
                 <WildDrop rosterCard={wild} index={-1} moves={moves} />
                 <div className='shop-card-1'>
                     <RosterDrop rosterCard={roster[0]} index={0} moves={moves} />
-                    <BagDrop bagId={0} bags={bags} moves={moves} />
+                    <button onClick={() => setEditBagId(0)}>edit bag{0}: {bags[0].length}</button>
                 </div>
                 <div className='shop-card-2'>
                     <RosterDrop rosterCard={roster[1]} index={1} moves={moves} />
-                    <BagDrop bagId={1} bags={bags} moves={moves} />
+                    <button onClick={() => setEditBagId(1)}>edit bag{1}: {bags[1].length}</button>
                 </div>
                 <StorageDrop moves={moves}>
                     Storage
@@ -232,5 +216,5 @@ export function ItemShop({ G, moves, _nextPage }) {
                 <BenchDrop bench={bench} moves={moves} />
             </DragdropWrapper>
         </div>
-    );
+
 }

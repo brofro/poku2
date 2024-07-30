@@ -1,20 +1,15 @@
 import React from "react";
-import { getRotations } from "./helper";
-
-export const ITEM_SIZE = 3;
 
 export default function ShapeView({
-  shapes = getRotations([
-    [1, 1, 1],
-    [0, 0, 1],
-    [0, 1, 0]
-  ]),
+  shapes = [[[0,0],[1,0],[2,0],[2,1]],[[0,0],[0,1],[0,2],[1,0]],[[0,1],[0,2],[1,2],[2,2]],[[1,2],[2,0],[2,1],[2,2]]],
   shapeIndex = 0,
   _rotate = () => {},
   boxSize = "5px",
   color = "#29b6f6",
-  handleColor = "blue"
+  handleColor = "blue",
+  style,
 }) {
+  const ITEM_SIZE = 3;
   const getColor = (index1, index2, shape) => {
     //drag handle is different color than rest
     if (shape[0][0] === index1 && shape[0][1] === index2) return handleColor;
@@ -22,7 +17,7 @@ export default function ShapeView({
     else return null;
   };
   return (
-    <div onClick={_rotate}>
+    <div style={style} onClick={_rotate}>
       {shapes.map((m, index) => (
         <div
           style={{

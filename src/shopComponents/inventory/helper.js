@@ -7,6 +7,7 @@ const getShape = (matrix) => {
   }
   return arr;
 };
+
 const rotate = (matrix) => {
   const len = matrix.length - 1;
   const res = matrix.map((row, i) => row.map((_, j) => matrix[len - j][i]));
@@ -43,17 +44,17 @@ export const flipSquare = (matrix, x, y, value = null) => {
   );
 };
 
-export const canFit = (toXY, shape, matrix) => {
+export const canPlace = (matrix, shape, target) => {
   const arr = [];
-  const from = shape[0]
+  const handle = shape[0]
   for (let i = 0; i < shape.length; i++) {
     //transform current xy to be relative to a single box
-    let x = from[0] - shape[i][0];
-    let y = from[1] - shape[i][1];
+    let x = handle[0] - shape[i][0];
+    let y = handle[1] - shape[i][1];
 
     //transform target xy to be relative to a single box
-    let x2 = toXY[0] - x;
-    let y2 = toXY[1] - y;
+    let x2 = target[0] - x;
+    let y2 = target[1] - y;
 
     if (matrix?.[x2]?.[y2] !== 0) return false;
     arr.push([x2, y2]);
@@ -61,20 +62,15 @@ export const canFit = (toXY, shape, matrix) => {
   return arr;
 };
 
-
-export const canPlace = (current, target, shape, bag) => {
-  const arr = [];
-  for (let i = 0; i < shape.length; i++) {
-    //transform current xy to be relative to a single box
-    let x = current[0] - shape[i][0];
-    let y = current[1] - shape[i][1];
-
-    //transform target xy to be relative to a single box
-    let x2 = target[0] - x;
-    let y2 = target[1] - y;
-
-    if (bag?.[x2]?.[y2] !== 0) return false;
-    arr.push([x2, y2]);
+export const findAll = (matrix, shape) => {
+  const ret = [];
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix.length; j++) {
+      const arr = canPlace(matrix, shape, [i, j]);
+      if (arr?.length > 0) {
+        ret.push([i, j]);
+      }
+    }
   }
-  return arr;
+  return ret;
 };
