@@ -48,7 +48,8 @@ export const KEY_EFFECTS = {
     DEATHRATTLE: 'deathrattle',
     GROW: 'grow',
     EQUIP: 'equip',
-    HEAL: 'heal'
+    HEAL: 'heal',
+    RAGE: 'rage'
 }
 
 export const PLAY_SPEED = 250;

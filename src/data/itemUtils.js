@@ -58,6 +58,8 @@ export function selectEffects(keys = [], presetRarity = ITEM_RARITY.NONE, preset
                 effectCopy.text += `+${effectCopy.rarityDetails.atk}/+${effectCopy.rarityDetails.hp}`
             if (effectCopy.effect === KEY_EFFECTS.HEAL)
                 effectCopy.text += `HEAL ${effectCopy.rarityDetails.rarityValue}`
+            if (effectCopy.effect === KEY_EFFECTS.RAGE)
+                effectCopy.text += `+${effectCopy.rarityDetails.rarityValue} ATK`
 
             return effectCopy;
         });

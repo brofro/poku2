@@ -84,6 +84,8 @@ function performAttack(attacker, defender, attackingPlayer, defendingPlayer, typ
     else {
         atkValue = attacker.atk
         gameState[defendingPlayer][defender.position].currentHp = Math.max(0, defender.currentHp - attacker.atk)
+        if (isEffectActiveOnCard(KEY_EFFECTS.RAGE, defender))
+            performEffectForCardIfExists(defender, defendingPlayer, defender.position, KEY_EFFECTS.RAGE)
     }
     createLogEntry(type, {
         log: `${attackingPlayer}_${attacker.position}(${abbreviateName(attacker.name)})_ATK ${attacker.atk}_${defender.position}(${abbreviateName(defender.name)})`,

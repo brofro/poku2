@@ -6,6 +6,7 @@ import deathrattleIcon from "../icons/deathrattle.svg"
 import growIcon from "../icons/grow.svg"
 import equipIcon from "../icons/equip.svg"
 import healIcon from "../icons/heal.svg"
+import rageIcon from "../icons/rage.svg"
 
 
 //This is needed because boardgame.io G state has to be a JSON serializable object
@@ -17,8 +18,10 @@ export const EFFECTS_FUNCTIONS = {
         return { ...card, atk: card.atk + atk, hp: card.hp + hp, currentHp: card.currentHp + hp }
     },
     [KEY_EFFECTS.HEAL]: (card, { rarityValue }) => {
-        console.log(card, rarityValue)
         return { ...card, currentHp: Math.min(card.hp, card.currentHp + rarityValue) }
+    },
+    [KEY_EFFECTS.RAGE]: (card, { rarityValue }) => {
+        return { ...card, atk: card.atk + rarityValue }
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: (card) => {
         return {
@@ -65,6 +68,15 @@ export const EFFECTS = [
         cost: 2,
         text: "Heal: Heals HP after turn",
         effectFunctionId: KEY_EFFECTS.HEAL
+    },
+    {
+        effect: KEY_EFFECTS.RAGE,
+        icon: rageIcon,
+        shapeId: "T",
+        active: true,
+        cost: 1,
+        text: "Rage: Gains attack after taking damage",
+        effectFunctionId: KEY_EFFECTS.RAGE
     },
     {
         effect: KEY_EFFECTS.RANGED,
