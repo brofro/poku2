@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { CARD_STATE, KEY_EFFECTS, PLAYER_ONE, PLAYER_TWO, getImageUrl } from "./constants"
 import { CARD_DEFINITIONS } from "./cardData"
 import rangedicon from "../icons/ranged.svg"
@@ -84,7 +85,9 @@ export function selectEffects(keys = []) {
         .filter(effect => keys.includes(effect.effect))
         .map(effect => {
             const effectCopy = deepCopy(effect);
-            effectCopy.id = id.generate()
+            const uuid = uuidv4()
+            effectCopy.uuid = uuid
+            effectCopy.id = id.short(uuid)
             effectCopy.shape = shapes[effectCopy.shapeId]
             return effectCopy;
         });
