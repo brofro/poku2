@@ -1,4 +1,5 @@
 import React from 'react';
+import { Badge } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import "./shop.css";
@@ -10,7 +11,7 @@ import BagGrid from './inventory/BagGrid';
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
     //Data passed in becomes inconsistent?
-    const { roster, bench, bags, storage, gold, shop } = G;
+    const { roster, bench, bags, storage, gold, shop, wild } = G;
     const isRosterIncomplete = () => roster.some(card => card === null);
 
     const flattenObject = ({ id, shape, ...rest }) => {
@@ -41,7 +42,9 @@ export function ItemShop({ G, moves, _nextPage }) {
 
         return (
             <DragBox {...dragProps}>
-                <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} shopCost={flat.cost} />
+                <Badge count={flat.cost} color={"gold"}>
+                    <ItemEffect key={flat.id} icon={flat.icon} alt={flat.name} text={flat.text} isShopItem={true} shopCost={flat.cost} />
+                </Badge>
                 <ShapeView shapes={obj.shape} shapeIndex={shapeIndex} _rotate={rotate} />
             </DragBox>
         );
@@ -53,7 +56,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             itemType: ["shop", "bag"],
             _canDrop: () => true,
             _afterDrop: ({ data, itemType, bagId }) => {
-                if (itemType === "shop") props.moves.buy(data);
+                if (itemType === "shop") props.moves.buyItem(data);
                 if (itemType === "bag") props.moves.bag2storage(bagId, data);
             },
             canDropStyle: { backgroundColor: COLORS.green },
@@ -70,7 +73,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             itemType: ["storage", "bag"],
             _canDrop: () => true,
             _afterDrop: ({ data, bagId }) => {
-                props.moves.sell(bagId, data)
+                props.moves.sellItem(bagId, data)
             },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
@@ -91,8 +94,14 @@ export function ItemShop({ G, moves, _nextPage }) {
         const dropProps = {
             className: "shop-roster",
             itemType: "card",
-            _canDrop: (item) => item.itemType === "card" && item.from === "bench",
-            _afterDrop: ({ card }) => props.moves.bench2roster(index, card),
+            _canDrop: (item) => item.itemType === "card" && (item.from === "bench" || item.from === "wild"),
+            _afterDrop: (dragged) => {
+                if (dragged.from === "bench") {
+
+                    props.moves.bench2roster(index, dragged.card)
+                }
+                if (dragged.from === "wild") props.moves.buyCard(index, dragged.card)
+            },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
             ...props
@@ -113,8 +122,12 @@ export function ItemShop({ G, moves, _nextPage }) {
         const dropProps = {
             className: "shop-bench",
             itemType: "card",
-            _canDrop: (item) => item.itemType === "card" && item.from === "roster",
-            _afterDrop: ({ card, index }) => props.moves.roster2bench(index, card),
+            _canDrop: (item) => item.itemType === "card" && (item.from === "roster" || item.from === "wild"),
+            _afterDrop: (dragged) => {
+                console.log(dragged)
+                if (dragged.from === "roster") props.moves.roster2bench(dragged.index, dragged.card)
+                if (dragged.from === "wild") props.moves.buyCard(-1, dragged.card)
+            },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
             ...props
@@ -124,8 +137,32 @@ export function ItemShop({ G, moves, _nextPage }) {
             <DropBox {...dropProps}>
                 Bench
                 {bench.map((card, index) => (
-                    <CardDrag key={card.id} card={card} index={index} from="bench" />
+                    <CardDrag key={card.id} card={card} index={-1} from="bench" />
                 ))}
+            </DropBox>
+        );
+    };
+
+    const WildDrop = ({ rosterCard, index, ...props }) => {
+        const dropProps = {
+            className: "shop-wild",
+            itemType: "card",
+            _canDrop: (item) => item.itemType === "card" && (item.from === "bench" || item.from === "roster"),
+            _afterDrop: (dragged) => props.moves.sellCard(dragged.index, dragged.card),
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            ...props
+        };
+
+        return (
+            <DropBox {...dropProps}>
+                {rosterCard ? (
+                    <Badge count={(rosterCard.atk + rosterCard.hp) * 2 + rosterCard.spd} color={"gold"}>
+                        <CardDrag card={rosterCard} from="wild" index={-1} />
+                    </Badge>
+                ) : (
+                    <div className="">Sell Card for 10g</div>
+                )}
             </DropBox>
         );
     };
@@ -134,6 +171,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         const dragProps = {
             className: "shop-card-drag",
             itemType: "card",
+            from: from,
             dragData: { card: card, itemType: "card", from, index },
             _canDrag: () => true,
             isDraggingStyle: {
@@ -160,6 +198,7 @@ export function ItemShop({ G, moves, _nextPage }) {
                 Battle
             </button>
             <DragdropWrapper className='shop-container'>
+                <WildDrop rosterCard={wild} index={-1} moves={moves} />
                 <div className='shop-card-1'>
                     <RosterDrop rosterCard={roster[0]} index={0} moves={moves} />
                     <BagDrop bagId={0} bags={bags} moves={moves} />

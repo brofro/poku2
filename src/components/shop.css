@@ -12,7 +12,7 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, auto);
     grid-template-areas:
-        ". card1 card2 ."
+        "wild card1 card2 ."
         "storage storage shop shop"
         "bench bench bench bench"
         ". . . .";
@@ -29,6 +29,31 @@
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shop-wild {
+    grid-area: wild;
+    width: 100px;
+    /* Adjust this value to make it smaller */
+    height: 120px;
+    /* Adjust this value to make it smaller */
+    background-color: #f0f8ff;
+    /* Light blue background */
+    border: 2px solid #2cd012;
+    /* Blue border */
+    border-radius: 8px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.shop-wild:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .shop-card-1 {

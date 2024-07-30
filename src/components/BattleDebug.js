@@ -77,6 +77,7 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setIsLogGenerated(true);
         moves.getNewOpponent()
+        moves.setNewWildCard()
     }, [])
 
     useEffect(() => {
