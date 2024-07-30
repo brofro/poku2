@@ -1,5 +1,6 @@
 import { getNewTeam } from "../data/cardData";
 import { initialShopData } from "../data/effectsData";
+import { INVALID_MOVE } from "boardgame.io/core";
 
 const Game = {
     setup: () => ({
@@ -16,11 +17,11 @@ const Game = {
         //Currently only supports shop->storage
         buyItem: ({ G }, item) => {
             if (item.cost <= G.gold) {
-                console.log(item)
                 G.shop = G.shop.filter(shopItem => shopItem.id !== item.id);
                 G.storage.push(item)
                 G.gold -= item.cost;
             }
+            else return INVALID_MOVE
         },
         buyCard: ({ G }, index, data) => {
             const cost = (data.atk + data.hp) * 2 + data.spd

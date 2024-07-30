@@ -1,7 +1,8 @@
 import React from 'react';
-import { Badge } from 'antd';
+import { Badge, message } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
+import { affordable, calculateCardCost } from './shopUtils';
 import "../css/shop.css";
 import Card from '../commonComponents/Card';
 import ItemEffect from '../commonComponents/ItemEffect';
@@ -12,12 +13,9 @@ export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
     //Data passed in becomes inconsistent?
     const { roster, bench, bags, storage, gold, shop, wild } = G;
-    const isRosterIncomplete = () => roster.some(card => card === null);
+    const [messageApi, contextHold] = message.useMessage();
 
-    const flattenObject = ({ id, shape, ...rest }) => {
-        const [name, value] = Object.entries(rest)[0];
-        return { name, ...value };
-    };
+    const isRosterIncomplete = () => roster.some(card => card === null);
 
     const ItemDrag = ({ item, itemType, bagId, sIndex = 0, ...props }) => {
         const [shapeIndex, setShapeIndex] = React.useState(sIndex)
@@ -53,7 +51,10 @@ export function ItemShop({ G, moves, _nextPage }) {
             itemType: ["shop", "bag"],
             _canDrop: () => true,
             _afterDrop: ({ data, itemType, bagId }) => {
-                if (itemType === "shop") props.moves.buyItem(data);
+                if (itemType === "shop") {
+                    if (affordable(data, gold)) props.moves.buyItem(data)
+                    else messageApi.open({ type: 'error', content: 'Not enough gold' })
+                }
                 if (itemType === "bag") props.moves.bag2storage(bagId, data);
             },
             canDropStyle: { backgroundColor: COLORS.green },
@@ -99,7 +100,11 @@ export function ItemShop({ G, moves, _nextPage }) {
 
                     props.moves.bench2roster(index, dragged.card)
                 }
-                if (dragged.from === "wild") props.moves.buyCard(index, dragged.card)
+                if (dragged.from === "wild") {
+                    if (affordable(dragged.card, gold)) props.moves.buyCard(index, dragged.card)
+                    else messageApi.open({ type: 'error', content: 'Not enough gold' })
+
+                }
             },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
@@ -123,9 +128,13 @@ export function ItemShop({ G, moves, _nextPage }) {
             itemType: "card",
             _canDrop: (item) => item.itemType === "card" && (item.from === "roster" || item.from === "wild"),
             _afterDrop: (dragged) => {
-                console.log(dragged)
                 if (dragged.from === "roster") props.moves.roster2bench(dragged.index, dragged.card)
-                if (dragged.from === "wild") props.moves.buyCard(-1, dragged.card)
+                if (dragged.from === "wild") {
+
+                    if (affordable(dragged.card, gold)) props.moves.buyCard(-1, dragged.card)
+                    else messageApi.open({ type: 'error', content: 'Not enough gold' })
+
+                }
             },
             canDropStyle: { backgroundColor: COLORS.green },
             isOverStyle: { opacity: "50%" },
@@ -156,7 +165,8 @@ export function ItemShop({ G, moves, _nextPage }) {
         return (
             <DropBox {...dropProps}>
                 {rosterCard ? (
-                    <Badge count={(rosterCard.atk + rosterCard.hp) * 2 + rosterCard.spd} color={"gold"}>
+                    //This is the only time card cost is calculated for now
+                    <Badge count={calculateCardCost(rosterCard)} color={"gold"}>
                         <CardDrag card={rosterCard} from="wild" index={-1} />
                     </Badge>
                 ) : (
@@ -189,6 +199,7 @@ export function ItemShop({ G, moves, _nextPage }) {
 
     return (
         <div className="shop-page">
+            {contextHold}
             <button
                 className="generate-log-button"
                 onClick={() => _nextPage()}
