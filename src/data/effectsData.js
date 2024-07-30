@@ -18,7 +18,7 @@ export const EFFECTS_FUNCTIONS = {
     },
     [KEY_EFFECTS.HEAL]: (card, { rarityValue }) => {
         console.log(card, rarityValue)
-        return { ...card, currentHp: Math.max(card.hp, card.currentHp + rarityValue) }
+        return { ...card, currentHp: Math.min(card.hp, card.currentHp + rarityValue) }
     },
     [`${KEY_EFFECTS.DEATHRATTLE}0`]: (card) => {
         return {
@@ -64,7 +64,7 @@ export const EFFECTS = [
         active: true,
         cost: 2,
         text: "Heal: Heals HP after turn",
-        effectFunctionId: KEY_EFFECTS.EQUIP
+        effectFunctionId: KEY_EFFECTS.HEAL
     },
     {
         effect: KEY_EFFECTS.RANGED,
