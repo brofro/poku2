@@ -201,7 +201,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         }
         winEffectRan.current = true
     }, [playerResult])
-    return editBagId !== null ? <BagEdit bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
+    return editBagId !== null ? <BagEdit _bagToStorage={moves.bag2storage} bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <>
             {contextHold}
             <Statistic prefix={<img src={goldicon} className='gold-icon' />} value={gold} />

@@ -2,16 +2,18 @@ import React from "react";
 import ShapeView from "./ShapeView.js"
 import { canPlace, updateMatrix, findAll } from "./helper.js"
 import { allShapes } from "./allShapes.js";
+import BagView from "./BagView.js";
 
-export default function BagEdit({ _storageToBag, _back, bag, storage, bagId }) {
+export default function BagEdit({ _storageToBag, _back, bag, storage, bagId, _bagToStorage }) {
     const [id, setId] = React.useState(null);
     const [shapeIndex, setShapeIndex] = React.useState(0);
     const currentItem = storage[id]
+    const [isEditPage, setIsEditPage] = React.useState(true)
 
     const rotate = () =>
         shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0);
 
-    return (
+    return isEditPage === false ? <BagView _remove={(item) => _bagToStorage(bagId, item)} bagId={bagId} bagItems={bag} _back={() => setIsEditPage(true)} /> : (
         <div
             style={{
                 height: "90vh",
@@ -21,7 +23,8 @@ export default function BagEdit({ _storageToBag, _back, bag, storage, bagId }) {
                 alignItems: "center"
             }}
         >
-            <button onClick={_back}>back</button>
+            <button onClick={_back}>back to shop</button>
+            <button onClick={() => setIsEditPage(false)}>admire bag</button>
             <BagMatrix
                 bagId={bagId}
                 _update={(newBagItem) => {
@@ -134,7 +137,7 @@ function BagMatrix({
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex", flexDirection: "column", userSelect: "none" }}>
             {bag.map(
                 (row, index1) => (
                     <div key={index1} style={{ display: "flex", flexDirection: "row" }}>
