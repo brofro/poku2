@@ -42,6 +42,7 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
                                     alt={effect.effect}
                                     text={effect.text}
                                     rarity={effect.staticRarity ? effect.staticRarity : effect.rarityDetails.rarity}
+                                    dynamicText={effect.dynamicText}
                                 />
                             ) : null
                         )}

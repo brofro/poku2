@@ -50,16 +50,15 @@ export function selectEffects(keys = [], presetRarity = ITEM_RARITY.NONE, preset
                 }
             }
 
-            //Handle tool tip text, can probably be a pure function abstracted
-            effectCopy.text += ` [${effectCopy.staticRarity ? effectCopy.staticRarity : effectCopy.rarityDetails.rarity}] `
+            //Handle extra tool tip text, can probably be a pure function abstracted, can also probably be somewhere else
             if (effectCopy.effect === KEY_EFFECTS.GROW)
-                effectCopy.text += `+${effectCopy.rarityDetails.rarityValue}/+${effectCopy.rarityDetails.rarityValue}`
+                effectCopy.dynamicText = `+${effectCopy.rarityDetails.rarityValue}/+${effectCopy.rarityDetails.rarityValue}`
             if (effectCopy.effect === KEY_EFFECTS.EQUIP)
-                effectCopy.text += `+${effectCopy.rarityDetails.atk}/+${effectCopy.rarityDetails.hp}`
+                effectCopy.dynamicText = `+${effectCopy.rarityDetails.atk}/+${effectCopy.rarityDetails.hp}`
             if (effectCopy.effect === KEY_EFFECTS.HEAL)
-                effectCopy.text += `HEAL ${effectCopy.rarityDetails.rarityValue}`
+                effectCopy.dynamicText = `HEAL ${effectCopy.rarityDetails.rarityValue}`
             if (effectCopy.effect === KEY_EFFECTS.RAGE)
-                effectCopy.text += `+${effectCopy.rarityDetails.rarityValue} ATK`
+                effectCopy.dynamicText = `+${effectCopy.rarityDetails.rarityValue} ATK`
 
             return effectCopy;
         });

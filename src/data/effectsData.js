@@ -61,7 +61,7 @@ export const EFFECTS = [
         shapeId: "L",
         active: true,
         cost: 3,
-        text: `Grow: Gains stats at the end of every round`,
+        text: `Gains stats at the end of every round`,
         effectFunctionId: KEY_EFFECTS.GROW,
     },
     {
@@ -70,7 +70,7 @@ export const EFFECTS = [
         shapeId: "L",
         active: true,
         cost: 2,
-        text: `Equip: Gains stats at the start of the game`,
+        text: `Gains stats at the start of the game`,
         effectFunctionId: KEY_EFFECTS.EQUIP
     },
     {
@@ -79,7 +79,7 @@ export const EFFECTS = [
         shapeId: "L",
         active: true,
         cost: 2,
-        text: "Heal: Heals HP after turn",
+        text: "Heals HP after turn",
         effectFunctionId: KEY_EFFECTS.HEAL
     },
     {
@@ -88,7 +88,7 @@ export const EFFECTS = [
         shapeId: "T",
         active: true,
         cost: 1,
-        text: "Rage: Gains attack after taking damage",
+        text: "Gains attack after taking damage",
         effectFunctionId: KEY_EFFECTS.RAGE
     },
     {
@@ -97,7 +97,7 @@ export const EFFECTS = [
         shapeId: "T",
         active: true,
         cost: 10,
-        text: "Ranged: Cannot be counter-attacked",
+        text: "Cannot be counter-attacked",
         staticRarity: ITEM_RARITY.EPIC
     },
     {
@@ -106,7 +106,7 @@ export const EFFECTS = [
         shapeId: "T2",
         active: true,
         cost: 2,
-        text: "Divine Shield: Negates first instance of attack damage (stacks)",
+        text: "Negates first instance of attack damage (stacks)",
         staticRarity: ITEM_RARITY.UNCOMMON
     },
     {
@@ -115,7 +115,7 @@ export const EFFECTS = [
         shapeId: "COR",
         active: true,
         cost: 10,
-        text: "Double Attack: If not fainted, attacks a second time (triggers once, stacks)",
+        text: "If not fainted, attacks a second time (triggers once, stacks)",
         staticRarity: ITEM_RARITY.UNCOMMON
     },
     {
@@ -124,7 +124,7 @@ export const EFFECTS = [
         shapeId: "COR",
         active: true,
         cost: 1,
-        text: "Deathrattle: Summon a 1/1 Magikarp with no items",
+        text: "Summon a 1/1 Magikarp with no items",
         staticRarity: ITEM_RARITY.COMMON,
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
     },
@@ -134,7 +134,7 @@ export const EFFECTS = [
         shapeId: "COR",
         active: true,
         cost: 5,
-        text: "Deathrattle: Revive with 1 HP",
+        text: "Revive with 1 HP",
         staticRarity: ITEM_RARITY.COMMON,
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}1`,
     }
