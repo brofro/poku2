@@ -1,17 +1,12 @@
 /* Card.css */
 :root {
-    --card-width: 100px;
-    --card-height: 140px;
     --card-border-radius: 8px;
     --card-padding: 6px;
     --icon-size: 16px;
-    --font-size-name: 0.8em;
-    --font-size-stats: 0.7em;
 }
 
 .card {
-    width: var(--card-width);
-    height: var(--card-height);
+    height: 120px;
     border: 1px solid #ccc;
     border-radius: var(--card-border-radius);
     background-color: white;
@@ -56,7 +51,6 @@
 .card-stat {
     display: flex;
     align-items: center;
-    background-color: #e0e0e0;
     padding: 1px 2px;
     border-radius: 2px;
     margin-left: 2px;
@@ -104,10 +98,6 @@
     box-shadow: 0 0 15px #ff8c00, 0 0 25px #ff8c00;
 }
 
-.card.shop-card {
-    --card-height: 120px;
-}
-
 .card.divine-shield::after {
     content: '';
     position: absolute;
@@ -118,4 +108,10 @@
     border: 3px solid yellow;
     border-radius: calc(var(--card-border-radius) + 3px);
     pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .card {
+        height: 60px;
+    }
 }

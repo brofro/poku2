@@ -4,6 +4,8 @@ import { INVALID_MOVE } from "boardgame.io/core";
 
 const Game = {
     setup: () => ({
+        //set isMobile on game start
+        isMobile: window.innerWidth <= 768,
         gold: 10,
         storage: [],
         bags: [[], []],

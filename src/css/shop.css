@@ -1,27 +1,6 @@
-/* ShopStyles.css */
-.shop-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-}
-
-.shop-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, auto);
-    grid-template-areas:
-        "wild card1 card2 ."
-        "storage storage shop shop"
-        "bench bench bench bench"
-        ". . . .";
-    gap: 1rem;
-    padding: 1rem;
-}
-
 .shop-card-1,
 .shop-card-2 {
+    margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
@@ -29,26 +8,27 @@
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 120px;
 }
 
 .shop-wild {
-    grid-area: wild;
-    width: 100px;
+    width: 120px;
     /* Adjust this value to make it smaller */
-    height: 120px;
+    height: 140px;
     /* Adjust this value to make it smaller */
-    background-color: #f0f8ff;
+    background-color: #e6bdbd;
     /* Light blue background */
-    border: 2px solid #2cd012;
+    border: 2px solid #c37b7b;
     /* Blue border */
     border-radius: 8px;
-    padding: 0.5rem;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .shop-wild:hover {
@@ -56,30 +36,28 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.shop-card-1 {
-    grid-area: card1;
-}
-
-.shop-card-2 {
-    grid-area: card2;
-}
-
 .shop-storage {
-    grid-area: storage;
+    margin-top: 20px;
+    width: 80%;
     background-color: #fff2e6;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .shop-shopItems {
-    grid-area: shop;
-    display: flex;
-    justify-content: space-evenly;
+    margin-top: 20px;
+    width: 80%;
     background-color: #e6ffe6;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .shop-bench {
-    grid-area: bench;
-    display: flex;
+    margin-top: 20px;
     background-color: #f0f8ff;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
 }
 
 .shop-storage,
@@ -142,7 +120,7 @@
 
 .empty-roster-slot {
     width: 120px;
-    height: 120px;
+    height: 60px;
     border: 2px dashed #ccc;
     border-radius: 8px;
     display: flex;
@@ -151,10 +129,10 @@
     font-size: 14px;
     color: #999;
     text-align: center;
-    padding: 10px;
 }
 
 .generate-log-button {
+    margin-top: 20px;
     padding: 0.5rem 1rem;
     font-size: 14px;
     cursor: pointer;
@@ -163,7 +141,7 @@
     border: none;
     border-radius: 4px;
     transition: background-color 0.3s;
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
 }
 
 .generate-log-button:hover {
@@ -171,23 +149,15 @@
 }
 
 @media (max-width: 768px) {
-    .shop-container {
-        grid-template-areas:
-            "card1" "card2"
-            "storage"
-            "shop"
-            "bench";
-    }
 
     .shop-card-1,
     .shop-card-2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        background-color: #f9f9f9;
-        padding: 1rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         height: 60px;
     }
+
+    .shop-wild {
+        height: 70px;
+        width: 80px;
+    }
+
 }
