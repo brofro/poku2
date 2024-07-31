@@ -3,6 +3,7 @@ import { CARD_DEFINITIONS } from "./cardData"
 import rangedicon from "../icons/ranged.svg"
 import divineShieldIcon from "../icons/divineshield.svg"
 import deathrattleIcon from "../icons/deathrattle.svg"
+import deathrattleIcon1 from "../icons/deathrattle1.svg"
 import growIcon from "../icons/grow.svg"
 import equipIcon from "../icons/equip.svg"
 import healIcon from "../icons/heal.svg"
@@ -33,6 +34,15 @@ export const EFFECTS_FUNCTIONS = {
             currentHp: 1,
             state: CARD_STATE.FATIGUED,
             effects: []
+        }
+    },
+    [`${KEY_EFFECTS.DEATHRATTLE}1`]: (card) => {
+        return {
+            ...card,
+            position: card.position,
+            currentHp: 1,
+            state: CARD_STATE.FATIGUED,
+            effects: card.effects
         }
     }
 
@@ -114,8 +124,18 @@ export const EFFECTS = [
         shapeId: "COR",
         active: true,
         cost: 1,
-        text: "Deathrattle: Summon a 1/1 Magikarp",
+        text: "Deathrattle: Summon a 1/1 Magikarp with no items",
         staticRarity: ITEM_RARITY.COMMON,
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}0`,
+    },
+    {
+        effect: KEY_EFFECTS.DEATHRATTLE,
+        icon: deathrattleIcon1,
+        shapeId: "COR",
+        active: true,
+        cost: 5,
+        text: "Deathrattle: Revive with 1 HP",
+        staticRarity: ITEM_RARITY.COMMON,
+        effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}1`,
     }
 ]

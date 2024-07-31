@@ -102,13 +102,14 @@ export function generateItem(shopLevel = 1) {
     }
 
     // Randomly select one effect from the eligible effects
-    const randomIndex = Math.floor(Math.random() * eligibleEffects.length);
+    let randomIndex = Math.floor(Math.random() * eligibleEffects.length);
     const chosenEffect = eligibleEffects[randomIndex];
 
     // Call selectEffects with the chosen effect and the generated rarity
     const processedEffect = selectEffects([chosenEffect.effect], rarity, rarityValue);
+    randomIndex = Math.floor(Math.random() * processedEffect.length)
 
-    return processedEffect[0]; // Return the first (and only) processed effect
+    return processedEffect[randomIndex]; // Return a random processed effect
 }
 
 //Generates n items returns n sized array of items (object)
