@@ -55,7 +55,8 @@ export const KEY_EFFECTS = {
     GROW: 'grow',
     EQUIP: 'equip',
     HEAL: 'heal',
-    RAGE: 'rage'
+    RAGE: 'rage',
+    DOUBLE_ATTACK: 'doubleAttack'
 }
 
 export const PLAY_SPEED = 250;

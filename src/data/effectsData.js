@@ -7,6 +7,7 @@ import growIcon from "../icons/grow.svg"
 import equipIcon from "../icons/equip.svg"
 import healIcon from "../icons/heal.svg"
 import rageIcon from "../icons/rage.svg"
+import doubleAttackIcon from "../icons/doubleattack.svg"
 
 
 //This is needed because boardgame.io G state has to be a JSON serializable object
@@ -95,7 +96,16 @@ export const EFFECTS = [
         shapeId: "T2",
         active: true,
         cost: 2,
-        text: "Divine Shield: Negates first instance of attack damage",
+        text: "Divine Shield: Negates first instance of attack damage (stacks)",
+        staticRarity: ITEM_RARITY.UNCOMMON
+    },
+    {
+        effect: KEY_EFFECTS.DOUBLE_ATTACK,
+        icon: doubleAttackIcon,
+        shapeId: "COR",
+        active: true,
+        cost: 10,
+        text: "Double Attack: If not fainted, attacks a second time (triggers once, stacks)",
         staticRarity: ITEM_RARITY.UNCOMMON
     },
     {

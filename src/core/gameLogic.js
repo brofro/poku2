@@ -97,7 +97,12 @@ function performAttack(attacker, defender, attackingPlayer, defendingPlayer, typ
         targetCardName: defender.name
     });
 
-    if (type === ACTION_TYPES.ATTACK) { gameState[attackingPlayer][attacker.position].state = CARD_STATE.FATIGUED }
+    if (type === ACTION_TYPES.ATTACK) {
+        if (isEffectActiveOnCard(KEY_EFFECTS.DOUBLE_ATTACK, attacker)) {
+            toggleCardEffect(KEY_EFFECTS.DOUBLE_ATTACK, attackingPlayer, attacker.position, true)
+        }
+        else gameState[attackingPlayer][attacker.position].state = CARD_STATE.FATIGUED
+    }
 }
 
 /**
