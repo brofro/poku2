@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { FloatButton, Badge, message, Image, Button, Flex } from 'antd';
+import { FloatButton, Badge, message, Image, Button, Flex, Statistic } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import { affordable, calculateCardCost } from './shopUtils';
@@ -9,6 +9,7 @@ import ItemEffect from '../commonComponents/ItemEffect';
 import BagEdit from './inventory/BagEdit';
 import { RESULT } from '../data/constants';
 import battleicon from '../icons/battlestart.svg'
+import goldicon from "../icons/gold.svg"
 
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
@@ -200,10 +201,10 @@ export function ItemShop({ G, moves, _nextPage }) {
         }
         winEffectRan.current = true
     }, [playerResult])
-
     return editBagId !== null ? <BagEdit bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <>
             {contextHold}
+            <Statistic prefix={<img src={goldicon} className='gold-icon' />} value={gold} />
             {!isMobile ? <Button className='generate-log-button' icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />
                 : <FloatButton icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />}
             <DragdropWrapper>
@@ -232,41 +233,4 @@ export function ItemShop({ G, moves, _nextPage }) {
                 <WildDrop rosterCard={wild} index={-1} moves={moves} />
             </DragdropWrapper >
         </>
-    // <BagEdit bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} />
-    // :
-    // <>
-    //     <div className="shop-page">
-    //         <button
-    //             className="generate-log-button"
-    //             onClick={() => _nextPage()}
-    //             disabled={isRosterIncomplete()}
-    //         >
-    //             Battle
-    //         </button>
-    //         <DragdropWrapper className='shop-container'>
-    //             <WildDrop rosterCard={wild} index={-1} moves={moves} />
-    //             <div className='shop-card-1'>
-    //                 <RosterDrop rosterCard={roster[0]} index={0} moves={moves} />
-    //                 <button onClick={() => setEditBagId(0)}>edit bag{0}: {bags[0].length}</button>
-    //             </div>
-    //             <div className='shop-card-2'>
-    //                 <RosterDrop rosterCard={roster[1]} index={1} moves={moves} />
-    //                 <button onClick={() => setEditBagId(1)}>edit bag{1}: {bags[1].length}</button>
-    //             </div>
-    //             <StorageDrop moves={moves}>
-    //                 Storage
-    //                 {storage.map((item) => (
-    //                     <ItemDrag itemType="storage" item={item} key={item.id} />
-    //                 ))}
-    //             </StorageDrop>
-    //             <ShopDrop moves={moves}>
-    //                 Shop Level: {shopLevel}, Gold:{gold}
-    //                 {shop.map((item) => (
-    //                     <ItemDrag itemType="shop" item={item} key={item.id} />
-    //                 ))}
-    //             </ShopDrop>
-    //             <BenchDrop bench={bench} moves={moves} />
-    //         </DragdropWrapper>
-    //     </div>
-
 }
