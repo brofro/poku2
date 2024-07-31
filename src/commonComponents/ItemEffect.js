@@ -35,7 +35,7 @@ const ItemEffect = ({ icon, alt, text, rarity, isShopItem, dynamicText }) => {
     );
 
     return (
-        <Popover content={details}>
+        <Popover placement="bottom" content={details}>
             <img
                 src={icon}
                 alt={alt}

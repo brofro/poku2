@@ -19,7 +19,7 @@ const Main = (props) => {
 const App = Client({
   game: Game,
   board: Main,
-  debug: { impl: Debug },
+  debug: false
 });
 
 export default App

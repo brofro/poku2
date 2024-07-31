@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { FloatButton, Badge, message, Image, Button, Flex, Statistic } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { FloatButton, Badge, message, Image, Button, Flex, Statistic, Tour } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
 import { affordable, calculateCardCost } from './shopUtils';
@@ -17,6 +17,56 @@ export function ItemShop({ G, moves, _nextPage }) {
     const { roster, bench, bags, storage, gold, shop, wild, playerResult, shopLevel, isMobile } = G;
     const [messageApi, contextHold] = message.useMessage();
     const [editBagId, setEditBagId] = React.useState(null)
+
+    //Tour states
+    const [isTourOpen, setIsTourOpen] = useState(false);
+    const benchRef = useRef(null);
+    const rosterRef = useRef(null);
+    const goldRef = useRef(null);
+    const shopRef = useRef(null);
+    const storageRef = useRef(null);
+    const wildRef = useRef(null);
+    const battleRef = useRef(null);
+
+    //Tour steps
+    const tourSteps = [
+        {
+            title: 'Drag a card from bench',
+            description: 'Start by dragging a card from the bench area.',
+            target: () => benchRef.current,
+        },
+        {
+            title: 'Fill your roster',
+            description: 'Drag it to a roster spot. Make sure you have no empty roster spots!',
+            target: () => rosterRef.current,
+        },
+        {
+            title: 'Your gold',
+            description: 'This is your gold. You get gold every time you win a battle.',
+            target: () => goldRef.current,
+        },
+        {
+            title: 'Shop items',
+            description: 'Drag items from here...',
+            target: () => shopRef.current,
+        },
+        {
+            title: 'Storage',
+            description: '...to here',
+            target: () => storageRef.current,
+        },
+        {
+            title: 'Wild Pokemon',
+            description: 'Buy new cards from here',
+            target: () => wildRef.current,
+        },
+        {
+            title: 'Start the battle',
+            description: "When you're done, press battle to start the game!",
+            target: () => battleRef.current,
+        },
+    ];
+
 
     const isRosterIncomplete = () => roster.some(card => card === null);
 
@@ -58,7 +108,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             ...props
         };
 
-        return <DropBox {...dropProps}><Flex justify='center' gap='small'>{children}</Flex></DropBox>;
+        return <DropBox {...dropProps}><Flex ref={storageRef} justify='center' gap='small'>{children}</Flex></DropBox>;
     };
 
     const ShopDrop = ({ children, ...props }) => {
@@ -74,7 +124,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             ...props
         };
 
-        return <DropBox {...dropProps}><Flex justify='center' gap='middle'>{children}</Flex></DropBox>;
+        return <DropBox {...dropProps}><Flex ref={shopRef} justify='center' gap='middle'>{children}</Flex></DropBox>;
     };
 
     const RosterDrop = ({ rosterCard, index, ...props }) => {
@@ -103,7 +153,7 @@ export function ItemShop({ G, moves, _nextPage }) {
                 {rosterCard ? (
                     <CardDrag card={rosterCard} from="roster" index={index} />
                 ) : (
-                    <div className="empty-roster-slot">Drag a card here</div>
+                    <div ref={rosterRef} className="empty-roster-slot">Drag a card here</div>
                 )}
             </DropBox>
         );
@@ -131,7 +181,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         return (
             <DropBox {...dropProps}>
                 Bench
-                <Flex wrap>
+                <Flex ref={benchRef} wrap>
                     {bench.map((card, index) => (
                         <CardDrag key={card.id} card={card} index={-1} from="bench" />
                     ))}
@@ -155,7 +205,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             <DropBox {...dropProps}>
                 {rosterCard ? (
                     //This is the only time card cost is calculated for now
-                    <Badge count={calculateCardCost(rosterCard)} color={"gold"}>
+                    <Badge ref={wildRef} count={calculateCardCost(rosterCard)} color={"gold"}>
                         <CardDrag card={rosterCard} from="wild" index={-1} />
                     </Badge>
                 ) : (
@@ -204,9 +254,17 @@ export function ItemShop({ G, moves, _nextPage }) {
     return editBagId !== null ? <BagEdit _bagToStorage={moves.bag2storage} bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <>
             {contextHold}
-            <Statistic prefix={<img src={goldicon} className='gold-icon' />} value={gold} />
-            {!isMobile ? <Button className='generate-log-button' onClick={() => _nextPage()} disabled={isRosterIncomplete()}>Battle</Button>
-                : <FloatButton icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />}
+            <Flex align="center" justify="space-between" style={{ marginBottom: '20px' }}>
+                <Statistic prefix={<img ref={goldRef} src={goldicon} className='gold-icon' />} value={gold} />
+                {!isMobile ?
+                    <div>
+                        <Button ref={battleRef} className='generate-log-button' onClick={() => _nextPage()} disabled={isRosterIncomplete()}>Battle</Button>
+                        <Button onClick={() => setIsTourOpen(true)} style={{ marginRight: '10px' }}>How to Play</Button>
+                    </div>
+                    : <FloatButton ref={battleRef} icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />}
+
+            </Flex>
+
             <DragdropWrapper>
                 <Flex gap="middle" justify='center' wrap>
                     <div className='shop-card-1'>
@@ -231,6 +289,7 @@ export function ItemShop({ G, moves, _nextPage }) {
                 </ShopDrop>
                 <BenchDrop bench={bench} moves={moves} />
                 <WildDrop rosterCard={wild} index={-1} moves={moves} />
+                <Tour open={isTourOpen} onClose={() => setIsTourOpen(false)} steps={tourSteps} />
             </DragdropWrapper >
         </>
 }
