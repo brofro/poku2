@@ -9,11 +9,6 @@ const baseFormIds = [1, 4, 7, 10, 13, 16, 19, 21, 23, 25, 27, 29, 32, 35, 37, 39
 export function getNewTeam(numCards) {
     return Array.from({ length: numCards }, () => {
         const randomId = Math.floor(Math.random() * 151) + 1;
-        return CARD_DEFINITIONS[randomId];
+        return JSON.parse(JSON.stringify(CARD_DEFINITIONS[randomId]));
     });
 }
-
-export const initialCardData = {
-    [PLAYER_ONE]: [CARD_DEFINITIONS[143], CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1]],
-    [PLAYER_TWO]: [CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1], CARD_DEFINITIONS[Math.floor(Math.random() * 151) + 1]],
-};

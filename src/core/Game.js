@@ -11,7 +11,9 @@ const Game = {
         P2: getNewTeam(2),
         bench: getNewTeam(2),
         shop: generateMultipleItems(5),
-        wild: getNewTeam(1)[0]
+        wild: getNewTeam(1)[0],
+        shopLevel: 0,
+        playerResult: null
     }),
     moves: {
         //Currently only supports shop->storage
@@ -89,6 +91,12 @@ const Game = {
         },
         setNewShop: ({ G }) => {
             G.shop = generateMultipleItems(5)
+        },
+        setPlayerResult: ({ G }, result) => {
+            G.playerResult = result
+        },
+        increaseShopLevel: ({ G }) => {
+            G.shopLevel += 0.01
         }
     }
 }

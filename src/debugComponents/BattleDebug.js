@@ -14,7 +14,6 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
-    const [playerWin, setPlayerWin] = useState(false)
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
@@ -71,8 +70,8 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     };
 
     useEffect(() => {
-        const { playerWin, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
-        setPlayerWin(playerWin)
+        const { playerResult, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
+        moves.setPlayerResult(playerResult)
         setGameLog(gameLog)
         setGameState(getGameStateAtLogIndex(gameLog, -1));
         setIsLogGenerated(true);
@@ -81,9 +80,6 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
         moves.setNewShop()
     }, [])
 
-    useEffect(() => {
-        if (playerWin) moves.addGold(5)
-    }, [playerWin, gameLog])
 
 
     return (

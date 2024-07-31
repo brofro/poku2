@@ -82,9 +82,6 @@ export function isEffectActiveOnCard(effectName, card) {
         return false;
     }
 
-    const effect = card.effects.find(e => e.effect === effectName);
-    if (!effect) {
-        return false; // Effect not found on the card
-    }
-    return effect.active;
+    const matchingEffects = card.effects.filter(e => e.effect === effectName);
+    return matchingEffects.some(effect => effect.active);
 }

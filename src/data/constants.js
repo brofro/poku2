@@ -14,6 +14,12 @@ export const HP_ICON = "https://i.imgur.com/MP4IoUo.png";
 export const PLAYER_ONE = 'P1';
 export const PLAYER_TWO = 'P2';
 
+export const RESULT = {
+    WIN: 'WIN',
+    LOSE: 'LOSE',
+    TIE: 'TIE'
+}
+
 export const CARD_STATE = {
     ACTIVE: 'ACTIVE',
     FATIGUED: 'FATIGUED',

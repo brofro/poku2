@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Badge, message } from 'antd';
 import { DragdropWrapper, DragBox, DropBox } from './dnd-wrapper';
 import { COLORS } from './dnd-wrapper';
@@ -7,11 +7,12 @@ import "../css/shop.css";
 import Card from '../commonComponents/Card';
 import ItemEffect from '../commonComponents/ItemEffect';
 import BagEdit from './inventory/BagEdit';
+import { RESULT } from '../data/constants';
 
 export function ItemShop({ G, moves, _nextPage }) {
     //For some reason when components (ItemDrag, RosterDrop, etc.) are moved out of this scope where G is destructured
     //Data passed in becomes inconsistent?
-    const { roster, bench, bags, storage, gold, shop, wild } = G;
+    const { roster, bench, bags, storage, gold, shop, wild, playerResult, shopLevel } = G;
     const [messageApi, contextHold] = message.useMessage();
     const [editBagId, setEditBagId] = React.useState(null)
 
@@ -181,6 +182,22 @@ export function ItemShop({ G, moves, _nextPage }) {
         );
     };
 
+    //Game result
+    const winEffectRan = useRef(false)
+    useEffect(() => {
+        if (winEffectRan.current === false) {
+            if (playerResult === RESULT.WIN) {
+                moves.increaseShopLevel()
+                messageApi.open({ type: 'success', content: 'You win! +3 gold' })
+                moves.addGold(3)
+            }
+            if (playerResult === RESULT.LOSE) messageApi.open({ type: 'error', content: 'You Lost!' })
+
+            if (playerResult === RESULT.TIE) messageApi.open({ type: 'warning', content: 'Draw' })
+        }
+        winEffectRan.current = true
+    }, [playerResult])
+
     return editBagId !== null ? <BagEdit bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <div className="shop-page">
             {contextHold}
@@ -208,7 +225,7 @@ export function ItemShop({ G, moves, _nextPage }) {
                     ))}
                 </StorageDrop>
                 <ShopDrop moves={moves}>
-                    Shop, Gold:{gold}
+                    Shop Level: {shopLevel}, Gold:{gold}
                     {shop.map((item) => (
                         <ItemDrag itemType="shop" item={item} key={item.id} />
                     ))}

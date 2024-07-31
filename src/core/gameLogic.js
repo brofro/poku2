@@ -1,4 +1,4 @@
-import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS } from '../data/constants.js';
+import { PLAYER_ONE, PLAYER_TWO, CARD_STATE, ACTION_TYPES, KEY_EFFECTS, RESULT } from '../data/constants.js';
 import { EFFECTS_FUNCTIONS } from '../data/effectsData.js';
 import { deepCopy, generateMultipleItems, hasValidEffectFunction } from '../data/itemUtils.js';
 import { getOpposingPlayer, findLeftmostActiveCard, findLeftmostNonFaintedCard, areAllCardsInState, areAnyCardsInState, abbreviateName, isEffectActiveOnCard } from './gameLogicUtils.js';
@@ -201,7 +201,7 @@ function runGameLoop(initialCardData, bag) {
         log: ACTION_TYPES.GAME_END,
     });
 
-    return { playerWin: !areAllCardsInState(gameState[PLAYER_ONE], CARD_STATE.FAINTED), gameLog };
+    return { playerResult: getResultForP1(), gameLog };
 }
 
 /**
@@ -330,31 +330,34 @@ function toggleCardEffect(KEY_EFFECT, player, position, activeState, flipAll = f
         return;
     }
 
-    // Find all effects that match KEY_EFFECT and the active state
-    const matchingEffects = card.effects.filter(effect =>
-        effect.effect === KEY_EFFECT && effect.active === activeState
-    );
+    // Find all effect ids that match KEY_EFFECT and the active state
+    const matchingEffectIds = gameState[player][position].effects
+        .filter(effect => effect.effect === KEY_EFFECT && effect.active === activeState)
+        .map(effect => effect.id);
 
-    if (matchingEffects.length === 0) {
+
+    if (matchingEffectIds.length === 0) {
         console.warn(`No matching effects found for ${KEY_EFFECT} with active state ${activeState}`);
         return;
     }
 
-    // Flip the effects
-    if (flipAll) {
-        // Flip all matching effects
-        matchingEffects.forEach(effect => {
-            effect.active = !effect.activeState;
-        });
-    } else {
-        // Flip only the first matching effect
-        matchingEffects[0].active = !matchingEffects[0].active;
-    }
+    //Iterate through the matching IDs
+    matchingEffectIds.forEach((effectId, index) => {
+        // Find the effect in gameState by its ID
+        const effectIndex = gameState[player][position].effects.findIndex(effect => effect.id === effectId);
 
-    // Update the card in the gameState
-    gameState[player][position] = { ...card, effects: [...card.effects] };
+        if (effectIndex !== -1) {
+            // 3 & 4. Flip the effect based on flipAll
+            if (flipAll || index === 0) {
+                gameState[player][position].effects[effectIndex].active = !activeState;
+            }
 
-    console.log(`Flipped ${flipAll ? 'all' : 'one'} ${KEY_EFFECT} effect(s) for Player ${player}, Position ${position}`);
+            // If we're only flipping one and we've done it, break the loop
+            if (!flipAll && index === 0) {
+                return false; // This will break the forEach loop
+            }
+        }
+    });
 }
 
 /**
@@ -376,6 +379,17 @@ function resetFatigue(playerCards) {
 function isGameOver() {
     return areAllCardsInState(gameState[PLAYER_ONE], CARD_STATE.FAINTED) ||
         areAllCardsInState(gameState[PLAYER_TWO], CARD_STATE.FAINTED);
+}
+
+//Calculate result for P1
+function getResultForP1() {
+    const allP1Fainted = areAllCardsInState(gameState[PLAYER_ONE], CARD_STATE.FAINTED)
+    const allP2Fainted = areAllCardsInState(gameState[PLAYER_TWO], CARD_STATE.FAINTED)
+
+    if (allP1Fainted)
+        if (allP2Fainted) return RESULT.TIE
+        else return RESULT.LOSE
+    return RESULT.WIN
 }
 
 export {
