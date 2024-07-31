@@ -205,7 +205,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         <>
             {contextHold}
             <Statistic prefix={<img src={goldicon} className='gold-icon' />} value={gold} />
-            {!isMobile ? <Button className='generate-log-button' icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />
+            {!isMobile ? <Button className='generate-log-button' onClick={() => _nextPage()} disabled={isRosterIncomplete()}>Battle</Button>
                 : <FloatButton icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />}
             <DragdropWrapper>
                 <Flex gap="middle" justify='center' wrap>
