@@ -1,10 +1,12 @@
 import React from "react";
 import ShapeView from "./ShapeView.js"
 import { canPlace, updateMatrix, findAll } from "./helper.js"
+import { allShapes } from "./allShapes.js";
 
 export default function BagEdit({ _storageToBag, _back, bag, storage, bagId }) {
     const [id, setId] = React.useState(null);
     const [shapeIndex, setShapeIndex] = React.useState(0);
+    const currentItem = storage[id]
 
     const rotate = () =>
         shapeIndex < 3 ? setShapeIndex(shapeIndex + 1) : setShapeIndex(0);
@@ -27,8 +29,8 @@ export default function BagEdit({ _storageToBag, _back, bag, storage, bagId }) {
                     setId(null);
                 }}
                 bagItems={bag}
-                obj={storage[id]}
-                shapeIndex={shapeIndex}
+                obj={currentItem}
+                shape={currentItem ? allShapes[currentItem.shapeId][shapeIndex] : null}
             />
             <div style={{
                 display: "flex",
@@ -58,7 +60,7 @@ export default function BagEdit({ _storageToBag, _back, bag, storage, bagId }) {
                             />
                             <ShapeView
                                 boxSize="10px"
-                                shapes={obj.shape}
+                                shapes={allShapes[obj.shapeId]}
                                 shapeIndex={shapeIndex}
                                 _rotate={rotate}
                                 style={{
@@ -84,7 +86,7 @@ function BagMatrix({
     bagItems = {},
     bagId,
     obj,
-    shapeIndex = 0,
+    shape,
     _update = () => { },
 }) {
     const BAG_SIZE = 8;
@@ -101,7 +103,7 @@ function BagMatrix({
     const add = (x, y) => {
         const can = canOccupy(x, y);
         if (!can) return console.log("wrong square idiot");
-        const occupied = canPlace(bag, obj.shape[shapeIndex], [x, y]);
+        const occupied = canPlace(bag, shape, [x, y]);
         const newBagItem = { ...obj, bagPosition: occupied };
         _update(newBagItem);
     };
@@ -110,10 +112,10 @@ function BagMatrix({
     React.useEffect(() => {
         if (obj == null) return setV(null);
 
-        let s = obj.shape[shapeIndex];
+        let s = shape;
         const v = findAll(bag, s);
         setV(v);
-    }, [obj, shapeIndex]);
+    }, [obj, shape]);
 
     //populate items
     React.useEffect(() => {

@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getItemRarity, distributeRarityValue } from "./itemFramework"
-import { shapes } from "../shopComponents/inventory/allShapes"
 import { EFFECTS, EFFECTS_FUNCTIONS } from "./effectsData";
 import { ITEM_RARITY, KEY_EFFECTS } from './constants';
+import { getRandomShapeId } from '../shopComponents/inventory/allShapes';
 
 const id = require('uuid-readable')
 
@@ -30,7 +30,7 @@ export function selectEffects(keys = [], presetRarity = ITEM_RARITY.NONE, preset
             const uuid = uuidv4()
             effectCopy.uuid = uuid
             effectCopy.id = id.short(uuid)
-            effectCopy.shape = shapes[effectCopy.shapeId]
+            effectCopy.shapeId = getRandomShapeId()
 
             //Generate rarity, skip if there is a pre-determined rarity
             if (!effectCopy.staticRarity) {

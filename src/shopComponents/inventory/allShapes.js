@@ -1,4 +1,4 @@
-export const shapes = {
+export const allShapes = {
     //generate shapes using https://codepen.io/ddd33/pen/ZEdLOvG?editors=0110
     L: [[[0,0],[1,0],[2,0],[2,1],],
     [[0,0],[0,1],[0,2],[1,0],],
@@ -63,5 +63,9 @@ export const shapes = {
     [[0,0],[0,1],[1,1],[1,2],],
     [[0,2],[1,1],[1,2],[2,1],]],
 }
+
+export const shapeIds = Object.keys(allShapes)
+
+export const getRandomShapeId = () => shapeIds[Math.floor(Math.random() * shapeIds.length)]
 
 

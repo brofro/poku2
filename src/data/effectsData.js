@@ -58,7 +58,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.GROW,
         icon: growIcon,
-        shapeId: "L",
         active: true,
         cost: 3,
         text: `Gains stats at the end of every round`,
@@ -67,7 +66,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.EQUIP,
         icon: equipIcon,
-        shapeId: "L",
         active: true,
         cost: 2,
         text: `Gains stats at the start of the game`,
@@ -76,7 +74,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.HEAL,
         icon: healIcon,
-        shapeId: "L",
         active: true,
         cost: 2,
         text: "Heals HP after turn",
@@ -85,7 +82,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.RAGE,
         icon: rageIcon,
-        shapeId: "T",
         active: true,
         cost: 1,
         text: "Gains attack after taking damage",
@@ -94,7 +90,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.RANGED,
         icon: rangedicon,
-        shapeId: "T",
         active: true,
         cost: 10,
         text: "Cannot be counter-attacked",
@@ -103,7 +98,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.DIVINE_SHIELD,
         icon: divineShieldIcon,
-        shapeId: "T2",
         active: true,
         cost: 2,
         text: "Negates first instance of attack damage (stacks)",
@@ -112,7 +106,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.DOUBLE_ATTACK,
         icon: doubleAttackIcon,
-        shapeId: "COR",
         active: true,
         cost: 10,
         text: "If not fainted, attacks a second time (triggers once, stacks)",
@@ -121,7 +114,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.DEATHRATTLE,
         icon: deathrattleIcon,
-        shapeId: "COR",
         active: true,
         cost: 1,
         text: "Summon a 1/1 Magikarp with no items",
@@ -131,7 +123,6 @@ export const EFFECTS = [
     {
         effect: KEY_EFFECTS.DEATHRATTLE,
         icon: deathrattleIcon1,
-        shapeId: "COR",
         active: true,
         cost: 5,
         text: "Revive with 1 HP",
