@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/poku2/static/css/main.902cec2b.css",
-    "main.js": "/poku2/static/js/main.0262ee15.js",
+    "main.css": "/poku2/static/css/main.9f0f658c.css",
+    "main.js": "/poku2/static/js/main.8e5f7d98.js",
     "static/js/453.0c1db918.chunk.js": "/poku2/static/js/453.0c1db918.chunk.js",
+    "static/media/gold.svg": "/poku2/static/media/gold.1ba1f3c9681cba54aac3db7b2b8f559b.svg",
     "static/media/doubleattack.svg": "/poku2/static/media/doubleattack.5c1d913886703cd17511aa5503915ff3.svg",
     "static/media/equip.svg": "/poku2/static/media/equip.2d7d67c6df850d0d78ccce7008609ee0.svg",
     "static/media/rage.svg": "/poku2/static/media/rage.a4859ef56bd7e8564341005063185e9e.svg",
@@ -14,12 +15,12 @@
     "static/media/deathrattle.svg": "/poku2/static/media/deathrattle.ccee72e8af57dc7562e9703d4370aace.svg",
     "index.html": "/poku2/index.html",
     "static/media/ranged.svg": "/poku2/static/media/ranged.c54039696c671dc9e507d67e94a4e2bb.svg",
-    "main.902cec2b.css.map": "/poku2/static/css/main.902cec2b.css.map",
-    "main.0262ee15.js.map": "/poku2/static/js/main.0262ee15.js.map",
+    "main.9f0f658c.css.map": "/poku2/static/css/main.9f0f658c.css.map",
+    "main.8e5f7d98.js.map": "/poku2/static/js/main.8e5f7d98.js.map",
     "453.0c1db918.chunk.js.map": "/poku2/static/js/453.0c1db918.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.902cec2b.css",
-    "static/js/main.0262ee15.js"
+    "static/css/main.9f0f658c.css",
+    "static/js/main.8e5f7d98.js"
   ]
 }
