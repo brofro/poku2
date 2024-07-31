@@ -10,8 +10,10 @@ import rageIcon from "../icons/rage.svg"
 
 
 //This is needed because boardgame.io G state has to be a JSON serializable object
+//All functions must change the playing game state so they must return a new version of the card
 export const EFFECTS_FUNCTIONS = {
     [KEY_EFFECTS.GROW]: (card, { rarityValue }) => {
+        if (card.state === CARD_STATE.FAINTED) return { ...card }
         return { ...card, atk: card.atk + rarityValue, hp: card.hp + rarityValue, currentHp: card.currentHp + rarityValue }
     },
     [KEY_EFFECTS.EQUIP]: (card, { atk, hp }) => {
