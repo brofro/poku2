@@ -23,6 +23,7 @@ const Main = (props) => {
     moves.getNewOpponent()
     moves.setNewWildCard()
     moves.setNewShop()
+    moves.addGold(5)
     if (playerResult === RESULT.WIN) {
       moves.increaseShopLevel()
       moves.addGold(3)
