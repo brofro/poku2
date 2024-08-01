@@ -76,9 +76,12 @@ const Game = {
             let currentCard = null
             //if theres a current card in slot, take it and put it into bench
             if (G.roster[index] !== null) currentCard = G.roster[index]
-            G.roster[index] = card
-            G.bench = G.bench.filter(benchCards => benchCards.id !== card.id)
             if (currentCard !== null) G.bench.push(currentCard)
+            //Put it in roster
+            G.roster[index] = card
+            //Remove the FIRST instance of matching id from bench (this wont work if the cards are unique)
+            const indexToRemove = G.bench.findIndex(benchCard => benchCard.id === card.id);
+            if (indexToRemove !== -1) G.bench = [...G.bench.slice(0, indexToRemove), ...G.bench.slice(indexToRemove + 1)]
         },
         roster2bench: ({ G }, index, card) => {
             G.bench = [...G.bench, card]
