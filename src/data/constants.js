@@ -59,4 +59,4 @@ export const KEY_EFFECTS = {
     DOUBLE_ATTACK: 'doubleAttack'
 }
 
-export const PLAY_SPEED = 750;
+export const PLAY_SPEED = 600;
