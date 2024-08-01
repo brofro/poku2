@@ -1,4 +1,4 @@
-import { getNewTeam } from "../data/cardData";
+import { getNewTeam, getGymLeader } from "../data/cardData";
 import { generateMultipleItems } from "../data/itemUtils";
 import { INVALID_MOVE } from "boardgame.io/core";
 
@@ -6,11 +6,12 @@ const Game = {
     setup: () => ({
         //set isMobile on game start
         isMobile: window.innerWidth <= 768,
+        gymLevel: 0,
         gold: 10,
         storage: [],
         bags: [[], []],
         roster: [null, null],
-        P2: getNewTeam(2),
+        P2: getGymLeader(0),
         bench: getNewTeam(2),
         shop: generateMultipleItems(5),
         wild: getNewTeam(1)[0],
@@ -86,7 +87,9 @@ const Game = {
             G.gold += amount
         },
         getNewOpponent: ({ G }) => {
-            G.P2 = getNewTeam(2)
+            //Get new gym leader win or lose
+            G.gymLevel += 1
+            G.P2 = getGymLeader(Math.min(G.gymLevel, 12))
         },
         setNewWildCard: ({ G }) => {
             G.wild = getNewTeam(1)[0]

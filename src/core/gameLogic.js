@@ -29,13 +29,13 @@ function initializeCard(cardData, bagData = {}, index) {
  * Initializes the game state
  * Initializes P1 and P2's cards, currentPlayer, and round
  */
-function initializeGameState(initialCardData, bags) {
+function initializeGameState(initialCardData, bags, gameLevel) {
     return {
         [PLAYER_ONE]: initialCardData[PLAYER_ONE].map((card, index) =>
             initializeCard(card, bags[index], index)),
         [PLAYER_TWO]: initialCardData[PLAYER_TWO].map((card, index) =>
             //not sure if this is where P2 should be getting his bag
-            initializeCard(card, generateMultipleItems(1), index)),
+            initializeCard({ ...card, atk: gameLevel + 1, hp: gameLevel + 1 }, [], index)),
 
         //Refactor when starting player is randomized
         currentPlayer: PLAYER_ONE,
@@ -183,10 +183,10 @@ function performRound() {
  * Runs the main game loop
  * Requires a roster (ie [cardData] array of cardData) and bag (ie {[id]:[effectData]} dictionary of effectDatas)
  */
-function runGameLoop(initialCardData, bag) {
+function runGameLoop(initialCardData, bag, gameLevel) {
     gameLog = []; // Reset the game log
     actionId = 0; // Reset the action ID counter
-    gameState = initializeGameState(initialCardData, bag);
+    gameState = initializeGameState(initialCardData, bag, gameLevel);
 
     createLogEntry(ACTION_TYPES.GAME_START, {
         log: ACTION_TYPES.GAME_START,

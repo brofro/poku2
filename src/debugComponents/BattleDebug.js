@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, FloatButton, Image, Flex } from "antd";
 import "../css/BattleDebug.css"
 import ControlButtons from './ControlButtons';
@@ -18,7 +18,10 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
 
-    const { isMobile } = G
+    //Strict mode workaround
+    const gameLoopRan = useRef(false)
+
+    const { isMobile, gymLevel } = G
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
@@ -77,18 +80,23 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     };
 
     useEffect(() => {
-        const { playerResult, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags)
-        moves.setPlayerResult(playerResult)
-        setGameLog(gameLog)
-        setGameState(getGameStateAtLogIndex(gameLog, -1));
-        setIsLogGenerated(true);
-        moves.getNewOpponent()
-        moves.setNewWildCard()
-        moves.setNewShop()
+        if (gameLoopRan.current === false) {
+            //This runs the actual game
+            const { playerResult, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags, gymLevel)
+            moves.setPlayerResult(playerResult)
+            setGameLog(gameLog)
+            setGameState(getGameStateAtLogIndex(gameLog, -1));
+            setIsLogGenerated(true);
+            moves.getNewOpponent()
+            moves.setNewWildCard()
+            moves.setNewShop()
 
-        // Start auto-play after log generation
-        setCurrentLogIndex(-1);
-        setIsPlaying(true);
+            // Start auto-play after log generation
+            setCurrentLogIndex(-1);
+            setIsPlaying(true);
+        }
+
+        return () => gameLoopRan.current = true
     }, [])
 
 
