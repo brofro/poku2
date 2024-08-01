@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/LogEntry.css';
+import "../css/DebugStyles.css"
 
 const LogEntry = ({ entry, index, currentIndex, setGameStateFromLog }) => {
 

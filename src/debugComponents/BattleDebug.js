@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, FloatButton, Image } from "antd";
+import { Button, FloatButton, Image, Flex } from "antd";
 import "../css/BattleDebug.css"
 import ControlButtons from './ControlButtons';
 import GameLog from './GameLog';
@@ -94,27 +94,7 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
 
 
     return (
-        <div className="game-container">
-            {!isMobile && (
-                <ControlButtons
-                    handlePlayNext={handlePlayNext}
-                    handlePlayPause={handlePlayPause}
-                    handleRestart={handleRestart}
-                    isPlaying={isPlaying}
-                    isLogGenerated={isLogGenerated}
-                />
-            )}
-            <div className={`battlefield-container${isMobile ? ' mobile' : ''}`}>
-                <BattleField gameState={gameState} currentAction={currentAction} isLogGenerated={isLogGenerated} />
-            </div>
-            {!isMobile && (
-                <GameLog
-                    gameLog={gameLog}
-                    currentLogIndex={currentLogIndex}
-                    isLogGenerated={isLogGenerated}
-                    setGameStateFromLog={setGameStateFromLog}
-                />
-            )}
+        <>
             {isMobile ? (
                 <FloatButton
                     onClick={_nextPage}
@@ -125,15 +105,41 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
                     Shop
                 </FloatButton>
             ) : (
-                <Button
-                    onClick={_nextPage}
-                    type="primary"
-                    className="back-to-shop-button"
-                >
-                    Back to Shop
-                </Button>
+
+                <Flex justify='center' align='center' style={{ width: '100%', marginTop: '20px' }}>
+                    <Button
+                        onClick={_nextPage}
+                        type="primary"
+                        disabled={isPlaying}
+                        style={{ width: '25%' }}
+                    >
+                        Back to Shop
+                    </Button>
+                </Flex>
             )}
-        </div>
+            <div className="game-container">
+                {!isMobile && (
+                    <ControlButtons
+                        handlePlayNext={handlePlayNext}
+                        handlePlayPause={handlePlayPause}
+                        handleRestart={handleRestart}
+                        isPlaying={isPlaying}
+                        isLogGenerated={isLogGenerated}
+                    />
+                )}
+                <div className={`battlefield-container${isMobile ? ' mobile' : ''}`}>
+                    <BattleField gameState={gameState} currentAction={currentAction} isLogGenerated={isLogGenerated} />
+                </div>
+                {!isMobile && (
+                    <GameLog
+                        gameLog={gameLog}
+                        currentLogIndex={currentLogIndex}
+                        isLogGenerated={isLogGenerated}
+                        setGameStateFromLog={setGameStateFromLog}
+                    />
+                )}
+            </div>
+        </>
     )
 }
 

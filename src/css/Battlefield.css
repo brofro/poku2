@@ -1,0 +1,22 @@
+.battlefield {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 70vh;
+}
+
+.player-area {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.player-two {
+    align-items: flex-start;
+    /* Changed from flex-end to flex-start */
+}
+
+.player-one {
+    align-items: flex-end;
+    /* Changed from flex-start to flex-end */
+}

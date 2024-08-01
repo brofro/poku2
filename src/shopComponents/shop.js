@@ -255,14 +255,20 @@ export function ItemShop({ G, moves, _nextPage }) {
         <>
             {contextHold}
             <Flex align="center" justify="space-between" style={{ marginBottom: '20px' }}>
-                <Statistic prefix={<img ref={goldRef} src={goldicon} className='gold-icon' />} value={gold} />
+                <Statistic prefix={<img ref={goldRef} src={goldicon} className='gold-icon' />} value={gold} style={{ marginRight: '20px' }} />
                 {!isMobile ?
-                    <div>
-                        <Button ref={battleRef} className='generate-log-button' onClick={() => _nextPage()} disabled={isRosterIncomplete()}>Battle</Button>
-                        <Button onClick={() => setIsTourOpen(true)} style={{ marginRight: '10px' }}>How to Play</Button>
-                    </div>
+                    <Flex style={{ flex: 1 }} align='center'>
+                        <Button
+                            ref={battleRef}
+                            type='primary'
+                            size='large'
+                            onClick={() => _nextPage()}
+                            style={{ width: "25%", marginTop: '20px', marginRight: 'auto', marginLeft: 'auto' }} disabled={isRosterIncomplete()}>
+                            Battle
+                        </Button>
+                        <Button onClick={() => setIsTourOpen(true)}>How to Play</Button>
+                    </Flex>
                     : <FloatButton ref={battleRef} icon={<Image src={battleicon} preview={false} />} onClick={() => _nextPage()} disabled={isRosterIncomplete()} />}
-
             </Flex>
 
             <DragdropWrapper>

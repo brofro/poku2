@@ -1,5 +1,7 @@
 import React from 'react';
+import "../css/DebugStyles.css"
 import LogEntry from './LogEntry';
+
 
 const GameLog = ({ gameLog, currentLogIndex, isLogGenerated, setGameStateFromLog }) => {
     if (!isLogGenerated) return null;

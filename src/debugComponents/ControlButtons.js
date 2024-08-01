@@ -1,4 +1,5 @@
 import React from 'react';
+import "../css/DebugStyles.css"
 
 const ControlButtons = ({ handlePlayNext, handlePlayPause, handleRestart, isPlaying, isLogGenerated }) => {
     if (!isLogGenerated) return null;

@@ -1,4 +1,5 @@
 import React from 'react';
+import "../css/Battlefield.css"
 import Card from './Card';
 import { PLAYER_ONE, PLAYER_TWO } from '../data/constants';
 
