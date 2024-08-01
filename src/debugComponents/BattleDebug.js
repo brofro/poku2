@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { Button, FloatButton } from "antd";
+import "../css/BattleDebug.css"
 import ControlButtons from './ControlButtons';
 import GameLog from './GameLog';
 import { runGameLoop } from "../core/gameLogic";
@@ -11,9 +13,11 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board
     const [gameLog, setGameLog] = useState([]);  // Log of all game actions
     const [currentLogIndex, setCurrentLogIndex] = useState(-1);  // Index of current action in the log
-    const [isPlaying, setIsPlaying] = useState(false);  // Whether the game is auto-playing
+    const [isPlaying, setIsPlaying] = useState(true);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
+
+    const { isMobile } = G
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
@@ -48,9 +52,11 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     // Function to start or pause auto-play
     const handlePlayPause = () => {
         if (!isPlaying) {
-            // If starting to play, reset to the beginning
-            setCurrentLogIndex(-1);
-            setGameState(getGameStateAtLogIndex(gameLog, -1));
+            // If starting to play, only reset if we're at the end of the log
+            if (currentLogIndex >= gameLog.length - 1) {
+                setCurrentLogIndex(-1);
+                setGameState(getGameStateAtLogIndex(gameLog, -1));
+            }
         }
         setIsPlaying(!isPlaying);
     };
@@ -78,24 +84,53 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
         moves.getNewOpponent()
         moves.setNewWildCard()
         moves.setNewShop()
+
+        // Start auto-play after log generation
+        setCurrentLogIndex(-1);
+        setIsPlaying(true);
     }, [])
 
 
 
     return (
         <div className="game-container">
-            {/* Control buttons for game flow */}
-            <ControlButtons handlePlayNext={handlePlayNext} handlePlayPause={handlePlayPause} handleRestart={handleRestart} isPlaying={isPlaying} isLogGenerated={isLogGenerated} />
-            <div className="battlefield-container">
-                <button className="generate-log-button" onClick={_nextPage}>Shop </button>
-
-                {/* The main game board */}
-
+            {!isMobile && (
+                <ControlButtons
+                    handlePlayNext={handlePlayNext}
+                    handlePlayPause={handlePlayPause}
+                    handleRestart={handleRestart}
+                    isPlaying={isPlaying}
+                    isLogGenerated={isLogGenerated}
+                />
+            )}
+            <div className={`battlefield-container${isMobile ? ' mobile' : ''}`}>
                 <BattleField gameState={gameState} currentAction={currentAction} isLogGenerated={isLogGenerated} />
-
             </div>
-            {/* Log of game actions */}
-            <GameLog gameLog={gameLog} currentLogIndex={currentLogIndex} isLogGenerated={isLogGenerated} setGameStateFromLog={setGameStateFromLog} />
+            {!isMobile && (
+                <GameLog
+                    gameLog={gameLog}
+                    currentLogIndex={currentLogIndex}
+                    isLogGenerated={isLogGenerated}
+                    setGameStateFromLog={setGameStateFromLog}
+                />
+            )}
+            {isMobile ? (
+                <FloatButton
+                    onClick={_nextPage}
+                    type="primary"
+                    style={{ right: 24, top: 24 }}
+                >
+                    Shop
+                </FloatButton>
+            ) : (
+                <Button
+                    onClick={_nextPage}
+                    type="primary"
+                    className="back-to-shop-button"
+                >
+                    Back to Shop
+                </Button>
+            )}
         </div>
     )
 }

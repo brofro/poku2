@@ -8,7 +8,7 @@ const ControlButtons = ({ handlePlayNext, handlePlayPause, handleRestart, isPlay
             <button onClick={handlePlayNext}>Play Next Log Only</button>
             {/* Button to start/pause continuous play */}
             <button onClick={handlePlayPause}>
-                {isPlaying ? 'Pause' : 'Continuously Play'}
+                {isPlaying ? 'Pause' : 'Play'}
             </button>
             {/* Button to restart the game */}
             <button onClick={handleRestart}>Restart</button>
