@@ -111,10 +111,23 @@ export function ItemShop({ G, moves, _nextPage }) {
         return <DropBox {...dropProps}><Flex ref={storageRef} justify='center' gap='small'>{children}</Flex></DropBox>;
     };
 
+    const BagDrop = (props) => {
+        const dropProps = {
+            itemType: ["storage"],
+            _canDrop: () => true,
+            _afterDrop: ({ data }) => moves.storage2bag(props.bagId, data),
+            canDropStyle: { backgroundColor: COLORS.green },
+            isOverStyle: { opacity: "50%" },
+            style: { border: "2px dashed", margin: "10%", padding: "2%", borderRadius: "10%" },
+            ...props
+        }
+        return <DropBox {...dropProps}> <Flex ref={storageRef} justify='center' gap='small'>{props.children.length > 0 ? props.children : "equip items here"}</Flex></DropBox>;
+    }
+
     const ShopDrop = ({ children, ...props }) => {
         const dropProps = {
             className: "shop-shopItems",
-            itemType: ["storage", "bag"],
+            itemType: ["storage"],
             _canDrop: () => true,
             _afterDrop: ({ data, bagId }) => {
                 props.moves.sellItem(bagId, data)
@@ -246,6 +259,7 @@ export function ItemShop({ G, moves, _nextPage }) {
         if (playerResult === RESULT.TIE) messageApi.open({ type: 'warning', content: 'Draw' })
     }, [playerResult])
 
+    //editBagId and BagEdit to be removed later
     return editBagId !== null ? <BagEdit _bagToStorage={moves.bag2storage} bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <>
             {contextHold}
@@ -270,11 +284,22 @@ export function ItemShop({ G, moves, _nextPage }) {
                 <Flex gap="middle" justify='center' wrap>
                     <div className='shop-card-1'>
                         <RosterDrop rosterCard={roster[0]} index={0} moves={moves} />
-                        <Button type="dashed" size='large' onClick={() => setEditBagId(0)}>edit bag{0}: {bags[0].length}/</Button>
+                        {/* <Button type="dashed" size='large' onClick={() => setEditBagId(0)}>edit bag{0}: {bags[0].length}/</Button> */}
+                        <BagDrop bagId={0}>
+                            {bags[0].map((item) => (
+                                <ItemDrag itemType="bag" bagId={0} item={item} key={item.id} />
+                            ))}
+                        </BagDrop>
                     </div>
                     <div className='shop-card-1'>
                         <RosterDrop rosterCard={roster[1]} index={1} moves={moves} />
-                        <Button type="dashed" size='large' onClick={() => setEditBagId(1)}>edit bag{1}: {bags[1].length}/</Button>
+                        {/* <Button type="dashed" size='large' onClick={() => setEditBagId(1)}>edit bag{1}: {bags[1].length}/</Button> */}
+                        <BagDrop bagId={1}>
+                            {bags[1].map((item) => (
+                                <ItemDrag itemType="bag" bagId={1} item={item} key={item.id} />
+                            ))}
+                        </BagDrop>
+
                     </div>
                 </Flex>
                 <StorageDrop moves={moves}>
