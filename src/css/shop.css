@@ -128,7 +128,7 @@
 
 .empty-roster-slot {
     width: 120px;
-    height: 60px;
+    height: auto;
     border: 2px dashed #ccc;
     border-radius: 8px;
     display: flex;
