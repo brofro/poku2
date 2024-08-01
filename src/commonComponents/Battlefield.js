@@ -30,6 +30,13 @@ const BattleField = ({ gameState, currentAction, isLogGenerated }) => {
             player === currentAction.action_details.actingPlayer;
     };
 
+    const isCardDefending = (player, index) => {
+        return currentAction &&
+            (currentAction.action === 'ATTACK' || currentAction.action === 'COUNTER_ATTACK') &&
+            currentAction.action_details.targetCardPosition === index &&
+            player !== currentAction.action_details.actingPlayer;
+    };
+
     const getDamageToShow = (player, index) => {
         if (currentAction &&
             (currentAction.action === 'ATTACK' || currentAction.action === 'COUNTER_ATTACK') &&
@@ -61,6 +68,7 @@ const BattleField = ({ gameState, currentAction, isLogGenerated }) => {
                         divineShield={hasDivineShield(card.effects)}
                         damageToShow={getDamageToShow(PLAYER_TWO, index)}
                         isAttacking={isCardAttacking(PLAYER_TWO, index)}
+                        isDefending={isCardDefending(PLAYER_TWO, index)}
                         isCounterAttacking={isCardCounterAttacking(PLAYER_TWO, index)}
                     />
                 ))}
@@ -77,6 +85,7 @@ const BattleField = ({ gameState, currentAction, isLogGenerated }) => {
                         divineShield={hasDivineShield(card.effects)}
                         damageToShow={getDamageToShow(PLAYER_ONE, index)}
                         isAttacking={isCardAttacking(PLAYER_ONE, index)}
+                        isDefending={isCardDefending(PLAYER_ONE, index)}
                         isCounterAttacking={isCardCounterAttacking(PLAYER_ONE, index)}
                     />
                 ))}
