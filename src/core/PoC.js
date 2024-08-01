@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DndContext, useDraggable, useDroppable, useSensor, MouseSensor, TouchSensor, useSensors } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -15,6 +15,32 @@ const Colors = {
     I: '#00CED1',
     O: '#FFD700',
 };
+const mediaQueries = `
+  @media (max-width: 480px) {
+    .game-area {
+      flex-direction: column;
+      align-items: center;
+    }
+    .pieces {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+    .piece {
+      width: 20vw;
+      height: 20vw;
+      margin: 5px;
+    }
+    .grid {
+      width: 80vw;
+      height: 80vw;
+    }
+  }
+`;
+
+
 
 const styles = {
     container: {
@@ -111,6 +137,16 @@ function TetrisStyleScreen() {
     const [draggedPiece, setDraggedPiece] = useState(null);
     const [previewCells, setPreviewCells] = useState(Array(16).fill(null));
 
+    // Add this to your component
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = mediaQueries;
+        document.head.appendChild(style);
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
             distance: 10,
@@ -118,10 +154,9 @@ function TetrisStyleScreen() {
     })
 
     const touchSensor = useSensor(TouchSensor, {
-        // Press delay of 250ms, with tolerance of 5px of movement
         activationConstraint: {
-            delay: 250,
-            tolerance: 5,
+            delay: 100,
+            tolerance: 8,
         },
     });
 
@@ -202,30 +237,33 @@ function TetrisStyleScreen() {
     return (
         <DndContext onDragStart={handleDragStart} onDragMove={handleDragMove} onDragEnd={handleDragEnd} sensors={sensors}>
             <div style={styles.container}>
-                <div style={styles.pieces}>
-                    {Object.entries(pieces).map(([shape, piece]) => (
-                        <TetrisPiece
-                            key={shape}
-                            shape={shape}
-                            color={Colors[shape]}
-                            piece={piece}
-                            onRotate={rotatePieceHandler}
-                        />
-                    ))}
-                </div>
-                <div style={styles.grid}>
-                    {grid.map((color, index) => (
-                        <GridCell
-                            key={index}
-                            id={index.toString()}
-                            color={color}
-                            previewColor={previewCells[index]}
-                        />
-                    ))}
+                <div style={styles.gameArea}>
+                    <div style={styles.pieces}>
+                        {Object.entries(pieces).map(([shape, piece]) => (
+                            <TetrisPiece
+                                key={shape}
+                                shape={shape}
+                                color={Colors[shape]}
+                                piece={piece}
+                                onRotate={rotatePieceHandler}
+                            />
+                        ))}
+                    </div>
+                    <div style={styles.grid}>
+                        {grid.map((color, index) => (
+                            <GridCell
+                                key={index}
+                                id={index.toString()}
+                                color={color}
+                                previewColor={previewCells[index]}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
         </DndContext>
     );
+
 }
 
 export default TetrisStyleScreen;
