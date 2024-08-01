@@ -1,4 +1,4 @@
-import { getNewTeam, getGymLeader } from "../data/cardData";
+import { getNewTeam, getGymLeader, getTestCards } from "../data/cardData";
 import { generateMultipleItems } from "../data/itemUtils";
 import { INVALID_MOVE } from "boardgame.io/core";
 
@@ -10,7 +10,7 @@ const Game = {
         gold: 10,
         storage: [],
         bags: [[], []],
-        roster: [null, null],
+        roster: getTestCards(),
         P2: getGymLeader(0),
         bench: getNewTeam(2),
         shop: generateMultipleItems(5),

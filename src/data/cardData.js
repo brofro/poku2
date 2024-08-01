@@ -20,6 +20,11 @@ const gymLeaders = [
     [150, 151],
 ]
 
+export function getTestCards() {
+    return [JSON.parse(JSON.stringify(CARD_DEFINITIONS[10])), JSON.parse(JSON.stringify(CARD_DEFINITIONS[10]))]
+}
+
+
 export function getGymLeader(level) {
     console.log(level, gymLeaders[level])
     return [

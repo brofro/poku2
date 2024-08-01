@@ -236,21 +236,16 @@ export function ItemShop({ G, moves, _nextPage }) {
         );
     };
 
-    //Game result
-    const winEffectRan = useRef(false)
+    //Game result notification
     useEffect(() => {
-        if (winEffectRan.current === false) {
-            if (playerResult === RESULT.WIN) {
-                moves.increaseShopLevel()
-                messageApi.open({ type: 'success', content: 'You win! +3 gold' })
-                moves.addGold(3)
-            }
-            if (playerResult === RESULT.LOSE) messageApi.open({ type: 'error', content: 'You Lost!' })
-
-            if (playerResult === RESULT.TIE) messageApi.open({ type: 'warning', content: 'Draw' })
+        if (playerResult === RESULT.WIN) {
+            messageApi.open({ type: 'success', content: 'You win! +3 gold' })
         }
-        winEffectRan.current = true
+        if (playerResult === RESULT.LOSE) messageApi.open({ type: 'error', content: 'You Lost!' })
+
+        if (playerResult === RESULT.TIE) messageApi.open({ type: 'warning', content: 'Draw' })
     }, [playerResult])
+
     return editBagId !== null ? <BagEdit _bagToStorage={moves.bag2storage} bagId={editBagId} _storageToBag={(data) => moves.storage2bag(editBagId, data)} bag={bags[editBagId]} storage={storage} _back={() => setEditBagId(null)} /> :
         <>
             {contextHold}

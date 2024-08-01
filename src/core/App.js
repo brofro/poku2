@@ -6,7 +6,7 @@ import { Debug } from "boardgame.io/debug"
 import { ItemShop } from "../shopComponents/shop";
 import Game from "./Game"
 import { runGameLoop } from "./gameLogic";
-import { PLAYER_ONE, PLAYER_TWO } from "../data/constants";
+import { PLAYER_ONE, PLAYER_TWO, RESULT } from "../data/constants";
 import BattleDebug from "../debugComponents/BattleDebug";
 
 
@@ -23,6 +23,11 @@ const Main = (props) => {
     moves.getNewOpponent()
     moves.setNewWildCard()
     moves.setNewShop()
+    if (playerResult === RESULT.WIN) {
+      moves.increaseShopLevel()
+      moves.addGold(3)
+    }
+
     nextPage()
   }
 
