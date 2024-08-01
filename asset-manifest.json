@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/poku2/static/css/main.1116ea7d.css",
-    "main.js": "/poku2/static/js/main.1bb14833.js",
+    "main.css": "/poku2/static/css/main.564cd753.css",
+    "main.js": "/poku2/static/js/main.4011aa60.js",
     "static/js/453.0c1db918.chunk.js": "/poku2/static/js/453.0c1db918.chunk.js",
     "static/media/gold.svg": "/poku2/static/media/gold.1ba1f3c9681cba54aac3db7b2b8f559b.svg",
     "static/media/doubleattack.svg": "/poku2/static/media/doubleattack.5c1d913886703cd17511aa5503915ff3.svg",
@@ -16,12 +16,12 @@
     "index.html": "/poku2/index.html",
     "static/media/ranged.svg": "/poku2/static/media/ranged.c54039696c671dc9e507d67e94a4e2bb.svg",
     "static/media/shop.svg": "/poku2/static/media/shop.af2426de6e897b1860c80f241e7b729e.svg",
-    "main.1116ea7d.css.map": "/poku2/static/css/main.1116ea7d.css.map",
-    "main.1bb14833.js.map": "/poku2/static/js/main.1bb14833.js.map",
+    "main.564cd753.css.map": "/poku2/static/css/main.564cd753.css.map",
+    "main.4011aa60.js.map": "/poku2/static/js/main.4011aa60.js.map",
     "453.0c1db918.chunk.js.map": "/poku2/static/js/453.0c1db918.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1116ea7d.css",
-    "static/js/main.1bb14833.js"
+    "static/css/main.564cd753.css",
+    "static/js/main.4011aa60.js"
   ]
 }
