@@ -60,6 +60,7 @@ function handleFainted(card, player, position) {
         });
         if (isEffectActiveOnCard(KEY_EFFECTS.DEATHRATTLE, card)) {
             performEffectForCardIfExists(card, player, position, KEY_EFFECTS.DEATHRATTLE)
+            toggleCardEffect(KEY_EFFECTS.DEATHRATTLE, player, position, true, true)
             createLogEntry(ACTION_TYPES.DEATHRATTLE, {
                 log: `${card.name} triggered deathrattle`,
                 sourceCardName: card.name,

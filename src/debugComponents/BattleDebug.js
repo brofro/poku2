@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, FloatButton } from "antd";
+import { Button, FloatButton, Image } from "antd";
 import "../css/BattleDebug.css"
 import ControlButtons from './ControlButtons';
 import GameLog from './GameLog';
@@ -8,6 +8,7 @@ import { runGameLoop } from "../core/gameLogic";
 import { getGameStateAtLogIndex } from "../core/gameLogicUtils";
 import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
 import BattleField from "../commonComponents/Battlefield";
+import shopicon from "../icons/shop.svg"
 
 const BattleDebug = ({ G, moves, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board
@@ -117,6 +118,7 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
             {isMobile ? (
                 <FloatButton
                     onClick={_nextPage}
+                    icon={<Image src={shopicon} preview={false} />}
                     type="primary"
                     style={{ right: 24, top: 24 }}
                 >
