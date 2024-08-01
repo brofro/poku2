@@ -31,13 +31,13 @@ export function ItemShop({ G, moves, _nextPage }) {
     //Tour steps
     const tourSteps = [
         {
-            title: 'Drag a card from bench',
-            description: 'Start by dragging a card from the bench area.',
+            title: 'Pick a card from the bench',
+            description: 'Start by dragging a card from the bench...',
             target: () => benchRef.current,
         },
         {
-            title: 'Fill your roster',
-            description: 'Drag it to a roster spot. Make sure you have no empty roster spots!',
+            title: 'Set your roster',
+            description: '...to a roster spot. Make sure you have no empty roster spots!',
             target: () => rosterRef.current,
         },
         {
@@ -46,8 +46,8 @@ export function ItemShop({ G, moves, _nextPage }) {
             target: () => goldRef.current,
         },
         {
-            title: 'Shop items',
-            description: 'Drag items from here...',
+            title: 'Shop',
+            description: 'Buy by draggin items from here...',
             target: () => shopRef.current,
         },
         {
@@ -56,7 +56,7 @@ export function ItemShop({ G, moves, _nextPage }) {
             target: () => storageRef.current,
         },
         {
-            title: 'Wild Pokemon',
+            title: 'New Cards',
             description: 'Buy new cards from here',
             target: () => wildRef.current,
         },
