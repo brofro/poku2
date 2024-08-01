@@ -125,7 +125,7 @@ export const EFFECTS = [
         icon: deathrattleIcon1,
         active: true,
         cost: 5,
-        text: "Revive with 1 HP",
+        text: "Revive with 1 HP, disable all deathrattles",
         staticRarity: ITEM_RARITY.COMMON,
         effectFunctionId: `${KEY_EFFECTS.DEATHRATTLE}1`,
     }

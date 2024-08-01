@@ -1,10 +1,12 @@
-import { useEffect, useRef, React } from 'react';
+import { useEffect, useState, useRef, React } from 'react';
 import { ATK_ICON, HP_ICON, getImageUrl } from '../data/constants';
 import '../css/Card.css';
+import '../css/CardAnimations.css'
 import ItemEffect from './ItemEffect';
 
-const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, isCounterAttacking, isShopCard }) => {
+const Card = ({ id, img, name, atk, hp, currentHp, state, effects, divineShield, damageToShow, isAttacking, isCounterAttacking, isShopCard }) => {
     const healthRef = useRef(null);
+    const [showDamage, setShowDamage] = useState(false);
 
     useEffect(() => {
         if (healthRef.current) {
@@ -14,6 +16,13 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
             }, 1000);
         }
     }, [currentHp]);
+
+    useEffect(() => {
+        if (damageToShow !== null && damageToShow !== undefined) {
+            setShowDamage(true);
+            setTimeout(() => setShowDamage(false), 1000);
+        }
+    }, [damageToShow]);
 
     // Initialize an array of CSS classes for the card
     const cardClasses = ['card'];
@@ -25,10 +34,15 @@ const Card = ({ id, img, name, atk, hp, currentHp, state, effects, isAttacking, 
     if (state === 'FAINTED') cardClasses.push('fainted');
     if (isAttacking) cardClasses.push('attacking');
     if (isCounterAttacking) cardClasses.push('counter-attacking');
-    //if (divineShield) cardClasses.push('divine-shield');
+    if (divineShield) cardClasses.push('divine-shield');
 
     return (
         <div className={cardClasses.join(' ')}>
+            {showDamage && damageToShow !== null && damageToShow !== undefined && (
+                <span className={`damage-number animate ${damageToShow === 0 ? 'blocked' : ''}`}>
+                    {damageToShow === 0 ? '0' : damageToShow}
+                </span>
+            )}
             {/* Card image */}
             <div className="card-image-container">
                 <img src={img || getImageUrl(id)} alt={`${name} #${id}`} className="card-image" />
