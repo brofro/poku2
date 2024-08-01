@@ -4,24 +4,23 @@ import { Button, FloatButton, Image, Flex } from "antd";
 import "../css/BattleDebug.css"
 import ControlButtons from './ControlButtons';
 import GameLog from './GameLog';
-import { runGameLoop } from "../core/gameLogic";
 import { getGameStateAtLogIndex } from "../core/gameLogicUtils";
-import { PLAYER_ONE, PLAYER_TWO, PLAY_SPEED } from "../data/constants";
+import { PLAY_SPEED } from "../data/constants";
 import BattleField from "../commonComponents/Battlefield";
 import shopicon from "../icons/shop.svg"
 
-const BattleDebug = ({ G, moves, _nextPage }) => {
+const BattleDebug = ({ G, _nextPage }) => {
     const [gameState, setGameState] = useState(null);  // Current state of the game board
-    const [gameLog, setGameLog] = useState([]);  // Log of all game actions
+    // const [gameLog, setGameLog] = useState([]);  // Log of all game actions
     const [currentLogIndex, setCurrentLogIndex] = useState(-1);  // Index of current action in the log
     const [isPlaying, setIsPlaying] = useState(true);  // Whether the game is auto-playing
     const [currentAction, setCurrentAction] = useState(null);  // The current action being performed
     const [isLogGenerated, setIsLogGenerated] = useState(false);
 
     //Strict mode workaround
-    const gameLoopRan = useRef(false)
+    // const gameLoopRan = useRef(false)
 
-    const { isMobile, gymLevel } = G
+    const { lastGameLog: gameLog, isMobile } = G
 
     const handlePlayNext = () => {
         if (currentLogIndex < gameLog.length - 1) {
@@ -80,23 +79,13 @@ const BattleDebug = ({ G, moves, _nextPage }) => {
     };
 
     useEffect(() => {
-        if (gameLoopRan.current === false) {
-            //This runs the actual game
-            const { playerResult, gameLog } = runGameLoop({ [PLAYER_ONE]: G.roster, [PLAYER_TWO]: G.P2 }, G.bags, gymLevel)
-            moves.setPlayerResult(playerResult)
-            setGameLog(gameLog)
-            setGameState(getGameStateAtLogIndex(gameLog, -1));
-            setIsLogGenerated(true);
-            moves.getNewOpponent()
-            moves.setNewWildCard()
-            moves.setNewShop()
+        setGameState(getGameStateAtLogIndex(gameLog, -1));
+        setIsLogGenerated(true);
 
-            // Start auto-play after log generation
-            setCurrentLogIndex(-1);
-            setIsPlaying(true);
-        }
+        // // Start auto-play after log generation
+        setCurrentLogIndex(-1);
+        setIsPlaying(true);
 
-        return () => gameLoopRan.current = true
     }, [])
 
 

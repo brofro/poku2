@@ -16,7 +16,8 @@ const Game = {
         shop: generateMultipleItems(5),
         wild: getNewTeam(1)[0],
         shopLevel: 0,
-        playerResult: null
+        playerResult: null,
+        lastGameLog: []
     }),
     moves: {
         //Currently only supports shop->storage
@@ -102,6 +103,9 @@ const Game = {
         },
         increaseShopLevel: ({ G }) => {
             G.shopLevel += 0.01
+        },
+        setGameLog: ({ G }, gameLog) => {
+            G.lastGameLog = gameLog
         }
     }
 }
